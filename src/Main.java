@@ -24,22 +24,22 @@ public class Main {
 		Domain domain = new Domain(n, c);
 		
 		// Assign gi values in all the k directions
-		Point.assignRandomPoints(domain, n, directions);
-//		Point.defineCube(domain, n, 4);
+//		Point.assignRandomPoints(domain, n, directions);
+		Point.defineCube(domain, n, 20);
 		
-		// Initial condition of phi = 0 at all points
-		for (int i=0; i<n[0]; i++)
-			for (int j=0; j<n[1]; j++)
-				for (int k=0; k<n[2]; k++){
-					double sign = 1.0;
-					if (Math.random() < 0.5 ) sign = -1.0;
-					domain.points[i][j][k].phi  = -1;
-					
-					domain.points[i][j][k].phi  = Math.random() * sign / 100.0;
-//					domain.points[i][j][k].phi = Double.parseDouble(String.format("%.8f",Math.random() * sign / 100.0 ));
-//					if (i<n[0]/2) domain.points[i][j][k].phi = 0.9999;
-//					else domain.points[i][j][k].phi = -0.9999;
-				}
+//		// Initial condition of phi = 0 at all points
+//		for (int i=0; i<n[0]; i++)
+//			for (int j=0; j<n[1]; j++)
+//				for (int k=0; k<n[2]; k++){
+//					double sign = 1.0;
+//					if (Math.random() < 0.5 ) sign = -1.0;
+//					domain.points[i][j][k].phi  = -1;
+//					
+//					domain.points[i][j][k].phi  = Math.random() * sign / 100.0;
+////					domain.points[i][j][k].phi = Double.parseDouble(String.format("%.8f",Math.random() * sign / 100.0 ));
+////					if (i<n[0]/2) domain.points[i][j][k].phi = 0.9999;
+////					else domain.points[i][j][k].phi = -0.9999;
+//				}
 			
 		
 		
@@ -54,7 +54,7 @@ public class Main {
 			
 			if (i%10 == 0 ) Plot.define(domain);
 //			System.out.println("sigma g = " + domain.sigmaG());
-			System.out.println(i);
+//			System.out.println(i);
 			
 		}
 		

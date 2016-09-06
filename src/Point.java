@@ -49,8 +49,9 @@ public class Point {
 					domain.points[i][j][k] = new Point(domain.directions, g);
 					
 					if ( (i > n[0]/2 - width/2) && (i < n[0]/2 + width/2) && 
-							(j > n[1]/2 - width/2) && (j < n[1]/2 + width/2) && 
-							(k > n[2]/2 - width/2) && (k < n[2]/2 + width/2) ){
+							(j > n[1]/2 - width/2) && (j < n[1]/2 + width/2) 
+							&& (k > n[2]/2 - width/2) && (k < n[2]/2 + width/2) 
+							){
 						domain.points[i][j][k].phi = 1;
 					}
 					else domain.points[i][j][k].phi = -1;
