@@ -12,7 +12,7 @@ import graphics.HSLColor;
 
 public class Plot extends JPanel{
 	
-	private static int pointSize = 10;
+	private static int pointSize = 1;
 	public static void define(Domain domain, String fileName){
 		JFrame frame = new JFrame("Plot");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

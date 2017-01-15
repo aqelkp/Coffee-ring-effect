@@ -14,9 +14,9 @@ public class Domain {
 	
 	// Simulation parameters from the paper
 	// Lattice - Boltzmann simulation of droplet evaporation
-	double a = -0.00305, b=0.00305, K = 0.0078;
-//	, K = 0.0078
-	int M = 10, rho = 1, delt = 1;
+	public static double a = -0.00305, b=-a, K = 0.0078;
+	public static double epsilon = Math.sqrt(-K/(2*a));
+	int M = 5, rho = 1, delt = 1;
 	double towG = 1;
 //	double towG = 0.78868;
 	
