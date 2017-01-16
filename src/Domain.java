@@ -16,7 +16,7 @@ public class Domain {
 	// Lattice - Boltzmann simulation of droplet evaporation
 	public static double a = -0.00305, b=-a, K = 0.0078;
 	public static double epsilon = Math.sqrt(-K/(2*a));
-	int M = 5, rho = 1, delt = 1;
+	int M = 10, rho = 1, delt = 1;
 	double towG = 1;
 //	double towG = 0.78868;
 	
@@ -27,11 +27,22 @@ public class Domain {
 		this.c = c;
 		this.directions = c.length;
 		points = new Point[n[0]][n[1]][n[2]];
+		for (int i=0; i<n[0]; i++){
+			for (int j = 0; j<n[1]; j++){
+				for (int m=0; m<n[2]; m++){
+					double[] g = new double[directions];
+					for (int k =0; k< directions; k++){
+						g[k] = 0.0;
+					}
+					points[i][j][m] = new Point(directions, g);
+				}
+			}
+		}
 
 	}
 	
 	// Apply streaming function
-	void stream(int directions, int[][] c){
+	void stream(int[][] c){
 		
 		for (int i=0; i<directions; i++){
 			
@@ -131,33 +142,34 @@ public class Domain {
 				for (int k=0; k<n[2]; k++){
 					
 					Point point = points[i][j][k];
-					double A = 0, omega =0;
 					
-//					for (int m=0; m<directions; m++){
-//						if (m==0){
-//							point.geq[m] = point.phi - 1.1547 * point.nu;
-//						}else if (m<5) {
-//							point.geq[m] = 0.23094 * point.nu;
-//						}else if (m<10){
-//							point.geq[m] = 0.057735 * point.nu;
-//						}
-//					}
-					
-					// Assign A value according to directions
-					for (int h =0; h<directions; h++){
-						if (h==0){
-							A = 4.5 * point.phi - (3.5 * 3 * M * point.nu);
-							omega = 2.0/9;
-						} else if (h < 7){
-							A = (1/rho) * 3 * M * point.nu;
-							omega = 1.0/9;
-						} else if (h < 16){
-							A = (1/rho) * 3 * M * point.nu;
-							omega = 1.0/72;
+					// D2Q9 Model weighing factors
+					for (int m=0; m<directions; m++){
+						if (m==0){
+							point.geq[m] = point.phi - 1.1547 * point.nu;
+						}else if (m<5) {
+							point.geq[m] = 0.23094 * point.nu;
+						}else if (m<10){
+							point.geq[m] = 0.057735 * point.nu;
 						}
-						point.geq[h] = rho *  omega * A;
-						
-					}	
+					}
+					
+//					//D3Q15 Model weighing factors
+//					// Assign A value according to directions
+//					for (int h =0; h<directions; h++){
+//						if (h==0){
+//							A = 4.5 * point.phi - (3.5 * 3 * M * point.nu);
+//							omega = 2.0/9;
+//						} else if (h < 7){
+//							A = (1/rho) * 3 * M * point.nu;
+//							omega = 1.0/9;
+//						} else if (h < 16){
+//							A = (1/rho) * 3 * M * point.nu;
+//							omega = 1.0/72;
+//						}
+//						point.geq[h] = rho *  omega * A;
+//						
+//					}	
 					
 				}
 		
@@ -252,4 +264,53 @@ public class Domain {
 					
 				}
 	}
+
+	public void defineSeperatedSystem() {
+		
+		// Initial condition of phi = 0 at all points
+				for (int i=0; i<n[0]; i++)
+					for (int j=0; j<n[1]; j++)
+						for (int k=0; k<n[2]; k++){
+							// For already seperated system
+							if (i<n[0]/2) points[i][j][k].phi = 1.0;
+							else points[i][j][k].phi = -1;
+							
+						}
+		
+	}
+	
+	public void defineRandomSystem() {
+			
+			// Initial condition of phi = 0 at all points
+					for (int i=0; i<n[0]; i++)
+						for (int j=0; j<n[1]; j++)
+							for (int k=0; k<n[2]; k++){
+								// For randomized system
+								double sign = 1.0;
+								if (Math.random() < 0.5 ) sign = -1.0;
+								points[i][j][k].phi  = Math.random() * sign / 100.0;
+															
+							}
+			
+	}
+	
+	void defineCube(int width ) {
+			
+			for (int i=0; i<n[0]; i++)
+				for (int j=0; j<n[1]; j++)
+					for (int k=0; k<n[2]; k++){
+						if ( (i > n[0]/2 - width/2) && (i < n[0]/2 + width/2) && 
+								(j > n[1]/2 - width/2) && (j < n[1]/2 + width/2) 
+								&& (k > n[2]/2 - width/2) && (k < n[2]/2 + width/2) 
+								){
+							points[i][j][k].phi = 1;
+						}
+						else points[i][j][k].phi = -1;
+					}
+			
+	}
+	
+
 }
+
+	
