@@ -18,7 +18,6 @@ public class TempProfile {
 		this.directions = directions;
 		this.domain = domain;
 		
-		Point.definePoints(domain, n, directions);
 		for (int i=0; i<n[0]; i++){
 			domain.points[i][0][0].T = 0;
 		}

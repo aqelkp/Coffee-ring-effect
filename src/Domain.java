@@ -1,3 +1,6 @@
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class Domain {
 
@@ -8,13 +11,14 @@ public class Domain {
 	
 	// Points in the plane
 	Point[][][] points;
+	double[][][] phi;
 	int[][] c;
 	
 	int delX = 1, delY = 1, delZ = 1;
 	
 	// Simulation parameters from the paper
 	// Lattice - Boltzmann simulation of droplet evaporation
-	public static double a = -0.00305, b=-a, K = 0.0078;
+	public static double a = -0.00305*0.25, b=-a, K = 0.0078;
 	public static double epsilon = Math.sqrt(-K/(2*a));
 	int M = 10, rho = 1, delt = 1;
 	double towG = 1;
@@ -27,6 +31,7 @@ public class Domain {
 		this.c = c;
 		this.directions = c.length;
 		points = new Point[n[0]][n[1]][n[2]];
+		phi = new double[n[0]][n[1]][n[2]];
 		for (int i=0; i<n[0]; i++){
 			for (int j = 0; j<n[1]; j++){
 				for (int m=0; m<n[2]; m++){
@@ -93,8 +98,7 @@ public class Domain {
 		for (int i=0; i<n[0]; i++)
 			for (int j=0; j<n[1];j++)
 				for (int m=0; m<n[2]; m++)
-					for (int k=0; k<directions; k++)
-						sum += points[i][j][m].g[k];
+					sum += phi[i][j][m];
 		return sum;
 	}
 
@@ -109,24 +113,24 @@ public class Domain {
 					// difference discretization
 					
 					// Checking for boundaries 
-					double phiPoint =  points[i][j][k].phi;
+					double phiPoint =  phi[i][j][k];
 					double nuPoint = a * phiPoint + b * phiPoint * phiPoint * phiPoint;
 					
 					// Applying discretization
 					nuPoint -= (K / (delX * delX)) * 
-							(points[ (i + delX < n[0]) ? i + delX : (i + delX - n[0]) ][j][k].phi 
+							(phi[ (i + delX < n[0]) ? i + delX : (i + delX - n[0]) ][j][k] 
 									- 2 * phiPoint + 
-									points[ (i- delX >= 0) ? i - delX : (i - delX + n[0])][j][k].phi);
+									phi[ (i- delX >= 0) ? i - delX : (i - delX + n[0])][j][k]);
 					
 					nuPoint -= (K / (delY * delY)) * 
-							( points[i][ (j + delY < n[1]) ? j + delY : (j + delY - n[1]) ][k].phi 
-									- 2 * points[i][j][k].phi + 
-									points[i][ (j- delY >= 0) ? j - delY : (j - delY + n[1])][k].phi );
+							( phi[i][ (j + delY < n[1]) ? j + delY : (j + delY - n[1]) ][k] 
+									- 2 * phi[i][j][k] + 
+									phi[i][ (j- delY >= 0) ? j - delY : (j - delY + n[1])][k] );
 					
 					nuPoint -= (K / (delZ * delZ)) * 
-							(points[i][j][(k + delZ < n[2]) ? k + delZ : (k + delZ - n[2]) ].phi 
-									- 2 * points[i][j][k].phi + 
-									points[i][j][ (k- delZ >= 0) ? k - delZ : (k - delZ + n[2])].phi);
+							(phi[i][j][(k + delZ < n[2]) ? k + delZ : (k + delZ - n[2]) ] 
+									- 2 * phi[i][j][k] + 
+									phi[i][j][ (k- delZ >= 0) ? k - delZ : (k - delZ + n[2])]);
 					
 					points[i][j][k].nu = nuPoint;
 
@@ -146,7 +150,7 @@ public class Domain {
 					// D2Q9 Model weighing factors
 					for (int m=0; m<directions; m++){
 						if (m==0){
-							point.geq[m] = point.phi - 1.1547 * point.nu;
+							point.geq[m] = phi[i][j][k] - 1.1547 * point.nu;
 						}else if (m<5) {
 							point.geq[m] = 0.23094 * point.nu;
 						}else if (m<10){
@@ -185,7 +189,7 @@ public class Domain {
 					for (int h =0; h<directions; h++){
 						phiPoint += point.g[h];
 					}
-					point.phi = phiPoint;
+					phi[i][j][k] = phiPoint;
 				}
 	}
 
@@ -194,13 +198,13 @@ public class Domain {
 		for (int i=0; i<n[0]; i++)
 			for (int j=0; j<n[1]; j++)
 				for (int k=0; k<n[2]; k++){
-					sum += Math.abs(points[i][j][k].phi);
+					sum += Math.abs(phi[i][j][k]);
 				}
 		double avg = sum / (n[0] * n[1] * n[2]);
 		for (int i=0; i<n[0]; i++)
 			for (int j=0; j<n[1]; j++)
 				for (int k=0; k<n[2]; k++)
-					points[i][j][k].phi = points[i][j][k].phi/avg;
+					phi[i][j][k] = phi[i][j][k]/avg;
 		// TODO Auto-generated method stub
 		
 	}
@@ -215,24 +219,24 @@ public class Domain {
 					// difference discretization
 					
 					// Checking for boundaries 
-					double phiPoint =  points[i][j][k].phi;
+					double phiPoint =  phi[i][j][k];
 					double nuPoint = a * phiPoint + b * phiPoint * phiPoint * phiPoint;
 					
 					// Applying discretization
 					nuPoint -= (K / (delX * delX)) * 
-							(points[ (i + delX < n[0]) ? i + delX : (i + delX - n[0]) ][j][k].phi 
+							(phi[ (i + delX < n[0]) ? i + delX : (i + delX - n[0]) ][j][k] 
 									- 2 * phiPoint + 
-									points[ (i- delX >= 0) ? i - delX : (i - delX + n[0])][j][k].phi);
+									phi[ (i- delX >= 0) ? i - delX : (i - delX + n[0])][j][k]);
 					
 					nuPoint -= (K / (delY * delY)) * 
-							( points[i][ (j + delY < n[1]) ? j + delY : (j + delY - n[1]) ][k].phi 
-									- 2 * points[i][j][k].phi + 
-									points[i][ (j- delY >= 0) ? j - delY : (j - delY + n[1])][k].phi );
+							( phi[i][ (j + delY < n[1]) ? j + delY : (j + delY - n[1]) ][k] 
+									- 2 * phi[i][j][k] + 
+									phi[i][ (j- delY >= 0) ? j - delY : (j - delY + n[1])][k] );
 					
 					nuPoint -= (K / (delZ * delZ)) * 
-							(points[i][j][(k + delZ < n[2]) ? k + delZ : (k + delZ - n[2]) ].phi 
-									- 2 * points[i][j][k].phi + 
-									points[i][j][ (k- delZ >= 0) ? k - delZ : (k - delZ + n[2])].phi);
+							(phi[i][j][(k + delZ < n[2]) ? k + delZ : (k + delZ - n[2]) ] 
+									- 2 * phi[i][j][k] + 
+									phi[i][j][ (k- delZ >= 0) ? k - delZ : (k - delZ + n[2])]);
 					
 					points[i][j][k].nu = nuPoint;
 
@@ -252,7 +256,7 @@ public class Domain {
 							A = (1/rho) * 3 * M * point.nu;
 							omega = 1.0/72;
 						}
-						point.geq[h] = point.phi * omega * A;
+						point.geq[h] = phi[i][j][k] * omega * A;
 						
 					}	
 					
@@ -260,7 +264,7 @@ public class Domain {
 					for (int h =0; h<directions; h++){
 						phiPoint1 += point.g[h];
 					}
-					point.phi = phiPoint1;
+					phi[i][j][k] = phiPoint1;
 					
 				}
 	}
@@ -272,8 +276,8 @@ public class Domain {
 					for (int j=0; j<n[1]; j++)
 						for (int k=0; k<n[2]; k++){
 							// For already seperated system
-							if (i<n[0]/2) points[i][j][k].phi = 1.0;
-							else points[i][j][k].phi = -1;
+							if (i<n[0]/2) phi[i][j][k] = 1.0;
+							else phi[i][j][k] = -1;
 							
 						}
 		
@@ -288,7 +292,7 @@ public class Domain {
 								// For randomized system
 								double sign = 1.0;
 								if (Math.random() < 0.5 ) sign = -1.0;
-								points[i][j][k].phi  = Math.random() * sign / 100.0;
+								phi[i][j][k]  = Math.random() * sign / 100.0;
 															
 							}
 			
@@ -303,11 +307,25 @@ public class Domain {
 								(j > n[1]/2 - width/2) && (j < n[1]/2 + width/2) 
 								&& (k > n[2]/2 - width/2) && (k < n[2]/2 + width/2) 
 								){
-							points[i][j][k].phi = 1;
+							phi[i][j][k] = 1;
 						}
-						else points[i][j][k].phi = -1;
+						else phi[i][j][k] = -1;
 					}
 			
+	}
+
+	public void savePhi(String name) {
+		try {
+			FileOutputStream fos = new FileOutputStream("dataphi/t" + name +".tmp");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(phi);
+			oos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 

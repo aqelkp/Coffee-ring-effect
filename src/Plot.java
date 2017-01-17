@@ -12,18 +12,21 @@ import graphics.HSLColor;
 
 public class Plot extends JPanel{
 	
+	private static final long serialVersionUID = 1L;
 	private static int pointSize = 1;
 	public static void define(Domain domain, String fileName){
+		int xLength = domain.n[0] * pointSize;
+		int yLength = domain.n[1] * pointSize + 30;
 		JFrame frame = new JFrame("Plot");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Plot plot = new Plot(domain);
 		frame.add(plot);
-		frame.setSize(domain.n[0] * pointSize , domain.n[1] * pointSize );
+		frame.setSize(xLength , yLength );
 		frame.setVisible(true);
 		
 		try
         {
-            BufferedImage image = new BufferedImage(domain.n[0] * pointSize , domain.n[1] * pointSize, BufferedImage.TYPE_INT_RGB);
+            BufferedImage image = new BufferedImage(xLength , yLength, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = image.createGraphics();
             frame.paint(graphics2D);
             ImageIO.write(image,"jpeg", new File("plots/" + fileName));
@@ -49,7 +52,7 @@ public class Plot extends JPanel{
 		
 		for (int i=0; i<domain.n[0]; i++)
 			for (int j =0; j<domain.n[1]; j++){
-				double ph = domain.points[i][j][0].phi;
+				double ph = domain.phi[i][j][0];
 				float intensity = (float) (Math.abs(ph) * 1.0f);
 				if (ph > 0){
 //					System.out.println((int) intensity);

@@ -1,13 +1,14 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 
-public class Point {
+public class Point implements Serializable{
 
 	int directions;
 	double[] g;
 	double[] geq;
 	
-	// Phi - Probabilitic distribution - sigma gi
-	double phi;
-		
 	// nu - Chemical potential
 	double nu;
 	
@@ -20,5 +21,7 @@ public class Point {
 		this.g = g;
 		geq = new double[directions];
 	}
+
 	
+		
 }
