@@ -10,8 +10,8 @@ public class DataDecoder {
 	public static void main(String[] args) {
 		
 		Domain domain = new Domain(Main.n, Main.cMatrix);
-		int max = 78700;
-		int stepSize = 1000;
+		int max = 230000;
+		int stepSize = 10000;
 		double[] x = new double[max/stepSize+1]; 
 		double[] y = new double[max/stepSize+1];
 		for (int i =0; i<=max; i=i+stepSize){
@@ -19,7 +19,7 @@ public class DataDecoder {
 			x[i/stepSize] = i;
 			y[i/stepSize] = domain.sigmaG();
 			System.out.println(y[i/stepSize]);
-//			Plot.define(domain, "Domain_at_t=" + i);
+			Plot.define(domain, "Domain_at_t=" + i);
 		}
 		
 		XYChart chart = QuickChart.getChart("sigma phi vs t", "t", "sigma phi", "phi(x)", x, y);
@@ -36,7 +36,7 @@ public class DataDecoder {
         
         try {	
         		
-                fis = new FileInputStream("data/t" + name + ".tmp");
+                fis = new FileInputStream("dataphi/t" + name + ".tmp");
                 in = new ObjectInputStream(fis);
                 points = (double[][][]) in.readObject();
                 in.close();

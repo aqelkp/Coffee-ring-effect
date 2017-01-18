@@ -9,8 +9,6 @@ public class Point implements Serializable{
 	double[] g;
 	double[] geq;
 	
-	// nu - Chemical potential
-	double nu;
 	
 	// TODO Delete this if temp profile is not required
 	// For temperature profile
