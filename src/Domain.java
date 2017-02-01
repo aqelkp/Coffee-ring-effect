@@ -26,7 +26,7 @@ public class Domain {
 	double Mbar = 2*M/(2*towG - 1);
 	public static double h = 0.00;
 //	double towG = 0.78868;
-	public static double contactAngle = Math.PI/2;
+	public static double contactAngle = Math.PI/4;
 	
 	// To exclude wall
 	int start = 1;
@@ -131,7 +131,7 @@ public class Domain {
 	double sigmaG(){
 		double sum = 0;
 		for (int i=0; i<n[0]; i++)
-			for (int j=0; j<n[1]-1;j++)
+			for (int j=1; j<n[1]-1;j++)
 				for (int k=0; k<n[2]; k++)
 //					for (int m = 0; m<directions; m++){
 //						sum += points[i][j][k].g[m];
@@ -166,6 +166,7 @@ public class Domain {
 						- 2 * phiPoint + 
 						phi[ (i- delX >= 0) ? i - delX : (i - delX + n[0])][j][k]);
 		
+//		if ( j + delY < n[1] && j - delY >= 0)
 		nuPoint -= (K / (delY * delY)) * 
 				( phi[i][ j + delY ][k] 
 						- 2 * phiPoint + 
@@ -388,11 +389,14 @@ public class Domain {
 //				// del.phi = -h/k condition applied
 //				phi[i][0][k] = bcValue + phi[i][1][k];
 //				phi[i][n[1]-1][k] = bcValue + phi[i][n[1]-2][k];
-				
-				
+
 				phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
 								* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
 										phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
+				
+				phi[i][0][k] = phi[i][2][k] + Math.tan(Math.PI/2 - contactAngle) 
+				* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][1][k] - 
+						phi[(i-1>= 0) ? i-1 : (i-1+n[0])][1][k]);
 				
 			}
 		

@@ -8,7 +8,7 @@ import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 
 public class Main {
-	public static int[] n = {750, 750, 10};
+	public static int[] n = {40, 40, 1};
 	public static int c = 1;
 	
 	// D2Q9 Model
@@ -28,7 +28,7 @@ public class Main {
 		
 		// Define a domain
 		Domain domain = new Domain(n, cMatrix);
-		domain.defineCube(n[0]/2);
+		domain.defineCube(n[0]/4);
 //		domain.defineSeperatedSystem();
 //		domain.defineRandomSystem();
 		
@@ -36,15 +36,14 @@ public class Main {
 		double[] yaxis = new double[n[1]];
 		for ( int i=0; i< n[1]; i++) xaxis[i] = i;
 		
-//		for (int i=0; i<=0; i++){
-//			if (i % 100000 == 0) displayResults(domain, i, xaxis, yaxis);	
-//			
+		// Apply streaming function
+		for (int i=0; i<=1000000000; i++){
+			if (i % 1000000 == 0) displayResults(domain, i, xaxis, yaxis);	
+			
 //			LBSimulation(domain);
-////			methodOfLines(domain);
-//			
-//		}
-		
-		System.out.println("Total memory " + total + ", Free memory " + free);
+			methodOfLines(domain);
+			
+		}
 		
 	}
 
@@ -63,7 +62,7 @@ public class Main {
 		domain.findNu();
 		domain.findBoundaryNu();
 		domain.findPhiMethodOfLines();
-//		domain.applySolidWallBC();
+		domain.applySolidWallBC();
 		
 		
 	}
