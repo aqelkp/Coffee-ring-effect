@@ -40,6 +40,7 @@ public class Domain {
 		points = new Point[n[0]][n[1]][n[2]];
 		phi = new double[n[0]][n[1]][n[2]];
 		nu = new double[n[0]][n[1]][n[2]];
+		
 		for (int i=0; i<n[0]; i++){
 			for (int j = 0; j<n[1]; j++){
 				for (int m=0; m<n[2]; m++){
@@ -348,6 +349,19 @@ public class Domain {
 			
 	}
 	
+	void definePlanarDroplet() {
+		
+		for (int i=0; i<n[0]; i++)
+			for (int j=0; j<n[1]; j++)
+				for (int k=0; k<n[2]; k++){
+					if ( j > n[1]/2){
+						phi[i][j][k] = 1;
+					}
+					else phi[i][j][k] = -1;
+				}
+		
+	}
+	
 	void defineCube(int width ) {
 			
 			for (int i=0; i<n[0]; i++)
@@ -378,6 +392,16 @@ public class Domain {
 		
 	}
 
+	public void evaporate() {
+		double phiH = -1.3;
+		
+		for (int i=0; i<n[0]; i++)
+			for (int k =0; k<n[2]; k++){
+				phi[i][0][k] = phiH;
+			}
+		
+	}
+	
 	public void applySolidWallBC() {
 		double bcValue = -h/K;
 		

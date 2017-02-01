@@ -13,8 +13,8 @@ public class DataVisuals {
 		findYAxis(domain, n, yaxis);
 		XYChart chart = QuickChart.getChart("Phi v/s r at t = " + i, "r", "phi", "phi(x)", xaxis, yaxis);
 		
-		findTanh(domain, n, yaxis);
-		chart.addSeries("tanh(r/epsilon)", xaxis, yaxis);
+//		findTanh(domain, n, yaxis);
+//		chart.addSeries("tanh(r/epsilon)", xaxis, yaxis);
 		
 		new SwingWrapper(chart).displayChart();
 		
@@ -42,9 +42,9 @@ public class DataVisuals {
 	}
 
 	public static void findYAxis(Domain domain, int[] n, double[] yaxis) {
-		int center = n[1]/2;
-		for (int i =0; i<n[0]; i++){
-			yaxis[i] = domain.phi[i][center][0];
+		int center = n[0]/2;
+		for (int i =0; i<n[1]; i++){
+			yaxis[i] = domain.phi[center][i][0];
 		}
 	}
 

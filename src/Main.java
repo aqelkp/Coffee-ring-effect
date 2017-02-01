@@ -8,7 +8,7 @@ import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 
 public class Main {
-	public static int[] n = {40, 40, 1};
+	public static int[] n = {1, 150, 1};
 	public static int c = 1;
 	
 	// D2Q9 Model
@@ -21,39 +21,42 @@ public class Main {
 			
 	public static void main(String[] args) {
 		
-		Runtime rt = Runtime.getRuntime();
-		long total = rt.totalMemory();
-        long free = rt.freeMemory();
-		System.out.println("Total memory " + total + ", Free memory " + free);
+		long startTime = System.currentTimeMillis();
 		
 		// Define a domain
 		Domain domain = new Domain(n, cMatrix);
-		domain.defineCube(n[0]/4);
+		
+		// Initial Condition for the domain
+		domain.definePlanarDroplet();
+//		domain.defineCube(n[0]/2);
 //		domain.defineSeperatedSystem();
 //		domain.defineRandomSystem();
 		
+		// For plotting tanh curve
 		double[] xaxis = new double[n[1]];
 		double[] yaxis = new double[n[1]];
 		for ( int i=0; i< n[1]; i++) xaxis[i] = i;
 		
 		// Apply streaming function
-		for (int i=0; i<=1000000000; i++){
-			if (i % 1000000 == 0) displayResults(domain, i, xaxis, yaxis);	
+		for (int i=0; i<=10000000; i++){
+			if (i % 100000 == 0) displayResults(domain, i, xaxis, yaxis);	
 			
-//			LBSimulation(domain);
-			methodOfLines(domain);
+			LBSimulation(domain);
+//			methodOfLines(domain);
 			
 		}
+		
+		System.out.println("Total time taken for the simulation = " + (System.currentTimeMillis() - startTime));
 		
 	}
 
 	private static void displayResults(Domain domain, int i, double[] xaxis, double[] yaxis) {
 		// TODO Auto-generated method stub
 //		printPoints(domain, n);
-//		DataVisuals.plotBoundaryPhi(domain, n, xaxis, yaxis, i);
+		DataVisuals.plotBoundaryPhi(domain, n, xaxis, yaxis, i);
 		System.out.println(domain.sigmaG());
 //		domain.savePhi("" + i);
-		Plot.define(domain, "Domain_at_t=" + i);
+//		Plot.define(domain, "Domain_at_t=" + i);
 //		
 	}
 
@@ -74,6 +77,7 @@ public class Main {
 		domain.stream();
 		domain.findPhiLBM();
 		domain.applySolidWallBC();
+		domain.evaporate();
 	}
 
 	
