@@ -8,22 +8,27 @@ import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 
 public class Main {
-	public static int[] n = {50, 50, 1};
+	public static int[] n = {750, 750, 10};
 	public static int c = 1;
 	
 	// D2Q9 Model
 	public static int[][] cMatrix = { {0,0,0}, {c,0,0}, {0,c,0}, {-c,0,0}, {0,-c,0}, {c,c,0}, {-c,c,0}, {-c,-c,0}, {c,-c,0} };
 			
 //	// D3Q15 Model
+	// Order to be changed with index
 //	public static int[][] cMatrix = { {0,0,0}, {1,0,0}, {-1,0,0}, {0,1,0}, {0,-1,0},{0,0,1},{0,0,-1}, {1,1,1}, {-1,1,1}, 
 //						{-1,-1,1}, {-1,1,-1}, {-1,-1,-1}, {1,-1,1}, {1,1,-1}, {1,-1,-1} };
 			
 	public static void main(String[] args) {
 		
+		Runtime rt = Runtime.getRuntime();
+		long total = rt.totalMemory();
+        long free = rt.freeMemory();
+		System.out.println("Total memory " + total + ", Free memory " + free);
 		
 		// Define a domain
 		Domain domain = new Domain(n, cMatrix);
-		domain.defineCube(15);
+		domain.defineCube(n[0]/2);
 //		domain.defineSeperatedSystem();
 //		domain.defineRandomSystem();
 		
@@ -31,36 +36,45 @@ public class Main {
 		double[] yaxis = new double[n[1]];
 		for ( int i=0; i< n[1]; i++) xaxis[i] = i;
 		
-		// Apply streaming function
-		for (int i=0; i<=10000000; i++){
-//			if (i % 100 == 0) printPoints(domain, n);
-//			if (i % 10000 == 0) DataVisuals.plotBoundaryPhi(domain, n, xaxis, yaxis, i);
-			if (i % 10000 == 0) System.out.println(domain.sigmaG());
-			
+//		for (int i=0; i<=0; i++){
+//			if (i % 100000 == 0) displayResults(domain, i, xaxis, yaxis);	
+//			
 //			LBSimulation(domain);
-			methodOfLines(domain);
-			
-//			if (i%100 == 0 ) domain.savePhi("" + i);
-//			Point.read("" + i);
-
-			if (i%10000 == 0 ) Plot.define(domain, "Domain_at_t=" + i);
-			
-		}
+////			methodOfLines(domain);
+//			
+//		}
 		
+		System.out.println("Total memory " + total + ", Free memory " + free);
+		
+	}
+
+	private static void displayResults(Domain domain, int i, double[] xaxis, double[] yaxis) {
+		// TODO Auto-generated method stub
+//		printPoints(domain, n);
+//		DataVisuals.plotBoundaryPhi(domain, n, xaxis, yaxis, i);
+		System.out.println(domain.sigmaG());
+//		domain.savePhi("" + i);
+		Plot.define(domain, "Domain_at_t=" + i);
+//		
 	}
 
 	private static void methodOfLines(Domain domain) {
 		
 		domain.findNu();
+		domain.findBoundaryNu();
 		domain.findPhiMethodOfLines();
+//		domain.applySolidWallBC();
+		
 		
 	}
 
 	private static void LBSimulation(Domain domain) {
 		domain.findNu();
+		domain.findBoundaryNu();
 		domain.findGeq();
-		domain.stream(cMatrix);
+		domain.stream();
 		domain.findPhiLBM();
+		domain.applySolidWallBC();
 	}
 
 	
@@ -68,7 +82,8 @@ public class Main {
 		Point[][][] points = domain.points;
 		for (int j=0; j<n[1]; j++){
 			for (int i=0; i< n[0]; i++){
-				System.out.print( new DecimalFormat("#.######").format(domain.phi[i][j][0])  + " ");
+				System.out.print( new DecimalFormat("#.######").format(domain.points[i][j][0].g[5])  + " ");
+				//System.out.print("(" + i + "," + j + ")");
 			}
 			System.out.println("");
 		}
