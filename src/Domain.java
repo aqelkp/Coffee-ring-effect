@@ -21,7 +21,7 @@ public class Domain {
 	public static double a = -0.00305*10, b=-a, K = 0.0078*2;
 	public static double epsilon = Math.sqrt(-K/(2*a));
 	public static int rho = 1, delt = 1;
-	public static double M = 0.2;
+	public static double M = 6.5;
 	double towG = 1;
 	double Mbar = 2*M/(2*towG - 1);
 	public static double h = 0.00;
@@ -190,33 +190,33 @@ public class Domain {
 					
 					Point point = points[i][j][k];
 					
-					// D2Q9 Model weighing factors
-					for (int m=0; m<directions; m++){
-						if (m==0){
-							point.geq[m] = phi[i][j][k] - 1.1547 * nu[i][j][k];
-						}else if (m<5) {
-							point.geq[m] = 0.23094 * nu[i][j][k];
-						}else if (m<10){
-							point.geq[m] = 0.057735 * nu[i][j][k];
-						}
-					}
-					
-//					//D3Q15 Model weighing factors
-//					// Assign A value according to directions
-//					double A = 0, omega =0;
-//					for (int h =0; h<directions; h++){
-//						if (h==0){
-//							A = 4.5 * phi[i][j][k] - (3.5 * 3 * M * nu[i][j][k]);
-//							omega = 2.0/9;
-//						} else if (h < 7){
-//							A = (1/rho) * 3 * M * nu[i][j][k];
-//							omega = 1.0/9;
-//						} else if (h < 16){
-//							A = (1/rho) * 3 * M * nu[i][j][k];
-//							omega = 1.0/72;
+//					// D2Q9 Model weighing factors
+//					for (int m=0; m<directions; m++){
+//						if (m==0){
+//							point.geq[m] = phi[i][j][k] - 1.1547 * nu[i][j][k];
+//						}else if (m<5) {
+//							point.geq[m] = 0.23094 * nu[i][j][k];
+//						}else if (m<10){
+//							point.geq[m] = 0.057735 * nu[i][j][k];
 //						}
-//						point.geq[h] = rho *  omega * A;
-//					}	
+//					}
+					
+					//D3Q15 Model weighing factors
+					// Assign A value according to directions
+					double A = 0, omega =0;
+					for (int h =0; h<directions; h++){
+						if (h==0){
+							A = 4.5 * phi[i][j][k] - (3.5 * 3 * Mbar * nu[i][j][k]);
+							omega = 2.0/9;
+						} else if (h < 7){
+							A = (1/rho) * 3 * Mbar * nu[i][j][k];
+							omega = 1.0/9;
+						} else if (h < 16){
+							A = (1/rho) * 3 * Mbar * nu[i][j][k];
+							omega = 1.0/72;
+						}
+						point.geq[h] = rho *  omega * A;
+					}	
 					
 				}
 		
@@ -392,6 +392,20 @@ public class Domain {
 		
 	}
 
+	public void savePhi(String name, String string) {
+		try {
+			FileOutputStream fos = new FileOutputStream("dataphi/stringfile" + name +".tmp");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(string);
+			oos.writeUTF(string);
+			oos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 	public void evaporate() {
 		double phiH = -1.3;
 		

@@ -52,7 +52,7 @@ public class RKMethod {
 				(nu[i][j][(k + 1 < n[2]) ? k + 1 : (k + 1 - n[2]) ] 
 						- 2 * domain.findNu(phiPoint, i, j, k) + 
 						nu[i][j][ (k- 1 >= 0) ? k - 1 : (k - 1 + n[2])]);
-		return 0.5 * delNu;
+		return Domain.M * delNu;
 	}
 	
 	public static double RK4(Domain domain, int x, int y, int z){
