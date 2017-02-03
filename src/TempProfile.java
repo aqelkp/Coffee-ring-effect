@@ -11,7 +11,7 @@ public class TempProfile {
 		int[] n = {100, 1, 1};
 		int[][] c = { {0,0,0}, {1,0,0}, {-1,0,0}, {0,1,0}, {0,-1,0}};
 		int directions = c.length;
-		Domain domain = new Domain(n, c);
+		Domain domain = new Domain();
 
 		this.n = n;
 		this.c = c;

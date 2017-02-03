@@ -64,6 +64,10 @@ public class RKMethod {
 		return phi + ( k1 + 2*k2 + 2*k3 + k4)/6;
 	}
 	
+	/*
+	 * For temperature calculation
+	 * Made for testing purpose
+	 */
 	public static double RK4(double[] T, int i){
 		double k1 = fun(T, T[i], i);
 		double k2 = fun(T, T[i] + 0.5 * k1, i);

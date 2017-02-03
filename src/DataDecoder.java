@@ -9,7 +9,7 @@ public class DataDecoder {
 
 	public static void main(String[] args) {
 		
-		Domain domain = new Domain(Main.n, Main.cMatrix);
+		Domain domain = new Domain();
 		int max = 2010000;
 		int stepSize = 10000;
 		double[] x = new double[max/stepSize+1]; 

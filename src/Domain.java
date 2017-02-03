@@ -4,24 +4,26 @@ import java.io.ObjectOutputStream;
 
 public class Domain {
 
-	int dimension, directions;
+	
+	public static int dimension = 2;
+	public static int numPoints = 50;
+	int directions;
 	
 	// Number of points in each dimension
-	int[] n;
+	int[] n = {numPoints, dimension > 1 ? numPoints : 1, dimension > 2 ? numPoints : 1};
 	
 	// Points in the plane
 	Point[][][] points;
 	double[][][] phi, nu;
 	int[][] c;
 	
-	int delX = 1, delY = 1, delZ = 1;
 	
 	// Simulation parameters from the paper
 	// Lattice - Boltzmann simulation of droplet evaporation
 	public static double a = -0.00305*10, b=-a, K = 0.0078*2;
 	public static double epsilon = Math.sqrt(-K/(2*a));
 	public static int rho = 1, delt = 1;
-	public static double M = 6.5;
+	public static double M = 0.5;
 	double towG = 1;
 	double Mbar = 2*M/(2*towG - 1);
 	public static double h = 0.00;
@@ -29,18 +31,49 @@ public class Domain {
 	public static double contactAngle = Math.PI/4;
 	
 	// To exclude wall
-	int start = 1;
+	int start = 0;
 	
 	// Defining a domain
-	public Domain(int[] n, int[][] c){
-		this.dimension = n.length;
-		this.n = n;
-		this.c = c;
-		this.directions = c.length;
+	public Domain(){
+		
 		points = new Point[n[0]][n[1]][n[2]];
 		phi = new double[n[0]][n[1]][n[2]];
 		nu = new double[n[0]][n[1]][n[2]];
+		defineDimensions();
+		defineGMatrices();
 		
+		
+	}
+	
+	public void defineDimensions() {
+		// TODO Auto-generated method stub
+		
+		
+		if (dimension == 2 ){
+			// D2Q9 Model
+			int[][] cMatrix = { {0,0,0}, {1,0,0}, {0,1,0}, {-1,0,0}, {0,-1,0}, {1,1,0}, {-1,1,0}, {-1,-1,0}, {1,-1,0} };
+			this.c = cMatrix;
+		} else if (dimension == 3) {
+			// D3Q15 Model
+			int[][] cMatrix = { {0,0,0}, {1,0,0}, {-1,0,0}, {0,1,0}, {0,-1,0},{0,0,1},{0,0,-1}, {1,1,1}, {-1,1,1}, 
+								{-1,-1,1}, {-1,1,-1}, {-1,-1,-1}, {1,-1,1}, {1,1,-1}, {1,-1,-1} };	
+			this.c = cMatrix;
+		} else if (dimension == 1){
+			// D1Q3 Model
+			int[][] cMatrix = { {0,0,0}, {1,0,0}, {-1,0,0} };
+			this.c = cMatrix;
+		} else {
+			int[][] cMatrix = { {0,0,0} };
+			this.c = cMatrix;
+		}
+		this.directions = c.length;
+		
+						System.out.println(directions);
+
+	}
+
+	private void defineGMatrices() {
+		// TODO Auto-generated method stub
 		for (int i=0; i<n[0]; i++){
 			for (int j = 0; j<n[1]; j++){
 				for (int m=0; m<n[2]; m++){
@@ -53,33 +86,31 @@ public class Domain {
 				}
 			}
 		}
-
+		
 	}
-	
+
 	// Apply streaming function
 	void stream(){
 		
-		double[][][][] tempg = new double[directions][n[0]][n[1]][n[2]];
-		
-		for (int i=0; i<directions; i++){
-			// Take out the g value in each direction and make it into a 1-D array
-						// For temp saving values
-						for (int j=0; j<n[0]; j++){
-							for (int k=0; k<n[1]; k++) {
-								for (int m=0; m<n[2]; m++){
-									tempg[i][j][k][m] = points[j][k][m].g[i];
-								}
-							}
-						}
-		}
+//		double[][][][] tempg = new double[directions][n[0]][n[1]][n[2]];
+//		
+//		for (int i=0; i<directions; i++){
+//			// Take out the g value in each direction and make it into a 1-D array
+//						// For temp saving values
+//						for (int j=0; j<n[0]; j++){
+//							for (int k=0; k<n[1]; k++) {
+//								for (int m=0; m<n[2]; m++){
+//									tempg[i][j][k][m] = points[j][k][m].g[i];
+//								}
+//							}
+//						}
+//		}
 		
 		for (int i=0; i<directions; i++){
 			// Apply streaming to each of the point
 			for (int j=0; j<n[0]; j++){
 				for (int k=0; k<n[1]; k++){
 					for (int m=0; m<n[2]; m++){
-						
-						
 						
 						int x = j + c[i][0] * delt;
 						int y = k + c[i][1] * delt;
@@ -95,22 +126,20 @@ public class Domain {
 						if (z >= n[2]) z =- n[2];
 						if (z < 0) z += n[2];
 						
-//						points[x][y][z].g[i] = tempg[i][j][k][m] - (delt/towG) * 1.0 *
-//							(tempg[i][j][k][m] - points[j][k][m].geq[i]) ;
+						points[x][y][z].g[i] = points[j][k][m].geq[i] ;
 						
-						// Top bounce-back BC
-						if (y == 0 && (i == 6 || i == 2 || i == 5 ) ){
-//							points[x][y][z].g[i] = tempg[i+2][x][y][z];
-							points[x][y][z].g[i] = points[x][y][z].geq[i+2];
-						// Bottom bounce-back BC
-						} else if (y == n[1] - 2 && (i == 8 || i == 4 || i == 7 ) ){
-//							points[x][y][z].g[i] = tempg[i-2][x][y][z];
-							points[x][y][z].g[i] = points[x][y][z].geq[i-2];
-						} else {
-//							points[x][y][z].g[i] = tempg[i][j][k][m];
-							points[x][y][z].g[i] = tempg[i][j][k][m] - (delt/towG) * 1.0 *
-									(tempg[i][j][k][m] - points[j][k][m].geq[i]) ;
-						}
+//						// Top bounce-back BC
+//						if (y == 0 && (i == 6 || i == 2 || i == 5 ) ){
+////							points[x][y][z].g[i] = tempg[i+2][x][y][z];
+//							points[x][y][z].g[i] = points[x][y][z].geq[i+2];
+//						// Bottom bounce-back BC
+//						} else if (y == n[1] - 2 && (i == 8 || i == 4 || i == 7 ) ){
+////							points[x][y][z].g[i] = tempg[i-2][x][y][z];
+//							points[x][y][z].g[i] = points[x][y][z].geq[i-2];
+//						} else {
+////							points[x][y][z].g[i] = tempg[i][j][k][m];
+//							points[x][y][z].g[i] = points[j][k][m].geq[i] ;
+//						}
 						
 						
 								
@@ -132,7 +161,7 @@ public class Domain {
 	double sigmaG(){
 		double sum = 0;
 		for (int i=0; i<n[0]; i++)
-			for (int j=1; j<n[1]-1;j++)
+			for (int j=start; j<n[1]-start;j++)
 				for (int k=0; k<n[2]; k++)
 //					for (int m = 0; m<directions; m++){
 //						sum += points[i][j][k].g[m];
@@ -162,21 +191,18 @@ public class Domain {
 		double nuPoint = a * phiPoint + b * phiPoint * phiPoint * phiPoint;
 		
 		// Applying discretization
-		nuPoint -= (K / (delX * delX)) * 
-				(phi[ (i + delX < n[0]) ? i + delX : (i + delX - n[0]) ][j][k] 
-						- 2 * phiPoint + 
-						phi[ (i- delX >= 0) ? i - delX : (i - delX + n[0])][j][k]);
+		nuPoint -= K * (phi[ (i + 1 < n[0]) ? i + 1 : (i + 1 - n[0]) ][j][k] - 2 * phiPoint + 
+						phi[ (i- 1 >= 0) ? i - 1 : (i - 1 + n[0])][j][k]);
 		
 //		if ( j + delY < n[1] && j - delY >= 0)
-		nuPoint -= (K / (delY * delY)) * 
-				( phi[i][ j + delY ][k] 
+		nuPoint -= K * ( phi[i][ j + 1 < n[1] ? j + 1 : j + 1 - n[1]][k] 
 						- 2 * phiPoint + 
-						phi[i][ j - delY][k] );
+						phi[i][ j - 1 >=0 ? j - 1 : j - 1 + n[1] ][k] );
 		
-		nuPoint -= (K / (delZ * delZ)) * 
-				(phi[i][j][(k + delZ < n[2]) ? k + delZ : (k + delZ - n[2]) ] 
+		nuPoint -= K * 
+				(phi[i][j][(k + 1 < n[2]) ? k + 1 : (k + 1 - n[2]) ] 
 						- 2 * phiPoint + 
-						phi[i][j][ (k- delZ >= 0) ? k - delZ : (k - delZ + n[2])]);
+						phi[i][j][ (k- 1 >= 0) ? k - 1 : (k - 1 + n[2])]);
 		
 		return  nuPoint;
 		
@@ -190,33 +216,33 @@ public class Domain {
 					
 					Point point = points[i][j][k];
 					
-//					// D2Q9 Model weighing factors
-//					for (int m=0; m<directions; m++){
-//						if (m==0){
-//							point.geq[m] = phi[i][j][k] - 1.1547 * nu[i][j][k];
-//						}else if (m<5) {
-//							point.geq[m] = 0.23094 * nu[i][j][k];
-//						}else if (m<10){
-//							point.geq[m] = 0.057735 * nu[i][j][k];
-//						}
-//					}
-					
-					//D3Q15 Model weighing factors
-					// Assign A value according to directions
-					double A = 0, omega =0;
-					for (int h =0; h<directions; h++){
-						if (h==0){
-							A = 4.5 * phi[i][j][k] - (3.5 * 3 * Mbar * nu[i][j][k]);
-							omega = 2.0/9;
-						} else if (h < 7){
-							A = (1/rho) * 3 * Mbar * nu[i][j][k];
-							omega = 1.0/9;
-						} else if (h < 16){
-							A = (1/rho) * 3 * Mbar * nu[i][j][k];
-							omega = 1.0/72;
+					// D2Q9 Model weighing factors
+					for (int m=0; m<directions; m++){
+						if (m==0){
+							point.geq[m] = phi[i][j][k] - 1.1547 * nu[i][j][k];
+						}else if (m<5) {
+							point.geq[m] = 0.23094 * nu[i][j][k];
+						}else if (m<10){
+							point.geq[m] = 0.057735 * nu[i][j][k];
 						}
-						point.geq[h] = rho *  omega * A;
-					}	
+					}
+					
+//					//D3Q15 Model weighing factors
+//					// Assign A value according to directions
+//					double A = 0, omega =0;
+//					for (int h =0; h<directions; h++){
+//						if (h==0){
+//							A = 4.5 * phi[i][j][k] - (3.5 * 3 * Mbar * nu[i][j][k]);
+//							omega = 2.0/9;
+//						} else if (h < 7){
+//							A = (1/rho) * 3 * Mbar * nu[i][j][k];
+//							omega = 1.0/9;
+//						} else if (h < 16){
+//							A = (1/rho) * 3 * Mbar * nu[i][j][k];
+//							omega = 1.0/72;
+//						}
+//						point.geq[h] = rho *  omega * A;
+//					}	
 					
 				}
 		
@@ -237,86 +263,11 @@ public class Domain {
 	}
 	
 	public void findPhiMethodOfLines() {
+		double sum = 0, sumPhi = 0, sumPhiOld = 0;
 		for (int i=0; i<n[0]; i++)
 			for (int j=start; j<n[1]-start; j++)
 				for (int k=0; k<n[2]; k++){
 					phi[i][j][k] = RKMethod.RK4(this, i, j, k);
-				}
-	}
-
-	public void makeAverage() {
-		double sum = 0;
-		for (int i=0; i<n[0]; i++)
-			for (int j=0; j<n[1]; j++)
-				for (int k=0; k<n[2]; k++){
-					sum += Math.abs(phi[i][j][k]);
-				}
-		double avg = sum / (n[0] * n[1] * n[2]);
-		for (int i=0; i<n[0]; i++)
-			for (int j=0; j<n[1]; j++)
-				for (int k=0; k<n[2]; k++)
-					phi[i][j][k] = phi[i][j][k]/avg;
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void findParams() {
-		
-		for (int i=0; i<n[0]; i++)
-			for (int j=0; j<n[1]; j++)
-				for (int k=0; k<n[2]; k++){
-					
-					// Applying Landau model and 2nd order central finite
-					// difference discretization
-					
-					// Checking for boundaries 
-					double phiPoint =  phi[i][j][k];
-					double nuPoint = a * phiPoint + b * phiPoint * phiPoint * phiPoint;
-					
-					// Applying discretization
-					nuPoint -= (K / (delX * delX)) * 
-							(phi[ (i + delX < n[0]) ? i + delX : (i + delX - n[0]) ][j][k] 
-									- 2 * phiPoint + 
-									phi[ (i- delX >= 0) ? i - delX : (i - delX + n[0])][j][k]);
-					
-					nuPoint -= (K / (delY * delY)) * 
-							( phi[i][ (j + delY < n[1]) ? j + delY : (j + delY - n[1]) ][k] 
-									- 2 * phi[i][j][k] + 
-									phi[i][ (j- delY >= 0) ? j - delY : (j - delY + n[1])][k] );
-					
-					nuPoint -= (K / (delZ * delZ)) * 
-							(phi[i][j][(k + delZ < n[2]) ? k + delZ : (k + delZ - n[2]) ] 
-									- 2 * phi[i][j][k] + 
-									phi[i][j][ (k- delZ >= 0) ? k - delZ : (k - delZ + n[2])]);
-					
-					nu[i][j][k] = nuPoint;
-
-					// Geqb
-					Point point = points[i][j][k];
-					double A = 0, omega =0;
-					
-					// Assign A value accoring to directions
-					for (int h =0; h<directions; h++){
-						if (h==0){
-							A = 4.5 - (3.5 * 3 * Mbar * nu[i][j][k]);
-							omega = 2.0/9;
-						} else if (h < 7){
-							A = (1/rho) * 3 * Mbar * nu[i][j][k];
-							omega = 1.0/9;
-						} else if (h < 16){
-							A = (1/rho) * 3 * Mbar * nu[i][j][k];
-							omega = 1.0/72;
-						}
-						point.geq[h] = phi[i][j][k] * omega * A;
-						
-					}	
-					
-					double phiPoint1 = 0;
-					for (int h =0; h<directions; h++){
-						phiPoint1 += point.g[h];
-					}
-					phi[i][j][k] = phiPoint1;
-					
 				}
 	}
 
@@ -424,10 +375,6 @@ public class Domain {
 			for (int k =0; k<n[2]; k++){
 				int j = n[1]-1;
 				
-//				// del.phi = -h/k condition applied
-//				phi[i][0][k] = bcValue + phi[i][1][k];
-//				phi[i][n[1]-1][k] = bcValue + phi[i][n[1]-2][k];
-
 				phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
 								* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
 										phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
@@ -457,25 +404,21 @@ public class Domain {
 		double nuPoint = a * phiPoint + b * phiPoint * phiPoint * phiPoint;
 		
 		// Applying discretization
-		nuPoint -= (K / (delX * delX)) * 
-				(phi[ (i + delX < n[0]) ? i + delX : (i + delX - n[0]) ][j][k] 
-						- 2 * phiPoint + 
-						phi[ (i- delX >= 0) ? i - delX : (i - delX + n[0])][j][k]);
-		
-//		nuPoint -= K * 
-//				( j+1 < n[1] ? phi[i][ j + 1 ][k] : phi[i][j][k]
-//						- 2 * phiPoint + 
-//						j-1 > 0 ? phi[i][ j - 1][k] : phi[i][j][k] );
-		
-		nuPoint -= (K / (delZ * delZ)) * 
-				(phi[i][j][(k + delZ < n[2]) ? k + delZ : (k + delZ - n[2]) ] 
-						- 2 * phiPoint + 
-						phi[i][j][ (k- delZ >= 0) ? k - delZ : (k - delZ + n[2])]);
+		nuPoint -= K * (phi[ (i + 1 < n[0]) ? i + 1 : (i + 1 - n[0]) ][j][k] - 2 * phiPoint + 
+						phi[ (i- 1 >= 0) ? i - 1 : (i - 1 + n[0])][j][k]);
+
+		nuPoint -= K * (phi[i][j][(k + 1 < n[2]) ? k + 1 : (k + 1 - n[2]) ] - 2 * phiPoint + 
+						phi[i][j][ (k- 1 >= 0) ? k - 1 : (k - 1 + n[2])]);
 		
 		return  nuPoint;
 		
 	}
 
+	public double phi(int i, int j, int k){
+		
+		return k;
+		
+	}
 	
 
 
