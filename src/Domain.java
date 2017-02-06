@@ -5,12 +5,11 @@ import java.io.ObjectOutputStream;
 public class Domain {
 
 	
-	public static int dimension = 3;
-	public static int numPoints = 50;
+	public int dimension = 2;
+	public int numPoints = 8;
 	int directions;
 	
-	// Number of points in each dimension
-	int[] n = {numPoints, dimension > 1 ? numPoints : 1, dimension > 2 ? numPoints : 1};
+	
 	
 	// Points in the plane
 	Point[][][] points;
@@ -32,10 +31,26 @@ public class Domain {
 	
 	// To exclude wall
 	int start = 0;
+	int[] n;
 	
 	// Defining a domain
 	public Domain(){
 		
+		int[] n = {numPoints, dimension > 1 ? numPoints : 1, dimension > 2 ? numPoints : 1};
+		this.n = n;
+		points = new Point[n[0]][n[1]][n[2]];
+		phi = new double[n[0]][n[1]][n[2]];
+		nu = new double[n[0]][n[1]][n[2]];
+		defineDimensions();
+		defineGMatrices();
+		
+	}
+	
+	public Domain(int dimension, int numPoints){
+		this.dimension = dimension;
+		this.numPoints = numPoints;
+		int[] n = {numPoints, dimension > 1 ? numPoints : 1, dimension > 2 ? numPoints : 1};
+		this.n = n;
 		points = new Point[n[0]][n[1]][n[2]];
 		phi = new double[n[0]][n[1]][n[2]];
 		nu = new double[n[0]][n[1]][n[2]];
@@ -44,6 +59,7 @@ public class Domain {
 		
 		
 	}
+
 	
 	public void defineDimensions() {
 		// TODO Auto-generated method stub

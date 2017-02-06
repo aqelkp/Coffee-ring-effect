@@ -17,28 +17,86 @@ public class Main {
 			
 	public static void main(String[] args) {
 		
-		// Define a domain
-		Domain domain = new Domain();
-		int[] n = domain.n;
-		// Initial Condition for the domain
-//		domain.definePlanarDroplet();
-//		domain.defineCube(n[0]/2);
-//		domain.defineSeperatedSystem();
-		domain.defineRandomSystem();
-//		domain.testDomain();
+//		// Define a domain
+//		Domain domain = new Domain();
+//		int[] n = domain.n;
+//		// Initial Condition for the domain
+////		domain.definePlanarDroplet();
+////		domain.defineCube(n[0]/2);
+////		domain.defineSeperatedSystem();
+//		domain.defineRandomSystem();
+////		domain.testDomain();
+//		
+//		// For plotting tanh curve
+//		double[] xaxis = new double[n[1]];
+//		double[] yaxis = new double[n[1]];
+//		for ( int i=0; i< n[1]; i++) xaxis[i] = i;
+//		
+//		// Apply streaming function
+//		for (int i=0; i<=200; i++){
+//			if (i % 1 == 0) displayResults(domain, i, xaxis, yaxis);	
+//			
+////			LBSimulation(domain);
+//			methodOfLines(domain);
+//			
+//		}
 		
-		// For plotting tanh curve
-		double[] xaxis = new double[n[1]];
-		double[] yaxis = new double[n[1]];
-		for ( int i=0; i< n[1]; i++) xaxis[i] = i;
+		int numPoints = 8;
+for (int num = 0; num < 150; num++){
+			
+			numPoints = numPoints + 10;
+			// Define a domain
+			Domain domain = new Domain(2, numPoints);
+			
+			// Initial Condition for the domain
+//			domain.definePlanarDroplet();
+//			domain.defineCube(n[0]/2);
+//			domain.defineSeperatedSystem();
+			domain.defineRandomSystem();
+			
+			long startTime = System.currentTimeMillis();
+			
+			// Apply streaming function
+			for (int i=0; i<=99; i++){
+//				if (i % 1000 == 0) displayResults(domain, i, xaxis, yaxis);	
+				
+				LBSimulation(domain);
+//				methodOfLines(domain);
+				
+			}
+			
+			System.out.println( num + " LB Time taken for  " + (domain.n[0]*domain.n[1]) + " points = " + (System.currentTimeMillis() - startTime));
+		}
 		
-		// Apply streaming function
-		for (int i=0; i<=200; i++){
-			if (i % 1 == 0) displayResults(domain, i, xaxis, yaxis);	
+		System.out.println("\n \n Method of lines \n \n");
+		numPoints = 8;
+for (int num = 0; num < 150; num++){
 			
-//			LBSimulation(domain);
-			methodOfLines(domain);
 			
+			numPoints = numPoints + 10;
+			// Define a domain
+			Domain domain = new Domain(2, numPoints);
+			
+			
+			// Initial Condition for the domain
+//			domain.definePlanarDroplet();
+//			domain.defineCube(n[0]/2);
+//			domain.defineSeperatedSystem();
+			domain.defineRandomSystem();
+			
+			
+			long startTime = System.currentTimeMillis();
+			
+			// Apply streaming function
+			for (int i=0; i<=99; i++){
+//				if (i % 1000 == 0) displayResults(domain, i, xaxis, yaxis);	
+				
+//				LBSimulation(domain);
+				methodOfLines(domain);
+				
+			}
+			
+			System.out.println( num + " MOL Time taken for " + (domain.n[0]*domain.n[1]) + " points = " + (System.currentTimeMillis() - startTime));
 		}
 			
 	}
