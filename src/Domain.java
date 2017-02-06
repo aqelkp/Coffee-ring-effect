@@ -5,7 +5,7 @@ import java.io.ObjectOutputStream;
 public class Domain {
 
 	
-	public static int dimension = 2;
+	public static int dimension = 3;
 	public static int numPoints = 50;
 	int directions;
 	
@@ -20,10 +20,10 @@ public class Domain {
 	
 	// Simulation parameters from the paper
 	// Lattice - Boltzmann simulation of droplet evaporation
-	public static double a = -0.00305*10, b=-a, K = 0.0078*2;
+	public static double a = -0.00305, b=-a, K = 0.0078;
 	public static double epsilon = Math.sqrt(-K/(2*a));
 	public static int rho = 1, delt = 1;
-	public static double M = 0.5;
+	public static double M = 0.005;
 	double towG = 1;
 	double Mbar = 2*M/(2*towG - 1);
 	public static double h = 0.00;
@@ -67,8 +67,6 @@ public class Domain {
 			this.c = cMatrix;
 		}
 		this.directions = c.length;
-		
-						System.out.println(directions);
 
 	}
 
@@ -190,6 +188,7 @@ public class Domain {
 		// Checking for boundaries 
 		double nuPoint = a * phiPoint + b * phiPoint * phiPoint * phiPoint;
 		
+		
 		// Applying discretization
 		nuPoint -= K * (phi[ (i + 1 < n[0]) ? i + 1 : (i + 1 - n[0]) ][j][k] - 2 * phiPoint + 
 						phi[ (i- 1 >= 0) ? i - 1 : (i - 1 + n[0])][j][k]);
@@ -203,10 +202,36 @@ public class Domain {
 				(phi[i][j][(k + 1 < n[2]) ? k + 1 : (k + 1 - n[2]) ] 
 						- 2 * phiPoint + 
 						phi[i][j][ (k- 1 >= 0) ? k - 1 : (k - 1 + n[2])]);
-		
 		return  nuPoint;
 		
 	}
+	 
+	 double findNu(int i, int j, int k) {
+		 return nu[i][j][k];
+//			// Applying Landau model and 2nd order central finite
+//			// difference discretization
+//			
+//		 	double phiPoint = phi[i][j][k];
+//			// Checking for boundaries 
+//			double nuPoint = a * phiPoint + b * phiPoint * phiPoint * phiPoint;
+//			
+//			// Applying discretization
+//			nuPoint -= K * (phi[ (i + 1 < n[0]) ? i + 1 : (i + 1 - n[0]) ][j][k] - 2 * phiPoint + 
+//							phi[ (i- 1 >= 0) ? i - 1 : (i - 1 + n[0])][j][k]);
+//			
+////			if ( j + delY < n[1] && j - delY >= 0)
+//			nuPoint -= K * ( phi[i][ j + 1 < n[1] ? j + 1 : j + 1 - n[1]][k] 
+//							- 2 * phiPoint + 
+//							phi[i][ j - 1 >=0 ? j - 1 : j - 1 + n[1] ][k] );
+//			
+//			nuPoint -= K * 
+//					(phi[i][j][(k + 1 < n[2]) ? k + 1 : (k + 1 - n[2]) ] 
+//							- 2 * phiPoint + 
+//							phi[i][j][ (k- 1 >= 0) ? k - 1 : (k - 1 + n[2])]);
+//			
+//			return  nuPoint;
+			
+		}
 
 	public void findGeq() {
 		
@@ -263,12 +288,12 @@ public class Domain {
 	}
 	
 	public void findPhiMethodOfLines() {
-		double sum = 0, sumPhi = 0, sumPhiOld = 0;
-		for (int i=0; i<n[0]; i++)
-			for (int j=start; j<n[1]-start; j++)
-				for (int k=0; k<n[2]; k++){
-					phi[i][j][k] = RKMethod.RK4(this, i, j, k);
-				}
+		RKMethod.RK4(this);
+//		for (int i=0; i<n[0]; i++)
+//			for (int j=start; j<n[1]-start; j++)
+//				for (int k=0; k<n[2]; k++){
+//					phi[i][j][k] = RKMethod.RK4(this, i, j, k);
+//				}
 	}
 
 	public void defineSeperatedSystem() {
@@ -298,6 +323,11 @@ public class Domain {
 															
 							}
 			
+	}
+	
+	public void testDomain(){
+		double[] arr = { 0.000405 , 0.007054 , 0.00772 , 0.000586 , -0.004323 , 0.009548 , 0.004614 , -0.008622 , 0.007425 , 0.004446 };
+		for (int i=0; i< arr.length; i++) phi[i][0][0] = arr[i];
 	}
 	
 	void definePlanarDroplet() {
@@ -414,11 +444,22 @@ public class Domain {
 		
 	}
 
-	public double phi(int i, int j, int k){
+	public double phi(int x, int y, int z){
+		// Periodic boundary condition 
+		if (x >= n[0]) x =- n[0];
+		if (x < 0 ) x+= n[0];
 		
-		return k;
+		if (y >= n[1]) y =- n[1];
+		if (y < 0 ) y += n[1];
+		
+		if (z >= n[2]) z =- n[2];
+		if (z < 0) z += n[2];
+		
+		return phi[x][y][z];
 		
 	}
+	
+	
 	
 
 

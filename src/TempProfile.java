@@ -29,7 +29,7 @@ public class TempProfile {
 			findGeq();
 			stream();
 			findT();
-			Main.printPoints(domain, n);
+			Main.printPoints(domain);
 			
 			if (i%200 == 0) TempPlot.define(domain);
 		}

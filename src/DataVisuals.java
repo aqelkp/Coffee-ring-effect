@@ -8,9 +8,9 @@ import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 
 public class DataVisuals {
 
-	public static void plotBoundaryPhi(Domain domain, int[] n, double[] xaxis, double[] yaxis, int i) {
+	public static void plotBoundaryPhi(Domain domain, double[] xaxis, double[] yaxis, int i) {
 		// TODO Auto-generated method stub
-		findYAxis(domain, n, yaxis);
+		findYAxis(domain, domain.n, yaxis);
 		XYChart chart = QuickChart.getChart("Nu v/s x at t = " + i, "x", "nu", "nu(x)", xaxis, yaxis);
 		
 //		findTanh(domain, n, yaxis);
