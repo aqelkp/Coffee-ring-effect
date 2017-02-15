@@ -36,8 +36,8 @@ public class Main {
 		for (int i=0; i<=100000000; i++){
 			if (i % 10000 == 0) displayResults(domain, i, xaxis, yaxis);	
 			
-//			LBSimulation(domain, i);
-			methodOfLines(domain, i);
+			LBSimulation(domain, i);
+//			methodOfLines(domain, i);
 			
 		}
 			
@@ -68,7 +68,7 @@ public class Main {
 		domain.findGeq();
 		domain.stream();
 		domain.findPhiLBM(i);
-		domain.solidWallBCLBM();
+		domain.solidWallBC();
 //		domain.evaporate();
 	}
 

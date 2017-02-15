@@ -34,7 +34,7 @@ public class Domain {
 	public static double contactAngle = Math.PI/3;
 	
 	// To exclude wall
-	int start = 2;
+	int start = 1;
 	int[] n;
 	
 	// Defining a domain
@@ -188,11 +188,11 @@ public class Domain {
 		// del.nu = 0
 				for (int i=0; i<n[0]; i++)
 					for (int k =0; k<n[2]; k++){
-						int j = n[1]-2;
+						int j = n[1]-1;
 						
 						nu[i][j][k] = nu[i][j-1][k];
 						
-						nu[i][1][k] = nu[i][2][k];
+						nu[i][0][k] = nu[i][1][k];
 					}
 		
 	}
@@ -446,36 +446,36 @@ public class Domain {
 //						phi[i][0][k] = phi[i][1][k];
 //					}
 				
-//		// BC at the bottom and top
-//				for (int i=0; i<n[0]; i++)
-//					for (int k =0; k<n[2]; k++){
-//						int j = n[1]-1;
-//						
-//						phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
-//										* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
-//												phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
-//						
-//						phi[i][0][k] = phi[i][2][k] + Math.tan(Math.PI/2 - contactAngle) 
-//						* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][1][k] - 
-//								phi[(i-1>= 0) ? i-1 : (i-1+n[0])][1][k]);
-//						
-//					}
-	
 		// BC at the bottom and top
-		for (int i=0; i<n[0]; i++)
-			for (int k =0; k<n[2]; k++){
-				int j = n[1]-2;
-				
-				phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
-								* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
-										phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
-				phi[i][j+1][k] = phi[i][j][k];
-				
-				phi[i][1][k] = phi[i][3][k] + Math.tan(Math.PI/2 - contactAngle) 
-				* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][2][k] - 
-						phi[(i-1>= 0) ? i-1 : (i-1+n[0])][2][k]);
-				phi[i][0][k] = phi[i][1][k];
-			}
+				for (int i=0; i<n[0]; i++)
+					for (int k =0; k<n[2]; k++){
+						int j = n[1]-1;
+						
+						phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
+										* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
+												phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
+						
+						phi[i][0][k] = phi[i][2][k] + Math.tan(Math.PI/2 - contactAngle) 
+						* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][1][k] - 
+								phi[(i-1>= 0) ? i-1 : (i-1+n[0])][1][k]);
+						
+					}
+	
+//		// BC at the bottom and top
+//		for (int i=0; i<n[0]; i++)
+//			for (int k =0; k<n[2]; k++){
+//				int j = n[1]-2;
+//				
+//				phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
+//								* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
+//										phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
+//				phi[i][j+1][k] = phi[i][j][k];
+//				
+//				phi[i][1][k] = phi[i][3][k] + Math.tan(Math.PI/2 - contactAngle) 
+//				* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][2][k] - 
+//						phi[(i-1>= 0) ? i-1 : (i-1+n[0])][2][k]);
+//				phi[i][0][k] = phi[i][1][k];
+//			}
 		
 	}
 
@@ -520,39 +520,6 @@ public class Domain {
 		
 	}
 
-	public void solidWallBCLBM() {
-		
-		// BC at the bottom and top
-		for (int i=0; i<n[0]; i++)
-			for (int k =0; k<n[2]; k++){
-				int j = n[1]-2;
-				
-				phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
-								* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
-										phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
-				phi[i][j+1][k] = phi[i][j][k];
-				
-				phi[i][1][k] = phi[i][3][k] + Math.tan(Math.PI/2 - contactAngle) 
-				* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][2][k] - 
-						phi[(i-1>= 0) ? i-1 : (i-1+n[0])][2][k]);
-				phi[i][0][k] = phi[i][1][k];
-			}
-		
-//		for (int i=0; i<n[0]; i++)
-//			for (int k =0; k<n[2]; k++){
-//				int j = n[1]-1;
-//				
-//				phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
-//								* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
-//										phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
-//				
-//				phi[i][0][k] = phi[i][2][k] + Math.tan(Math.PI/2 - contactAngle) 
-//				* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][1][k] - 
-//						phi[(i-1>= 0) ? i-1 : (i-1+n[0])][1][k]);
-//				
-//			}
-		
-	}
 	
 	
 	
