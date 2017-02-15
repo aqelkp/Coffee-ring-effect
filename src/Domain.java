@@ -6,9 +6,13 @@ public class Domain {
 
 	
 	public int dimension = 2;
-	public int numPoints = 8;
+	public int numPoints = 75;
 	int directions;
 	
+	public static final int D3Q15 = 3;
+	public static final int D2Q9 = 2;
+	
+	int model = dimension;
 	
 	
 	// Points in the plane
@@ -22,21 +26,22 @@ public class Domain {
 	public static double a = -0.00305, b=-a, K = 0.0078;
 	public static double epsilon = Math.sqrt(-K/(2*a));
 	public static int rho = 1, delt = 1;
-	public static double M = 0.005;
+	public static double M = 0.015;
 	double towG = 1;
 	double Mbar = 2*M/(2*towG - 1);
 	public static double h = 0.00;
 //	double towG = 0.78868;
-	public static double contactAngle = Math.PI/4;
+	public static double contactAngle = Math.PI/3;
 	
 	// To exclude wall
-	int start = 0;
+	int start = 2;
 	int[] n;
 	
 	// Defining a domain
 	public Domain(){
 		
 		int[] n = {numPoints, dimension > 1 ? numPoints : 1, dimension > 2 ? numPoints : 1};
+//		int[] n = {1,10,1};
 		this.n = n;
 		points = new Point[n[0]][n[1]][n[2]];
 		phi = new double[n[0]][n[1]][n[2]];
@@ -45,21 +50,6 @@ public class Domain {
 		defineGMatrices();
 		
 	}
-	
-	public Domain(int dimension, int numPoints){
-		this.dimension = dimension;
-		this.numPoints = numPoints;
-		int[] n = {numPoints, dimension > 1 ? numPoints : 1, dimension > 2 ? numPoints : 1};
-		this.n = n;
-		points = new Point[n[0]][n[1]][n[2]];
-		phi = new double[n[0]][n[1]][n[2]];
-		nu = new double[n[0]][n[1]][n[2]];
-		defineDimensions();
-		defineGMatrices();
-		
-		
-	}
-
 	
 	public void defineDimensions() {
 		// TODO Auto-generated method stub
@@ -140,20 +130,20 @@ public class Domain {
 						if (z >= n[2]) z =- n[2];
 						if (z < 0) z += n[2];
 						
-						points[x][y][z].g[i] = points[j][k][m].geq[i] ;
+//						points[x][y][z].g[i] = points[j][k][m].geq[i] ;
 						
-//						// Top bounce-back BC
-//						if (y == 0 && (i == 6 || i == 2 || i == 5 ) ){
-////							points[x][y][z].g[i] = tempg[i+2][x][y][z];
-//							points[x][y][z].g[i] = points[x][y][z].geq[i+2];
-//						// Bottom bounce-back BC
-//						} else if (y == n[1] - 2 && (i == 8 || i == 4 || i == 7 ) ){
-////							points[x][y][z].g[i] = tempg[i-2][x][y][z];
-//							points[x][y][z].g[i] = points[x][y][z].geq[i-2];
-//						} else {
-////							points[x][y][z].g[i] = tempg[i][j][k][m];
-//							points[x][y][z].g[i] = points[j][k][m].geq[i] ;
-//						}
+						// Top bounce-back BC
+						if (y == start && (i == 6 || i == 2 || i == 5 ) ){
+//							points[x][y][z].g[i] = tempg[i+2][x][y][z];
+							points[x][y][z].g[i] = points[x][y][z].geq[i+2];
+						// Bottom bounce-back BC
+						} else if (y == n[1] - 1 - start && (i == 8 || i == 4 || i == 7 ) ){
+//							points[x][y][z].g[i] = tempg[i-2][x][y][z];
+							points[x][y][z].g[i] = points[x][y][z].geq[i-2];
+						} else {
+//							points[x][y][z].g[i] = tempg[i][j][k][m];
+							points[x][y][z].g[i] = points[j][k][m].geq[i] ;
+						}
 						
 						
 								
@@ -188,12 +178,22 @@ public class Domain {
 		
 		
 		for (int i=0; i<n[0]; i++)
-			for (int j=start; j<n[1]-start; j++)
+			for (int j= start; j<n[1]- start; j++)
 				for (int k=0; k<n[2]; k++){
 					
 					nu[i][j][k] = findNu(phi[i][j][k], i,j,k);
 					
 				}
+		
+		// del.nu = 0
+				for (int i=0; i<n[0]; i++)
+					for (int k =0; k<n[2]; k++){
+						int j = n[1]-2;
+						
+						nu[i][j][k] = nu[i][j-1][k];
+						
+						nu[i][1][k] = nu[i][2][k];
+					}
 		
 	}
 
@@ -208,6 +208,7 @@ public class Domain {
 		// Applying discretization
 		nuPoint -= K * (phi[ (i + 1 < n[0]) ? i + 1 : (i + 1 - n[0]) ][j][k] - 2 * phiPoint + 
 						phi[ (i- 1 >= 0) ? i - 1 : (i - 1 + n[0])][j][k]);
+		
 		
 //		if ( j + delY < n[1] && j - delY >= 0)
 		nuPoint -= K * ( phi[i][ j + 1 < n[1] ? j + 1 : j + 1 - n[1]][k] 
@@ -257,39 +258,55 @@ public class Domain {
 					
 					Point point = points[i][j][k];
 					
-					// D2Q9 Model weighing factors
-					for (int m=0; m<directions; m++){
-						if (m==0){
-							point.geq[m] = phi[i][j][k] - 1.1547 * nu[i][j][k];
-						}else if (m<5) {
-							point.geq[m] = 0.23094 * nu[i][j][k];
-						}else if (m<10){
-							point.geq[m] = 0.057735 * nu[i][j][k];
+					if (dimension == 2){
+						
+						// D2Q9 Model weighing factors
+						for (int m=0; m<directions; m++){
+							if (m==0){
+								point.geq[m] = phi[i][j][k] - (20.0/12) * Mbar * nu[i][j][k];
+							}else if (m<5) {
+								point.geq[m] = (4.0/12) * Mbar * nu[i][j][k];
+							}else if (m<10){
+								point.geq[m] = (1.0/12) * Mbar * nu[i][j][k];
+							}
 						}
-					}
-					
-//					//D3Q15 Model weighing factors
-//					// Assign A value according to directions
-//					double A = 0, omega =0;
-//					for (int h =0; h<directions; h++){
-//						if (h==0){
-//							A = 4.5 * phi[i][j][k] - (3.5 * 3 * Mbar * nu[i][j][k]);
-//							omega = 2.0/9;
-//						} else if (h < 7){
-//							A = (1/rho) * 3 * Mbar * nu[i][j][k];
-//							omega = 1.0/9;
-//						} else if (h < 16){
-//							A = (1/rho) * 3 * Mbar * nu[i][j][k];
-//							omega = 1.0/72;
+						
+////						 D2Q9 Model weighing factors
+//						for (int m=0; m<directions; m++){
+//							if (m==0){
+//								point.geq[m] = phi[i][j][k] - 1.1547 * nu[i][j][k];
+//							}else if (m<5) {
+//								point.geq[m] = 0.23094 * nu[i][j][k];
+//							}else if (m<10){
+//								point.geq[m] = 0.057735 * nu[i][j][k];
+//							}
 //						}
-//						point.geq[h] = rho *  omega * A;
-//					}	
+					} else {
+						//D3Q15 Model weighing factors
+						// Assign A value according to directions
+						double A = 0, omega =0;
+						for (int h =0; h<directions; h++){
+							if (h==0){
+								A = 4.5 * phi[i][j][k] - (3.5 * 3 * Mbar * nu[i][j][k]);
+								omega = 2.0/9;
+							} else if (h < 7){
+								A = (1/rho) * 3 * Mbar * nu[i][j][k];
+								omega = 1.0/9;
+							} else if (h < 16){
+								A = (1/rho) * 3 * Mbar * nu[i][j][k];
+								omega = 1.0/72;
+							}
+							point.geq[h] = rho *  omega * A;
+						}	
+
+					}
 					
 				}
 		
 	}
 
-	public void findPhiLBM() {
+	public void findPhiLBM(int c) {
+		double error = 0;
 		for (int i=0; i<n[0]; i++)
 			for (int j=0; j<n[1]; j++)
 				for (int k=0; k<n[2]; k++){
@@ -299,17 +316,17 @@ public class Domain {
 					for (int h =0; h<directions; h++){
 						phiPoint += point.g[h];
 					}
+					if (Math.abs(phi[i][j][k]) >= 0.9 )
+						error += (phi[i][j][k]-phiPoint) * (phi[i][j][k]-phiPoint);
 					phi[i][j][k] = phiPoint;
 				}
+//		if (c % 1000 == 0 ) 
+//			System.out.println("error at t = " + c + " = " + Math.pow(error/(n[0]*n[1]*n[2]), 0.5));
 	}
 	
-	public void findPhiMethodOfLines() {
-		RKMethod.RK4(this);
-//		for (int i=0; i<n[0]; i++)
-//			for (int j=start; j<n[1]-start; j++)
-//				for (int k=0; k<n[2]; k++){
-//					phi[i][j][k] = RKMethod.RK4(this, i, j, k);
-//				}
+	public void findPhiMethodOfLines(int i) {
+		Solver.RK4(this, i);
+//		Solver.euler(this);
 	}
 
 	public void defineSeperatedSystem() {
@@ -343,7 +360,7 @@ public class Domain {
 	
 	public void testDomain(){
 		double[] arr = { 0.000405 , 0.007054 , 0.00772 , 0.000586 , -0.004323 , 0.009548 , 0.004614 , -0.008622 , 0.007425 , 0.004446 };
-		for (int i=0; i< arr.length; i++) phi[i][0][0] = arr[i];
+		for (int i=0; i< arr.length; i++) phi[0][i][0] = arr[i];
 	}
 	
 	void definePlanarDroplet() {
@@ -366,6 +383,7 @@ public class Domain {
 					for (int k=0; k<n[2]; k++){
 						if ( (i > n[0]/2 - width/2) && (i < n[0]/2 + width/2) && 
 								(j > n[1]/2 + width/2)  
+//								(j < n[1]/2 + width/2) && (j > n[1]/2 - width/2)
 								&& (k > n[2]/2 - width/2) && (k < n[2]/2 + width/2) 
 								){
 							phi[i][j][k] = 1;
@@ -403,6 +421,7 @@ public class Domain {
 		
 		
 	}
+	
 	public void evaporate() {
 		double phiH = -1.3;
 		
@@ -413,22 +432,49 @@ public class Domain {
 		
 	}
 	
-	public void applySolidWallBC() {
-		double bcValue = -h/K;
+	public void solidWallBC() {
 		
+//		// BC at the bottom and top
+//				for (int i=0; i<n[0]; i++)
+//					for (int k =0; k<n[2]; k++){
+//						int j = n[1]-2;
+//						
+//						phi[i][j][k] = phi[i][j-1][k];
+//						phi[i][j+1][k] = phi[i][j][k];
+//						
+//						phi[i][1][k] = phi[i][2][k];
+//						phi[i][0][k] = phi[i][1][k];
+//					}
+				
+//		// BC at the bottom and top
+//				for (int i=0; i<n[0]; i++)
+//					for (int k =0; k<n[2]; k++){
+//						int j = n[1]-1;
+//						
+//						phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
+//										* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
+//												phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
+//						
+//						phi[i][0][k] = phi[i][2][k] + Math.tan(Math.PI/2 - contactAngle) 
+//						* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][1][k] - 
+//								phi[(i-1>= 0) ? i-1 : (i-1+n[0])][1][k]);
+//						
+//					}
+	
 		// BC at the bottom and top
 		for (int i=0; i<n[0]; i++)
 			for (int k =0; k<n[2]; k++){
-				int j = n[1]-1;
+				int j = n[1]-2;
 				
 				phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
 								* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
 										phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
+				phi[i][j+1][k] = phi[i][j][k];
 				
-				phi[i][0][k] = phi[i][2][k] + Math.tan(Math.PI/2 - contactAngle) 
-				* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][1][k] - 
-						phi[(i-1>= 0) ? i-1 : (i-1+n[0])][1][k]);
-				
+				phi[i][1][k] = phi[i][3][k] + Math.tan(Math.PI/2 - contactAngle) 
+				* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][2][k] - 
+						phi[(i-1>= 0) ? i-1 : (i-1+n[0])][2][k]);
+				phi[i][0][k] = phi[i][1][k];
 			}
 		
 	}
@@ -441,8 +487,7 @@ public class Domain {
 			}
 	}
 	
-
-	 double findBoundaryNu(double phiPoint, int i, int j, int k) {
+	double findBoundaryNu(double phiPoint, int i, int j, int k) {
 		// Applying Landau model and 2nd order central finite
 		// difference discretization
 		
@@ -472,6 +517,40 @@ public class Domain {
 		if (z < 0) z += n[2];
 		
 		return phi[x][y][z];
+		
+	}
+
+	public void solidWallBCLBM() {
+		
+		// BC at the bottom and top
+		for (int i=0; i<n[0]; i++)
+			for (int k =0; k<n[2]; k++){
+				int j = n[1]-2;
+				
+				phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
+								* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
+										phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
+				phi[i][j+1][k] = phi[i][j][k];
+				
+				phi[i][1][k] = phi[i][3][k] + Math.tan(Math.PI/2 - contactAngle) 
+				* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][2][k] - 
+						phi[(i-1>= 0) ? i-1 : (i-1+n[0])][2][k]);
+				phi[i][0][k] = phi[i][1][k];
+			}
+		
+//		for (int i=0; i<n[0]; i++)
+//			for (int k =0; k<n[2]; k++){
+//				int j = n[1]-1;
+//				
+//				phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
+//								* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
+//										phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
+//				
+//				phi[i][0][k] = phi[i][2][k] + Math.tan(Math.PI/2 - contactAngle) 
+//				* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][1][k] - 
+//						phi[(i-1>= 0) ? i-1 : (i-1+n[0])][1][k]);
+//				
+//			}
 		
 	}
 	

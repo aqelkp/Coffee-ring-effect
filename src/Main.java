@@ -17,86 +17,28 @@ public class Main {
 			
 	public static void main(String[] args) {
 		
-//		// Define a domain
-//		Domain domain = new Domain();
-//		int[] n = domain.n;
-//		// Initial Condition for the domain
-////		domain.definePlanarDroplet();
-////		domain.defineCube(n[0]/2);
-////		domain.defineSeperatedSystem();
+		// Define a domain
+		Domain domain = new Domain();
+		int[] n = domain.n;
+		// Initial Condition for the domain
+//		domain.definePlanarDroplet();
+		domain.defineCube(n[0]/2);
+//		domain.defineSeperatedSystem();
 //		domain.defineRandomSystem();
-////		domain.testDomain();
-//		
-//		// For plotting tanh curve
-//		double[] xaxis = new double[n[1]];
-//		double[] yaxis = new double[n[1]];
-//		for ( int i=0; i< n[1]; i++) xaxis[i] = i;
-//		
-//		// Apply streaming function
-//		for (int i=0; i<=200; i++){
-//			if (i % 1 == 0) displayResults(domain, i, xaxis, yaxis);	
-//			
-////			LBSimulation(domain);
-//			methodOfLines(domain);
-//			
-//		}
+//		domain.testDomain();
 		
-		int numPoints = 8;
-for (int num = 0; num < 150; num++){
-			
-			numPoints = numPoints + 10;
-			// Define a domain
-			Domain domain = new Domain(2, numPoints);
-			
-			// Initial Condition for the domain
-//			domain.definePlanarDroplet();
-//			domain.defineCube(n[0]/2);
-//			domain.defineSeperatedSystem();
-			domain.defineRandomSystem();
-			
-			long startTime = System.currentTimeMillis();
-			
-			// Apply streaming function
-			for (int i=0; i<=99; i++){
-//				if (i % 1000 == 0) displayResults(domain, i, xaxis, yaxis);	
-				
-				LBSimulation(domain);
-//				methodOfLines(domain);
-				
-			}
-			
-			System.out.println( num + " LB Time taken for  " + (domain.n[0]*domain.n[1]) + " points = " + (System.currentTimeMillis() - startTime));
-		}
+		// For plotting tanh curve
+		double[] xaxis = new double[n[1]];
+		double[] yaxis = new double[n[1]];
+		for ( int i=0; i< n[1]; i++) xaxis[i] = i;
 		
-		System.out.println("\n \n Method of lines \n \n");
-		numPoints = 8;
-for (int num = 0; num < 150; num++){
+		// Apply streaming function
+		for (int i=0; i<=100000000; i++){
+			if (i % 10000 == 0) displayResults(domain, i, xaxis, yaxis);	
 			
+//			LBSimulation(domain, i);
+			methodOfLines(domain, i);
 			
-			numPoints = numPoints + 10;
-			// Define a domain
-			Domain domain = new Domain(2, numPoints);
-			
-			
-			// Initial Condition for the domain
-//			domain.definePlanarDroplet();
-//			domain.defineCube(n[0]/2);
-//			domain.defineSeperatedSystem();
-			domain.defineRandomSystem();
-			
-			
-			long startTime = System.currentTimeMillis();
-			
-			// Apply streaming function
-			for (int i=0; i<=99; i++){
-//				if (i % 1000 == 0) displayResults(domain, i, xaxis, yaxis);	
-				
-//				LBSimulation(domain);
-				methodOfLines(domain);
-				
-			}
-			
-			System.out.println( num + " MOL Time taken for " + (domain.n[0]*domain.n[1]) + " points = " + (System.currentTimeMillis() - startTime));
 		}
 			
 	}
@@ -105,29 +47,28 @@ for (int num = 0; num < 150; num++){
 		// TODO Auto-generated method stub
 //		printPoints(domain);
 //		DataVisuals.plotBoundaryPhi(domain, xaxis, yaxis, i);
-		System.out.println(domain.sigmaG());
-//		domain.savePhi("" + i);
-//		Plot.define(domain, "Domain_at_t=" + i);
+		System.out.println("at t = " + i + " sigma phi " +  domain.sigmaG());
+		domain.savePhi("" + i);
+		Plot.define(domain, "Domain_at_t=" + i);
 //		
 	}
 
-	private static void methodOfLines(Domain domain) {
+	private static void methodOfLines(Domain domain, int i) {
 		
+		domain.solidWallBC();
 		domain.findNu();
 //		domain.findBoundaryNu();
-		domain.findPhiMethodOfLines();
-//		domain.applySolidWallBC();
-		
-		
+		domain.findPhiMethodOfLines(i);
+		 
 	}
 
-	private static void LBSimulation(Domain domain) {
+	private static void LBSimulation(Domain domain, int i) {
 		domain.findNu();
 //		domain.findBoundaryNu();
 		domain.findGeq();
 		domain.stream();
-		domain.findPhiLBM();
-//		domain.applySolidWallBC();
+		domain.findPhiLBM(i);
+		domain.solidWallBCLBM();
 //		domain.evaporate();
 	}
 

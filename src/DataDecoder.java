@@ -10,15 +10,10 @@ public class DataDecoder {
 	public static void main(String[] args) {
 		
 		Domain domain = new Domain();
-		int max = 2010000;
-		int stepSize = 10000;
-		double[] x = new double[max/stepSize+1]; 
-		double[] y = new double[max/stepSize+1];
-		for (int i =max; i<=max; i=i+stepSize){
+		int max = 4800000;
+		int stepSize = 100000;
+		for (int i =0; i<=max; i=i+stepSize){
 			domain.phi = read("" + i );
-			x[i/stepSize] = i;
-			y[i/stepSize] = domain.sigmaG();
-			System.out.println(y[i/stepSize]);
 			Plot.define(domain, "Domain_at_t=" + i);
 		}
 		
