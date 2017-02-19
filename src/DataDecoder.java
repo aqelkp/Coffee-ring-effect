@@ -9,12 +9,15 @@ public class DataDecoder {
 
 	public static void main(String[] args) {
 		
-		Domain domain = new Domain();
-		int max = 4800000;
+		Domain domain = new Domain(2,200);
+		int max = 5300000;
 		int stepSize = 100000;
 		for (int i =0; i<=max; i=i+stepSize){
-			domain.phi = read("" + i );
+			domain.phi = read("contactangle" + i );
 			Plot.define(domain, "Domain_at_t=" + i);
+//			System.out.println(domain.sigmaG());
+			System.out.print("t = "  + i + " ");
+			domain.findContactAngle();
 		}
 		
 //		XYChart chart = QuickChart.getChart("sigma phi vs t", "t", "sigma phi", "phi(x)", x, y);

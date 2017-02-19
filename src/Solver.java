@@ -69,7 +69,7 @@ public class Solver {
 					domain.phi[i][j][k] = 0.5 * k1[i][j][k] + domain.phi[i][j][k];
 				}
 		
-		domain.solidWallBC();
+		if (domain.isSolidWall) domain.solidWallBC();
 		domain.findNu();
 		
 		double[][][] k2 = new double[n[0]][n[1]][n[2]];
@@ -80,7 +80,7 @@ public class Solver {
 					domain.phi[i][j][k] = phiTemp[i][j][k] +  k2[i][j][k]/2;
 				}
 		
-		domain.solidWallBC();
+		if (domain.isSolidWall) domain.solidWallBC();
 		domain.findNu();
 		
 		double[][][] k3 = new double[n[0]][n[1]][n[2]];
@@ -91,7 +91,7 @@ public class Solver {
 					domain.phi[i][j][k] = phiTemp[i][j][k] +  k3[i][j][k];
 				}
 		
-		domain.solidWallBC();
+		if (domain.isSolidWall) domain.solidWallBC();
 		domain.findNu();
 
 		double[][][] k4 = new double[n[0]][n[1]][n[2]];

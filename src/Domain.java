@@ -5,14 +5,14 @@ import java.io.ObjectOutputStream;
 public class Domain {
 
 	
-	public int dimension = 2;
-	public int numPoints = 75;
+	public int dimension;
+	public int numPoints;
 	int directions;
 	
 	public static final int D3Q15 = 3;
 	public static final int D2Q9 = 2;
 	
-	int model = dimension;
+//	int model = dimension;
 	
 	
 	// Points in the plane
@@ -26,22 +26,28 @@ public class Domain {
 	public static double a = -0.00305, b=-a, K = 0.0078;
 	public static double epsilon = Math.sqrt(-K/(2*a));
 	public static int rho = 1, delt = 1;
-	public static double M = 0.015;
+	public static double M = 5;
 	double towG = 1;
 	double Mbar = 2*M/(2*towG - 1);
 	public static double h = 0.00;
 //	double towG = 0.78868;
-	public static double contactAngle = Math.PI/3;
+	public static double contactAngle =  Math.PI/3;
 	
 	// To exclude wall
 	int start = 1;
 	int[] n;
+	public boolean isSolidWall = false;
 	
 	// Defining a domain
-	public Domain(){
+	public Domain(int dimension, int numPoints){
+		
+		this.dimension = dimension;
+		this.numPoints = numPoints;
 		
 		int[] n = {numPoints, dimension > 1 ? numPoints : 1, dimension > 2 ? numPoints : 1};
-//		int[] n = {1,10,1};
+		
+//		int[] n = {150,50,1}; dimension = 2;
+		
 		this.n = n;
 		points = new Point[n[0]][n[1]][n[2]];
 		phi = new double[n[0]][n[1]][n[2]];
@@ -67,9 +73,6 @@ public class Domain {
 		} else if (dimension == 1){
 			// D1Q3 Model
 			int[][] cMatrix = { {0,0,0}, {1,0,0}, {-1,0,0} };
-			this.c = cMatrix;
-		} else {
-			int[][] cMatrix = { {0,0,0} };
 			this.c = cMatrix;
 		}
 		this.directions = c.length;
@@ -133,11 +136,11 @@ public class Domain {
 //						points[x][y][z].g[i] = points[j][k][m].geq[i] ;
 						
 						// Top bounce-back BC
-						if (y == start && (i == 6 || i == 2 || i == 5 ) ){
+						if (isSolidWall && y == start && (i == 6 || i == 2 || i == 5 ) ){
 //							points[x][y][z].g[i] = tempg[i+2][x][y][z];
 							points[x][y][z].g[i] = points[x][y][z].geq[i+2];
 						// Bottom bounce-back BC
-						} else if (y == n[1] - 1 - start && (i == 8 || i == 4 || i == 7 ) ){
+						} else if (isSolidWall && y == n[1] - 1 - start && (i == 8 || i == 4 || i == 7 ) ){
 //							points[x][y][z].g[i] = tempg[i-2][x][y][z];
 							points[x][y][z].g[i] = points[x][y][z].geq[i-2];
 						} else {
@@ -184,7 +187,7 @@ public class Domain {
 					nu[i][j][k] = findNu(phi[i][j][k], i,j,k);
 					
 				}
-		
+		if (isSolidWall)
 		// del.nu = 0
 				for (int i=0; i<n[0]; i++)
 					for (int k =0; k<n[2]; k++){
@@ -368,6 +371,7 @@ public class Domain {
 		for (int i=0; i<n[0]; i++)
 			for (int j=0; j<n[1]; j++)
 				for (int k=0; k<n[2]; k++){
+//					if ( j > 50){
 					if ( j > n[1]/2){
 						phi[i][j][k] = 1;
 					}
@@ -381,8 +385,9 @@ public class Domain {
 			for (int i=0; i<n[0]; i++)
 				for (int j=0; j<n[1]; j++)
 					for (int k=0; k<n[2]; k++){
-						if ( (i > n[0]/2 - width/2) && (i < n[0]/2 + width/2) && 
-								(j > n[1]/2 + width/2)  
+						if ( (i > n[0]/2 - width/1.5) && (i < n[0]/2 + width/1.5) && 
+//								(j > n[1]/2 + width/4) 
+								(j > 30)
 //								(j < n[1]/2 + width/2) && (j > n[1]/2 - width/2)
 								&& (k > n[2]/2 - width/2) && (k < n[2]/2 + width/2) 
 								){
@@ -427,7 +432,7 @@ public class Domain {
 		
 		for (int i=0; i<n[0]; i++)
 			for (int k =0; k<n[2]; k++){
-				phi[i][0][k] = phiH;
+				phi[i][1][k] = phiH;
 			}
 		
 	}
@@ -517,6 +522,54 @@ public class Domain {
 		if (z < 0) z += n[2];
 		
 		return phi[x][y][z];
+		
+	}
+
+	public void findContactAngle() {
+		
+		/*
+		 * Ref : Displacement of a two-dimensional immiscible droplet in a channel
+		 * https://pdfs.semanticscholar.org/b851/1e184101fc44f6d68e8757c6f4f998c063da.pdf
+		 */
+		
+		double b0, a0 = 0; 
+		int start = n[0]-1;
+		int end = 0;
+		for (int i = 0; i<n[0]; i++){
+			if (phi[i][n[1]-1][0] > 0 ){
+				start = i;
+				break;
+			}
+		}
+		for (int i = n[0]-1; i>= 0; i--){
+			if (phi[i][n[1]-1][0] > 0 ){
+				end = i;
+				break;
+			}
+		}
+		b0 =  (end - start + 1);
+		
+		
+		for (int j=0; j<n[1]; j++)
+			for (int i= 0; i<n[0]; i++){
+				if (phi[i][j][0] > 0 ){
+					a0 = n[1] - j;
+					j = n[1]; break; 
+				}
+			}
+//		System.out.println("b0 = " + b0 + " a0 = " + a0 );
+		double R = a0/2 + (b0 * b0)/(8*a0);
+		System.out.println( Math.atan(b0/(2*(R-a0)))*(180/Math.PI) );
+		
+		
+//		for (int m=0; m<20; m = m + 1){
+//			for (int i=0; i<n[0]; i++){
+//				if (phi[i][n[1]-m-1][0] >= 0 ){
+//					System.out.println("Point on the interface "  + i + " " + m);
+//					i = n[0];
+//				}
+//			}	
+//		}
 		
 	}
 
