@@ -1,0 +1,55 @@
+This is BibTeX, Version 0.99d (TeX Live 2016)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: main.aux
+The style file: ieeetr.bst
+Database file #1: data/cite.bib
+Too many commas in name 1 of "V. M. Kendon, M. E. Cates, J-C. Desplat, I. Pagonabarraga, P. Bladon" for entry paper:intertial_effects
+while executing---line 969 of file ieeetr.bst
+Too many commas in name 1 of "V. M. Kendon, M. E. Cates, J-C. Desplat, I. Pagonabarraga, P. Bladon" for entry paper:intertial_effects
+while executing---line 969 of file ieeetr.bst
+Name 1 in "P.T. Sumesh, Ignacio Pagonabarraga, and R. Adhikari" has a comma at the end for entry arXiv:1104.0078
+while executing---line 969 of file ieeetr.bst
+Name 1 in "Lei Wang, Hai-bo Huang, and Xi-Yun Lu" has a comma at the end for entry paper:contact_angle
+while executing---line 969 of file ieeetr.bst
+You've used 6 entries,
+            1876 wiz_defined-function locations,
+            516 strings with 4543 characters,
+and the built_in function-call counts, 1549 in all, are:
+= -- 157
+> -- 46
+< -- 0
++ -- 18
+- -- 12
+* -- 104
+:= -- 222
+add.period$ -- 6
+call.type$ -- 6
+change.case$ -- 6
+chr.to.int$ -- 0
+cite$ -- 6
+duplicate$ -- 84
+empty$ -- 151
+format.name$ -- 12
+if$ -- 381
+int.to.chr$ -- 0
+int.to.str$ -- 6
+missing$ -- 6
+newline$ -- 21
+num.names$ -- 6
+pop$ -- 15
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 56
+stack$ -- 0
+substring$ -- 112
+swap$ -- 36
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 13
+width$ -- 7
+write$ -- 59
+(There were 4 error messages)

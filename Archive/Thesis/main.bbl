@@ -1,0 +1,32 @@
+\begin{thebibliography}{1}
+
+\bibitem{paper:intertial_effects}
+J.-C. D. I. P. P.~B. V.~M.~Kendon, M. E.~Cates, ``Inertial effects in three
+  dimensional spinodal decomposition of a symmetric binary fluid mixture: A
+  lattice boltzmann study,'' {\em J. Fluid Mech. 440 (2001) 147-203}, 2000.
+
+\bibitem{arXiv:1104.0078}
+I.~P. P.T.~Sumesh and R.~Adhikari, ``Lattice boltzmann - langevin simulations
+  of binary mixtures,'' {\em Phys. Rev. E 84, 046709 (2011)}, 2011.
+
+\bibitem{paper:bounce_back}
+A.~J. C.~L. Verberg, ``Lattice-boltzmann simulations of particle-fluid
+  suspensions,'' {\em Journal of Statistical Physics}, vol.~104, no.~5,
+  pp.~1191--1251, 2001.
+
+\bibitem{paper:contact_angle}
+H.-b.~H. Lei~Wang and X.-Y. Lu, ``Scheme for contact angle and its hysteresis
+  in a multiphase lattice boltzmann method,'' {\em Phys. Rev. E 87, 013301},
+  2013.
+
+\bibitem{paper:geometrical_contact_anngle}
+Q.~Kang, D.~Zhang, and S.~Chen, ``Displacement of a two-dimensional immiscible
+  droplet in a channel,'' {\em Physics of Fluids}, vol.~14, no.~9,
+  pp.~3203--3214, 2002.
+
+\bibitem{paper:evaporation}
+R.~Ledesma-Aguilar, D.~Vella, and J.~M. Yeomans, ``Lattice-boltzmann
+  simulations of droplet evaporation.,'' {\em Soft Matter}, vol.~10, no.~41,
+  pp.~8267--8275, 2014.
+
+\end{thebibliography}

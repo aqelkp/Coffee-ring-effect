@@ -1,0 +1,9 @@
+\contentsline {section}{\numberline {1}Governing equations}{1}{section.1}
+\contentsline {section}{\numberline {2}Lattice-Boltzmann method}{1}{section.2}
+\contentsline {section}{\numberline {3}Spinodal decomposition}{1}{section.3}
+\contentsline {section}{\numberline {4}Surface tension}{2}{section.4}
+\contentsline {section}{\numberline {5}Variation of phase phield close to interphase}{2}{section.5}
+\contentsline {section}{\numberline {6}LB Method and Method of Lines}{2}{section.6}
+\contentsline {section}{\numberline {7}Solid wall}{3}{section.7}
+\contentsline {section}{\numberline {8}Evaporation of a planar droplet}{4}{section.8}
+\contentsline {section}{\numberline {9}Evaporation of a droplet on solid wall}{4}{section.9}

@@ -10,54 +10,130 @@ import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 
 import graphics.DataGraph;
+import util.BlankSlate;
 
 public class Main {
 	
+	static int numPoints;
+	static String file = "data96.tmp";
 	
 			
 	public static void main(String[] args) {
-		
+		numPoints = DataDecoder.readFile(file).length;
 		// Define a domain
-		Domain domain = new Domain(2,300);
-		int[] n = domain.n;
-		domain.isSolidWall = true;
+		Domain domain = new Domain(2,numPoints);
+		domain.addSolidWall();
 		
-		// Initial Condition for the domain
-//		domain.definePlanarDroplet();
-		domain.defineCube(n[0]/2);
-//		domain.defineSeperatedSystem();
-//		domain.defineRandomSystem();
-//		domain.testDomain();
+		initializeDroplet(domain);
 		
-		// For plotting tanh curve
-		double[] xaxis = new double[n[0]];
-		double[] yaxis = new double[n[0]];
-		for ( int i=0; i< n[0]; i++) xaxis[i] = i;
+		domain.phi = DataDecoder.readFile(file);
 		
-		// Apply streaming function
-		for (int i=0; i<=20000000; i++){
-			if (i % 100000 == 0) displayResults(domain, i, xaxis, yaxis);	
+		System.out.print("t Contact_Diameter\t Drop_Height\t\t Slope\t\t Desired_Angle");
+		runSimulation(domain);
+		
+		domain.phi = DataDecoder.readFile(file);
+		domain.a = domain.a/2; domain.K = domain.K * 2; domain.b = -domain.a;
+		runSimulation(domain);
+		
+		domain.phi = DataDecoder.readFile(file);
+		domain.a = domain.a/2; domain.K = domain.K * 2; domain.b = -domain.a;
+		runSimulation(domain);
+		
+		domain.phi = DataDecoder.readFile(file);
+		domain.a = domain.a/2; domain.K = domain.K * 2; domain.b = -domain.a;
+		runSimulation(domain);
+		
+		domain.phi = DataDecoder.readFile(file);
+		domain.a = domain.a*8; domain.K = domain.K /8; domain.b = -domain.a;
+		domain.a = domain.a*2; domain.K = domain.K / 2; domain.b = -domain.a;
+		runSimulation(domain);
+		
+		domain.phi = DataDecoder.readFile(file);
+		domain.a = domain.a*2; domain.K = domain.K / 2; domain.b = -domain.a;
+		runSimulation(domain);
+		
+		
+		
+//		for (int i=0; i<7; i++){
+//			NewThread thread = new NewThread(numPoints, 80 + i * 3);
+//			thread.start();
+//		}
+				
+		
+	}
+
+	
+
+	public static void runSimulation(Domain domain) {
+		
+		double angle = 0.123445678;
+		for (int i=0; i<=5000000; i++){
+			if (i % 5000000 == 0) displayResults(domain, i);	
+			if (i % 10000 == 0) {
+				double tempAngle = Math.floor(domain.findContactAngle(false) * 10000000) / 10000000;
+				if (angle == tempAngle ) {
+					displayResults(domain, i);
+					break;
+				}
+				else angle = tempAngle;
+			}
 			
-//			LBSimulation(domain, i);
-			methodOfLines(domain, i);
 			
+			
+			LBSimulation(domain, i);
+//			methodOfLines(domain, i);
+		
+//			if ( domain.findContactAngle(false) <= 0 ){
+//				System.out.println("\n" + i + " 0 0 0 0 " );
+//				break;
+//			}
 		}
-			
+		System.out.print("a " + domain.a +" b " + domain.b + " k " + domain.K + " ");
+		
 	}
 
-	private static void displayResults(Domain domain, int i, double[] xaxis, double[] yaxis) {
-		// TODO Auto-generated method stub
+	public static void LBSimulation(Domain domain, int i) {
+		
+		domain.findNu();
+		domain.findBoundaryNu();
+		domain.findGeq();
+		domain.stream();
+		domain.findPhiLBM(i);
+		if (domain.isSolidWall) domain.solidWallBC(i);
+//		domain.contactAngleHysterisis();
+//		domain.evaporate();
+//		domain.condensate();
+	}
+
+	private static void displayResults(Domain domain, int i) {
+		System.out.print("\n" + i + " ");
+		double angle = domain.findContactAngle(true);
 //		printPoints(domain);
-		System.out.print("At t = " + i + " ");
-//		DataVisuals.plotBoundaryPhi(domain, xaxis, yaxis, i);
-//		System.out.println("at t = " + i + " sigma phi " +  domain.sigmaG());
-//		domain.savePhi("contactangle" + i);
-		Plot.define(domain, "Domain_at_t=" + i);
+//		DataVisuals.plotBoundaryPhi(domain, i);
+//		System.out.print("sigma phi = " +  domain.sigmaG() + " ");
+//		domain.savePhi(((int) (angle * 180 / Math.PI)) + "contactangle" + i);
+//		Plot.define(domain, "Domain_at_t=" + i);
 //		findHeight(domain);
-		domain.findContactAngle();
-
+//		Image.createImage(domain,i);
+//		domain.findContactAngleBC(true);
+		
 	}
 
+	private static void methodOfLines(Domain domain, int i) {
+		
+//		domain.findCenter();
+		domain.findNu();
+//		domain.findBoundaryNu();
+		domain.findPhiMethodOfLines(i);
+		if (domain.isSolidWall) domain.solidWallBC(i);
+		domain.contactAngleHysterisis();
+		domain.evaporate();
+//		domain.condensate();
+		
+	}
+		
+	
+	
 	private static void findHeight(Domain domain) {
 		// TODO Auto-generated method stub
 		for (int i=0; i<domain.numPoints; i++){
@@ -68,33 +144,13 @@ public class Main {
 		}
 	}
 
-	private static void methodOfLines(Domain domain, int i) {
-		
-		if (domain.isSolidWall) domain.solidWallBC();
-		domain.findNu();
-//		domain.findBoundaryNu();
-		domain.findPhiMethodOfLines(i);
-		 
-	}
-
-	private static void LBSimulation(Domain domain, int i) {
-		domain.findNu();
-//		domain.findBoundaryNu();
-		domain.findGeq();
-		domain.stream();
-		domain.findPhiLBM(i);
-		if (domain.isSolidWall) domain.solidWallBC();
-		
-//		domain.evaporate();
-	}
-
-	
 	public static void printPoints(Domain domain){
 		int[] n = domain.n;
 		Point[][][] points = domain.points;
-		for (int j=0; j<n[1]; j++){
+//		for (int j=0; j<n[1]; j++){
+		for (int j=n[1]-1; j>=0; j--){
 			for (int i=0; i< n[0]; i++){
-				System.out.print( new DecimalFormat("#.######").format(domain.phi[i][j][n[2]/2])  + " ");
+				System.out.print( new DecimalFormat("#.######").format(domain.phi[i][j][0])  + " ");
 				//System.out.print("(" + i + "," + j + ")");
 			}
 			System.out.println("");
@@ -103,5 +159,17 @@ public class Main {
 		
 	}
 	
+	public static void initializeDroplet(Domain domain){
+		 // Initial Condition for the domain
+			domain.definePlanarDroplet();
+//			domain.defineCube(numPoints/2);	
+//			domain.defineOneDimentionalDrop(numPoints/2);
+//			domain.defineCube(numPoints/2);
+//			domain.defineSeperatedSystem();
+//			domain.defineRandomSystem();
+//			domain.testDomain();
+		}
 	
+	
+
 }

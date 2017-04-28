@@ -49,6 +49,7 @@ public class Plot extends JPanel{
 		
 		HSLColor liquid = new HSLColor( Color.RED );
 		HSLColor gas = new HSLColor( Color.BLUE );
+		HSLColor boundary = new HSLColor( Color.GRAY );
 		
 		for (int i=0; i<domain.n[0]; i++)
 			for (int j =0; j<domain.n[1]; j++){
@@ -58,7 +59,10 @@ public class Plot extends JPanel{
 //					System.out.println((int) intensity);
 					g.setColor(liquid.adjustTone(intensity));
 //					g.setColor(new Color( (int)intensity  * 25, 0, 0));
-				} else if (ph < 0) {
+				} else if (ph < domain.phiH + 0.005 && ph < -1) {
+					g.setColor(boundary.adjustTone(intensity));
+//					g.setColor(Color.getHSBColor(0.0f, 1.0f, 1- intensity));;
+				}else if (ph < 0) {
 					g.setColor(gas.adjustTone(intensity));
 //					g.setColor(Color.getHSBColor(0.0f, 1.0f, 1- intensity));;
 				} else if (ph ==0 ){

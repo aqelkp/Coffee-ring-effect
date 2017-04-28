@@ -51,6 +51,13 @@ public class Solver {
 		for (int i=0; i<n[0]; i++)
 			for (int j=domain.start; j<n[1]-domain.start; j++)
 				for (int k=0; k<n[2]; k++){
+					
+//					double distance = (i-domain.centerX)*(i-domain.centerX) + (j-domain.centerY)*(j-domain.centerY);
+//					if(Math.pow(distance, 0.5) > domain.rH){
+//						domain.phi[i][j][k] = domain.phiH;
+//						continue;						
+//					}
+					
 					domain.phi[i][j][k] = fun(domain, domain.phi[i][j][k], i,j,k) + domain.phi[i][j][k];
 				}
 	}
@@ -64,6 +71,7 @@ public class Solver {
 		for (int i=0; i<n[0]; i++)
 			for (int j=domain.start; j<n[1]-domain.start; j++)
 				for (int k=0; k<n[2]; k++){
+					
 					phiTemp[i][j][k] = domain.phi[i][j][k];
 					k1[i][j][k] = fun(domain, domain.phi[i][j][k], i,j,k);
 					domain.phi[i][j][k] = 0.5 * k1[i][j][k] + domain.phi[i][j][k];
@@ -73,22 +81,28 @@ public class Solver {
 		domain.findNu();
 		
 		double[][][] k2 = new double[n[0]][n[1]][n[2]];
+		
 		for (int i=0; i<n[0]; i++)
 			for (int j=domain.start; j<n[1]-domain.start; j++)
 				for (int k=0; k<n[2]; k++){
-					k2[i][j][k] = fun(domain, domain.phi[i][j][k], i,j,k);
-					domain.phi[i][j][k] = phiTemp[i][j][k] +  k2[i][j][k]/2;
+					
+					phiTemp[i][j][k] = domain.phi[i][j][k];
+					k1[i][j][k] = fun(domain, domain.phi[i][j][k], i,j,k);
+					domain.phi[i][j][k] = 0.5 * k1[i][j][k] + domain.phi[i][j][k];
 				}
 		
 		if (domain.isSolidWall) domain.solidWallBC();
 		domain.findNu();
 		
 		double[][][] k3 = new double[n[0]][n[1]][n[2]];
+		
 		for (int i=0; i<n[0]; i++)
 			for (int j=domain.start; j<n[1]-domain.start; j++)
 				for (int k=0; k<n[2]; k++){
-					k3[i][j][k] = fun(domain, domain.phi[i][j][k], i,j,k);
-					domain.phi[i][j][k] = phiTemp[i][j][k] +  k3[i][j][k];
+					
+					phiTemp[i][j][k] = domain.phi[i][j][k];
+					k1[i][j][k] = fun(domain, domain.phi[i][j][k], i,j,k);
+					domain.phi[i][j][k] = 0.5 * k1[i][j][k] + domain.phi[i][j][k];
 				}
 		
 		if (domain.isSolidWall) domain.solidWallBC();
@@ -98,14 +112,11 @@ public class Solver {
 		for (int i=0; i<n[0]; i++)
 			for (int j=domain.start; j<n[1]-domain.start; j++)
 				for (int k=0; k<n[2]; k++){
-					k4[i][j][k] = fun(domain, domain.phi[i][j][k], i,j,k);
-					domain.phi[i][j][k] = phiTemp[i][j][k] +  ( k1[i][j][k] + 2 * k2[i][j][k] + 
-							2 * k3[i][j][k] + k4[i][j][k] )/6;
-					if (Math.abs(domain.phi[i][j][k]) >= 0.9 )
-					error += (domain.phi[i][j][k] - phiTemp[i][j][k] ) * (domain.phi[i][j][k] - phiTemp[i][j][k] );
-				}
-//		if (num % 1000 == 0) System.out.println("Error at t = " + num + " is " + Math.pow(max/(n[0]*n[1]*n[2]), 0.5));
-		
+					
+					phiTemp[i][j][k] = domain.phi[i][j][k];
+					k1[i][j][k] = fun(domain, domain.phi[i][j][k], i,j,k);
+					domain.phi[i][j][k] = 0.5 * k1[i][j][k] + domain.phi[i][j][k];
+				}		
 	}
 	
 	public static double RK4(Domain domain, int x, int y, int z){

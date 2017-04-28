@@ -20,18 +20,24 @@ public class Domain {
 	double[][][] phi, nu;
 	int[][] c;
 	
-	
 	// Simulation parameters from the paper
 	// Lattice - Boltzmann simulation of droplet evaporation
-	public static double a = -0.00305, b=-a, K = 0.0078;
-	public static double epsilon = Math.sqrt(-K/(2*a));
+//	public double a = -0.00305, b=-a, K = 0.0078;
+	public double a = -0.01, b=-a, K = 0.09;
+//	public double a = -0.01, b=-a, K = 0.03;
+	public double epsilon = Math.sqrt(-K/(2*a));
 	public static int rho = 1, delt = 1;
-	public static double M = 5;
+	public static double M = 0.5;
 	double towG = 1;
 	double Mbar = 2*M/(2*towG - 1);
 	public static double h = 0.00;
 //	double towG = 0.78868;
-	public static double contactAngle =  Math.PI/3;
+	public static final double desiredAngle = (96/180.0) * Math.PI;
+	public double contactAngle = desiredAngle;
+	public double phiH = -1.1;
+	public double rH = 99;
+	
+	public double centerX, centerY; 
 	
 	// To exclude wall
 	int start = 1;
@@ -44,9 +50,9 @@ public class Domain {
 		this.dimension = dimension;
 		this.numPoints = numPoints;
 		
-		int[] n = {numPoints, dimension > 1 ? numPoints : 1, dimension > 2 ? numPoints : 1};
+		int[] n = {numPoints, dimension > 1 ? numPoints  : 1, dimension > 2 ? numPoints : 1};
 		
-//		int[] n = {150,50,1}; dimension = 2;
+//		int[] n = {1,150,1}; dimension = 2;
 		
 		this.n = n;
 		points = new Point[n[0]][n[1]][n[2]];
@@ -135,14 +141,15 @@ public class Domain {
 						
 //						points[x][y][z].g[i] = points[j][k][m].geq[i] ;
 						
+						// Bottom bounce-back BC
+						if (isSolidWall && y == n[1] - 1 - start && (i == 8 || i == 4 || i == 7 ) ){
+	//						points[x][y][z].g[i] = tempg[i-2][x][y][z];
+							points[x][y][z].g[i] = points[x][y][z].geq[i-2];
+						}
 						// Top bounce-back BC
-						if (isSolidWall && y == start && (i == 6 || i == 2 || i == 5 ) ){
+						else if (isSolidWall && y == start && (i == 6 || i == 2 || i == 5 ) ){
 //							points[x][y][z].g[i] = tempg[i+2][x][y][z];
 							points[x][y][z].g[i] = points[x][y][z].geq[i+2];
-						// Bottom bounce-back BC
-						} else if (isSolidWall && y == n[1] - 1 - start && (i == 8 || i == 4 || i == 7 ) ){
-//							points[x][y][z].g[i] = tempg[i-2][x][y][z];
-							points[x][y][z].g[i] = points[x][y][z].geq[i-2];
 						} else {
 //							points[x][y][z].g[i] = tempg[i][j][k][m];
 							points[x][y][z].g[i] = points[j][k][m].geq[i] ;
@@ -166,37 +173,49 @@ public class Domain {
 
 	// ΣΣgi
 	double sigmaG(){
+		
+		int count = 0;
+		
+		
 		double sum = 0;
 		for (int i=0; i<n[0]; i++)
 			for (int j=start; j<n[1]-start;j++)
-				for (int k=0; k<n[2]; k++)
+				for (int k=0; k<n[2]; k++){
 //					for (int m = 0; m<directions; m++){
 //						sum += points[i][j][k].g[m];
 //					}
+					
+//					double distance = (i-n[0]/2)*(i-n[0]/2) + (j-n[1]-1)*(j-n[1]-1);
+//					if(Math.pow(distance, 0.5) > rH){
+//						if (i==25 && j==n[1]-1) System.out.println(Math.pow(distance, 0.5));
+//						continue;						
+//					}
+					
 					sum += phi[i][j][k];
+					if (phi[i][j][k]>0) count++;
+				}
 		return sum;
 	}
 
 	public void findNu() {
 		
-		
 		for (int i=0; i<n[0]; i++)
-			for (int j= start; j<n[1]- start; j++)
+			for (int j=start; j<n[1]- start; j++)
 				for (int k=0; k<n[2]; k++){
 					
 					nu[i][j][k] = findNu(phi[i][j][k], i,j,k);
 					
 				}
-		if (isSolidWall)
-		// del.nu = 0
-				for (int i=0; i<n[0]; i++)
-					for (int k =0; k<n[2]; k++){
-						int j = n[1]-1;
-						
-						nu[i][j][k] = nu[i][j-1][k];
-						
-						nu[i][0][k] = nu[i][1][k];
-					}
+//		if (isSolidWall)
+//		// del.nu = 0
+//				for (int i=0; i<n[0]; i++)
+//					for (int k =0; k<n[2]; k++){
+//						int j = n[1]-1;
+//						
+//						nu[i][j][k] = nu[i][j-1][k];
+//						
+//						nu[i][0][k] = nu[i][1][k];
+//					}
 		
 	}
 
@@ -309,27 +328,28 @@ public class Domain {
 	}
 
 	public void findPhiLBM(int c) {
-		double error = 0;
 		for (int i=0; i<n[0]; i++)
 			for (int j=0; j<n[1]; j++)
 				for (int k=0; k<n[2]; k++){
+					
+//					double distance = (i-n[0]/2)*(i-n[0]/2) + (j-n[1]-1)*(j-n[1]-1);
+//					if(Math.pow(distance, 0.5) > rH){
+//						phi[i][j][k] = phiH;
+//						continue;						
+//					}
 					
 					Point point = points[i][j][k];	
 					double phiPoint = 0;
 					for (int h =0; h<directions; h++){
 						phiPoint += point.g[h];
 					}
-					if (Math.abs(phi[i][j][k]) >= 0.9 )
-						error += (phi[i][j][k]-phiPoint) * (phi[i][j][k]-phiPoint);
 					phi[i][j][k] = phiPoint;
 				}
-//		if (c % 1000 == 0 ) 
-//			System.out.println("error at t = " + c + " = " + Math.pow(error/(n[0]*n[1]*n[2]), 0.5));
 	}
 	
 	public void findPhiMethodOfLines(int i) {
-		Solver.RK4(this, i);
-//		Solver.euler(this);
+//		Solver.RK4(this, i);
+		Solver.euler(this);
 	}
 
 	public void defineSeperatedSystem() {
@@ -371,8 +391,8 @@ public class Domain {
 		for (int i=0; i<n[0]; i++)
 			for (int j=0; j<n[1]; j++)
 				for (int k=0; k<n[2]; k++){
-//					if ( j > 50){
-					if ( j > n[1]/2){
+					if ( i > n[0]/2){
+//					if ( j > n[1]/2){
 						phi[i][j][k] = 1;
 					}
 					else phi[i][j][k] = -1;
@@ -380,14 +400,23 @@ public class Domain {
 		
 	}
 	
+	void defineOneDimentionalDrop(int heightOfLiquid ) {
+			for (int j=0; j<n[1]; j++){
+				if (j>n[1]-heightOfLiquid){
+					phi[0][j][0] = 1;
+				} else {
+					phi[0][j][0] = -1;
+				}
+			}
+	}
+	
 	void defineCube(int width ) {
 			
 			for (int i=0; i<n[0]; i++)
 				for (int j=0; j<n[1]; j++)
 					for (int k=0; k<n[2]; k++){
-						if ( (i > n[0]/2 - width/1.5) && (i < n[0]/2 + width/1.5) && 
-//								(j > n[1]/2 + width/4) 
-								(j > 30)
+						if ( (i > n[0]/2 - width/2) && (i < n[0]/2 + width/2) && 
+								(j > n[1]/2 + width/2 ) 
 //								(j < n[1]/2 + width/2) && (j > n[1]/2 - width/2)
 								&& (k > n[2]/2 - width/2) && (k < n[2]/2 + width/2) 
 								){
@@ -400,7 +429,7 @@ public class Domain {
 
 	public void savePhi(String name) {
 		try {
-			FileOutputStream fos = new FileOutputStream("dataphi/t" + name +".tmp");
+			FileOutputStream fos = new FileOutputStream("dataphi/" + name +".tmp");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(phi);
 			oos.close();
@@ -428,30 +457,76 @@ public class Domain {
 	}
 	
 	public void evaporate() {
-		double phiH = -1.3;
 		
 		for (int i=0; i<n[0]; i++)
 			for (int k =0; k<n[2]; k++){
 				phi[i][1][k] = phiH;
+//				phi[i][1][k] = 1.023252975;
 			}
+		
+//		for (int i=0; i<n[1]; i++)
+//			for (int k =0; k<n[2]; k++){
+//				phi[0][i][k] = phiH;
+//				phi[n[0]-1][i][k] = phiH;
+//			}
+//		
+		
 		
 	}
 	
+	public void condensate() {
+			
+			for (int i=0; i<n[0]; i++)
+				for (int k =0; k<n[2]; k++){
+					phi[i][1][k] = -0.85413;
+//					phi[i][1][k] = -0.989690623;
+//					phi[i][1][k] = -0.975;
+				}
+	}
+
+	
 	public void solidWallBC() {
+		solidWallBC(1);
+	}
+	
+	public void solidWallBC(int t) {
 		
-//		// BC at the bottom and top
-//				for (int i=0; i<n[0]; i++)
-//					for (int k =0; k<n[2]; k++){
-//						int j = n[1]-2;
-//						
-//						phi[i][j][k] = phi[i][j-1][k];
-//						phi[i][j+1][k] = phi[i][j][k];
-//						
-//						phi[i][1][k] = phi[i][2][k];
-//						phi[i][0][k] = phi[i][1][k];
-//					}
+//		 BC at the bottom and top
+		
+//		for (int k =0; k<n[2]; k++){
+//			int start = n[0]-1;
+//			int end = 0;
+//			for (int m = 0; m<n[0]; m++){
+//				if (phi[m][n[1]-1][k] > 0 ){
+//					start = m;
+//					break;
+//				}
+//			}
+//			for (int m = n[0]-1; m>= 0; m--){
+//				if (phi[m][n[1]-1][k] > 0 ){
+//					end = m;
+//					break;
+//				}
+//			}
+//			for (int i=0; i<n[0]; i++){
+//				if (i == end || i == start){
+//					int j = n[1]-1;
+//					
+//					phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
+//									* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
+//											phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
+//					
+//					
+//				} else {
+//					int j = n[1]-1;
+//					phi[i][j][k] = phi[i][j-1][k];
+//				}
+//				phi[i][0][k] = phi[i][1][k];
+//				
+//			}
+//		}
 				
-		// BC at the bottom and top
+		
 				for (int i=0; i<n[0]; i++)
 					for (int k =0; k<n[2]; k++){
 						int j = n[1]-1;
@@ -460,28 +535,11 @@ public class Domain {
 										* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
 												phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
 						
-						phi[i][0][k] = phi[i][2][k] + Math.tan(Math.PI/2 - contactAngle) 
+						phi[i][0][k] = phi[i][2][k] + Math.tan(Math.PI/2 - (contactAngle) ) 
 						* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][1][k] - 
 								phi[(i-1>= 0) ? i-1 : (i-1+n[0])][1][k]);
 						
 					}
-	
-//		// BC at the bottom and top
-//		for (int i=0; i<n[0]; i++)
-//			for (int k =0; k<n[2]; k++){
-//				int j = n[1]-2;
-//				
-//				phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
-//								* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
-//										phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
-//				phi[i][j+1][k] = phi[i][j][k];
-//				
-//				phi[i][1][k] = phi[i][3][k] + Math.tan(Math.PI/2 - contactAngle) 
-//				* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][2][k] - 
-//						phi[(i-1>= 0) ? i-1 : (i-1+n[0])][2][k]);
-//				phi[i][0][k] = phi[i][1][k];
-//			}
-		
 	}
 
 	public void findBoundaryNu() {
@@ -503,6 +561,12 @@ public class Domain {
 		nuPoint -= K * (phi[ (i + 1 < n[0]) ? i + 1 : (i + 1 - n[0]) ][j][k] - 2 * phiPoint + 
 						phi[ (i- 1 >= 0) ? i - 1 : (i - 1 + n[0])][j][k]);
 
+		if (j == n[1]-1){
+			nuPoint -= K * ( phi[i][j][k] - 2 * phi[i][j-1][k] + phi[i][j-2][k] );
+		} else {
+			nuPoint -= K * ( phi[i][0][k] - 2 * phi[i][1][k] + phi[i][2][k] );
+		}
+		
 		nuPoint -= K * (phi[i][j][(k + 1 < n[2]) ? k + 1 : (k + 1 - n[2]) ] - 2 * phiPoint + 
 						phi[i][j][ (k- 1 >= 0) ? k - 1 : (k - 1 + n[2])]);
 		
@@ -525,7 +589,8 @@ public class Domain {
 		
 	}
 
-	public void findContactAngle() {
+	
+	public double findContactAngle(boolean printResult) {
 		
 		/*
 		 * Ref : Displacement of a two-dimensional immiscible droplet in a channel
@@ -533,6 +598,135 @@ public class Domain {
 		 */
 		
 		double b0, a0 = 0; 
+		double start = n[0]-1;
+		double end = 0;
+		for (int i = 1; i<n[0]; i++){
+			if (phi[i][n[1]-1][0] >= 0 ){
+				start = i;
+				start = i - 1 + Math.abs(phi[i-1][n[1]-1][0])/(Math.abs(phi[i-1][n[1]-1][0])+phi[i][n[1]-1][0]);
+				break;
+			}
+		}
+		for (int i = n[0]-1; i>= 0; i--){
+			if (i-1 >=0 && phi[i][n[1]-1][0] > 0){
+				end = i;
+				end = i + 1 - Math.abs(phi[i-1][n[1]-1][0])/(Math.abs(phi[i-1][n[1]-1][0]) + phi[i][n[1]-1][0]);
+				break;
+			}
+		}
+//		b0 = end - start + 1;
+		b0 =  (end - start);
+		
+		for ( int j= n[1] - 2; j > 0 ; j--){
+			if (phi[n[0]/2][j][0] <= 0){
+				a0 = n[1] - 1 - ( j + Math.abs(phi[n[0]/2][j][0])/(Math.abs(phi[n[0]/2][j][0]) + phi[n[0]/2][j+1][0]) );
+				break;
+			}
+		}
+		
+//		for (int j=0; j<n[1]; j++)
+//			for (int i= 0; i<n[0]; i++){
+//				if (phi[i][j][0] > 0 ){
+//					a0 = n[1] - j;
+//					j = n[1]; break; 
+//				}
+//			}
+		if (printResult) System.out.print(" " + b0 + "  " + a0 + " " );
+		if (a0 <= 0 || b0 <= 0 ) return 0;
+		double R = a0/2 + (b0 * b0)/(8*a0);
+//		if (printResult) System.out.print("circular:" +  (( Math.atan(b0/(2*(R-a0)))*(180/Math.PI) > 0) ? Math.atan(b0/(2*(R-a0)))*(180/Math.PI) : 180 + Math.atan(b0/(2*(R-a0)))*(180/Math.PI) ) + " " );
+		
+		double first = 0;
+		int firstY = 0;
+		for (int i=0; i<n[0]; i++){
+			if (i-1>=0 && phi[i][n[1]-1-firstY][0] >= 0 ){
+				first = i-1+ Math.abs(phi[i-1][n[1]-1-firstY][0])/(phi[i][n[1]-1-firstY][0] + Math.abs(phi[i-1][n[1]-1-firstY][0]));			
+				break;
+			}
+		}
+		
+		double second = 0; 
+		int secondY = 2;
+		for (int i=0; i<n[0]; i++){
+			if (i-1>= 0 && phi[i][n[1]-1-secondY][0] >= 0 ){
+				second = i;
+				second = i-1+ Math.abs(phi[i-1][n[1]-1-secondY][0])/ ( phi[i][n[1]-1-secondY][0] + Math.abs(phi[i-1][n[1]-1-secondY][0] ) );
+				break;
+			}
+		}
+		
+		double third = 0; 
+		int thirdY = 2;
+		for (int i=0; i<n[0]; i++){
+			if (i-1>= 0 && phi[i][n[1]-1-thirdY][0] >= 0 ){
+				third = i;
+				third = i-1+ Math.abs(phi[i-1][n[1]-1-thirdY][0])/ ( phi[i][n[1]-1-thirdY][0] + Math.abs(phi[i-1][n[1]-1-thirdY][0] ) );
+				break;
+			}
+		}
+		
+		
+//		if(printResult) System.out.println("\nfist "+first + " " + second + " "+ secondY + " "+ firstY);
+//		double angle = Math.atan(b0/(2*(R-a0)));
+		double angle = Math.atan((secondY-firstY)/(second-first));
+		if (angle < 0) angle += Math.PI;
+//		angle += adjustAngle(angle);
+		double angleDegree = angle*(180/Math.PI);
+		
+		if(printResult) System.out.print( " " + (angleDegree>=0?angleDegree:angleDegree+180) + " " );
+		if(printResult) System.out.print( " " + (contactAngle*(180/Math.PI)) + " " );
+		
+		if(printResult) System.out.print( " " + (angle) + " " );
+		if(printResult) System.out.print( " " + (contactAngle) + " " );
+		
+//		if(printResult){			
+//			for (int m=0; m<20; m = m + 1){
+//				for (int i=0; i<n[0]; i++){
+//					if (phi[i][n[1]-m-1][0] >= 0 ){
+//						System.out.println("Point on the interface "  + i + " " + m);
+//						i = n[0];
+//					}
+//				}	
+//			}
+//		}
+		
+		return angle;
+	}
+
+	public void addSolidWall() {
+		// TODO Auto-generated method stub
+		isSolidWall = true;
+		start = 1;
+		solidWallBC();
+		
+	}
+
+	public void contactAngleHysterisis() {
+		double recedingAngle = (81/180.0) * Math.PI;
+		double advancingAngle = (99/180.0) * Math.PI;
+		double angle  = findContactAngle(false) ;
+		
+		if (angle < 0) angle = Math.PI + angle;
+		
+		if (angle >= advancingAngle)  contactAngle = advancingAngle;
+		else if (angle <= recedingAngle) contactAngle = recedingAngle;
+		else contactAngle = angle;	
+		
+	}
+	
+
+	public void findH() {
+		for (int i=0; i<n[0]; i++){
+			double h = (phi[i][n[1]-1][0]-phi[i][n[1]-2][0])*K;
+			double root = h/Math.pow(K*b, 0.5);
+			double cos = 0.5 * (-Math.pow(1-root, 1.5)+Math.pow(1+root, 1.5));
+			System.out.println(i + " " + cos + " " + h);
+			
+		}
+			
+	}
+
+	public void findCenter() {
 		int start = n[0]-1;
 		int end = 0;
 		for (int i = 0; i<n[0]; i++){
@@ -547,35 +741,47 @@ public class Domain {
 				break;
 			}
 		}
-		b0 =  (end - start + 1);
-		
-		
-		for (int j=0; j<n[1]; j++)
-			for (int i= 0; i<n[0]; i++){
-				if (phi[i][j][0] > 0 ){
-					a0 = n[1] - j;
-					j = n[1]; break; 
-				}
-			}
-//		System.out.println("b0 = " + b0 + " a0 = " + a0 );
-		double R = a0/2 + (b0 * b0)/(8*a0);
-		System.out.println( Math.atan(b0/(2*(R-a0)))*(180/Math.PI) );
-		
-		
-//		for (int m=0; m<20; m = m + 1){
-//			for (int i=0; i<n[0]; i++){
-//				if (phi[i][n[1]-m-1][0] >= 0 ){
-//					System.out.println("Point on the interface "  + i + " " + m);
-//					i = n[0];
-//				}
-//			}	
-//		}
+		centerX = (start+end)/2;
+		centerY = (n[1]-1)+(end-start)/(2*Math.tan(contactAngle));
 		
 	}
 
+	public double findContactAngleBC(boolean isPrint){
+		int start = 0;
+		for (int i = 1; i<n[0]; i++){
+			if (phi[i][n[1]-1][0] >= 0 ){
+				start = i;
+				break;
+			}
+		}
+		int j = n[1]-1;
+		double angle = Math.PI/2 - Math.atan((phi[start][j][0] - phi[start][j-2][0])/Math.abs( phi[start+1][j-1][0] - phi[start-1][j-1][0] + 0.0000000000000001 ) );
+		if(isPrint) System.out.print("BCAngle " + (angle*(180/Math.PI)) + " ");
+		return angle;
+		
+		
+		
+//		phi[i][j][k] = phi[i][j-2][k] + Math.tan(Math.PI/2 - contactAngle) 
+//						* Math.abs(phi[(i+1<n[0]) ? i+1 : (i+1-n[0])][j-1][k] - 
+//								phi[(i-1>= 0) ? i-1 : (i-1+n[0])][j-1][k]);
+	}
 	
 	
 	
+	public double adjustAngle(double angle){
+		if (angle < 0) angle += Math.PI;
+		double adj = 0;
+		double[] adjs = CorrectionData.adjs;
+		double[] angles = CorrectionData.angles;
+		
+		if (angle > angles[0] && angle < angles[angles.length-1]) 
+		for (int i = 0; i<angles.length; i++){
+			if (angles[i]>angle){
+				return adjs[i-1] + (angle-angles[i-1]) *(adjs[i]-adjs[i-1])/(angles[i]-angles[i-1]) ;
+			}
+		}
+		return adj;
+	}
 
 
 	
