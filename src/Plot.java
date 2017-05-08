@@ -14,7 +14,7 @@ public class Plot extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	private static int pointSize = 1;
-	public static void define(Domain domain, String fileName){
+	public static void define(Domain domain){
 		int xLength = domain.n[0] * pointSize;
 		int yLength = domain.n[1] * pointSize + 30;
 		JFrame frame = new JFrame("Plot");
@@ -24,17 +24,17 @@ public class Plot extends JPanel{
 		frame.setSize(xLength , yLength );
 		frame.setVisible(true);
 		
-		try
-        {
-            BufferedImage image = new BufferedImage(xLength , yLength, BufferedImage.TYPE_INT_RGB);
-            Graphics2D graphics2D = image.createGraphics();
-            frame.paint(graphics2D);
-            ImageIO.write(image,"jpeg", new File("plots/" + fileName));
-        }
-        catch(Exception exception)
-        {
-            //code
-        }
+//		try
+//        {
+//            BufferedImage image = new BufferedImage(xLength , yLength, BufferedImage.TYPE_INT_RGB);
+//            Graphics2D graphics2D = image.createGraphics();
+//            frame.paint(graphics2D);
+//            ImageIO.write(image,"jpeg", new File("plots/" + fileName));
+//        }
+//        catch(Exception exception)
+//        {
+//            //code
+//        }
 		
 	}
 	

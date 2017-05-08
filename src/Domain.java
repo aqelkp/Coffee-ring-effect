@@ -32,7 +32,7 @@ public class Domain {
 	double Mbar = 2*M/(2*towG - 1);
 	public static double h = 0.00;
 //	double towG = 0.78868;
-	public static final double desiredAngle = (96/180.0) * Math.PI;
+	public static final double desiredAngle = (10/180.0) * Math.PI;
 	public double contactAngle = desiredAngle;
 	public double phiH = -1.1;
 	public double rH = 99;
@@ -206,16 +206,16 @@ public class Domain {
 					nu[i][j][k] = findNu(phi[i][j][k], i,j,k);
 					
 				}
-//		if (isSolidWall)
-//		// del.nu = 0
-//				for (int i=0; i<n[0]; i++)
-//					for (int k =0; k<n[2]; k++){
-//						int j = n[1]-1;
-//						
-//						nu[i][j][k] = nu[i][j-1][k];
-//						
-//						nu[i][0][k] = nu[i][1][k];
-//					}
+		if (isSolidWall)
+		// del.nu = 0
+				for (int i=0; i<n[0]; i++)
+					for (int k =0; k<n[2]; k++){
+						int j = n[1]-1;
+						
+						nu[i][j][k] = nu[i][j-1][k];
+						
+						nu[i][0][k] = nu[i][1][k];
+					}
 		
 	}
 
@@ -348,8 +348,8 @@ public class Domain {
 	}
 	
 	public void findPhiMethodOfLines(int i) {
-//		Solver.RK4(this, i);
-		Solver.euler(this);
+		Solver.RK4(this, i);
+//		Solver.euler(this);
 	}
 
 	public void defineSeperatedSystem() {
@@ -461,7 +461,7 @@ public class Domain {
 		for (int i=0; i<n[0]; i++)
 			for (int k =0; k<n[2]; k++){
 				phi[i][1][k] = phiH;
-//				phi[i][1][k] = 1.023252975;
+//				phi[i][1][k] = 0.023252975;
 			}
 		
 //		for (int i=0; i<n[1]; i++)
@@ -478,8 +478,10 @@ public class Domain {
 			
 			for (int i=0; i<n[0]; i++)
 				for (int k =0; k<n[2]; k++){
-					phi[i][1][k] = -0.85413;
-//					phi[i][1][k] = -0.989690623;
+					phi[i][1][k] = -0.8541381265;
+//					phi[i][1][k] = -0.2458618735;
+
+					//					phi[i][1][k] = -0.989690623;
 //					phi[i][1][k] = -0.975;
 				}
 	}
@@ -608,9 +610,9 @@ public class Domain {
 			}
 		}
 		for (int i = n[0]-1; i>= 0; i--){
-			if (i-1 >=0 && phi[i][n[1]-1][0] > 0){
+			if (i + 1 <n[0] && phi[i][n[1]-1][0] > 0){
 				end = i;
-				end = i + 1 - Math.abs(phi[i-1][n[1]-1][0])/(Math.abs(phi[i-1][n[1]-1][0]) + phi[i][n[1]-1][0]);
+				end = i + 1 - Math.abs(phi[i+1][n[1]-1][0])/(Math.abs(phi[i+1][n[1]-1][0]) + phi[i][n[1]-1][0]);
 				break;
 			}
 		}
@@ -670,14 +672,14 @@ public class Domain {
 //		double angle = Math.atan(b0/(2*(R-a0)));
 		double angle = Math.atan((secondY-firstY)/(second-first));
 		if (angle < 0) angle += Math.PI;
-//		angle += adjustAngle(angle);
+		angle += adjustAngle(angle);
 		double angleDegree = angle*(180/Math.PI);
 		
 		if(printResult) System.out.print( " " + (angleDegree>=0?angleDegree:angleDegree+180) + " " );
-		if(printResult) System.out.print( " " + (contactAngle*(180/Math.PI)) + " " );
+//		if(printResult) System.out.print( " " + (contactAngle*(180/Math.PI)) + " " );
 		
-		if(printResult) System.out.print( " " + (angle) + " " );
-		if(printResult) System.out.print( " " + (contactAngle) + " " );
+//		if(printResult) System.out.print( " " + (angle) + " " );
+//		if(printResult) System.out.print( " " + (contactAngle) + " " );
 		
 //		if(printResult){			
 //			for (int m=0; m<20; m = m + 1){
@@ -694,7 +696,6 @@ public class Domain {
 	}
 
 	public void addSolidWall() {
-		// TODO Auto-generated method stub
 		isSolidWall = true;
 		start = 1;
 		solidWallBC();
@@ -702,8 +703,8 @@ public class Domain {
 	}
 
 	public void contactAngleHysterisis() {
-		double recedingAngle = (81/180.0) * Math.PI;
-		double advancingAngle = (99/180.0) * Math.PI;
+		double recedingAngle = (1/180.0) * Math.PI;
+		double advancingAngle = (142/180.0) * Math.PI;
 		double angle  = findContactAngle(false) ;
 		
 		if (angle < 0) angle = Math.PI + angle;
@@ -784,7 +785,53 @@ public class Domain {
 	}
 
 
+	public void getShape(){
+		
+		for (int j=0; j<n[0]; j++){
+			double start = n[0]-1;
+			double end = 0;
+			for (int i = 1; i<n[0]; i++){
+				if (phi[i][j][0] >= 0 ){
+					start = i;
+					start = i - 1 + Math.abs(phi[i-1][j][0])/(Math.abs(phi[i-1][j][0])+phi[i][j][0]);
+					break;
+				}
+			}
+			for (int i = n[0]-1; i>= 0; i--){
+				if (i-1 >=0 && phi[i][j][0] > 0){
+					end = i;
+					end = i + 1 - Math.abs(phi[i+1][j][0])/(Math.abs(phi[i+1][j][0]) + phi[i][j][0]);
+					break;
+				}
+			}
+			
+			if (end != 0) System.out.print("\n" + start + " " + (n[1]-1-j));
+			if (start != n[0]-1) System.out.print("\n" + end + " " + (n[1]-1-j));
+		}
+		
+		for (int i=0; i<n[0]; i++){
+			double point = n[0]-1;
+			for (int j=0; j<n[0]; j++){
+				if (j-1>=0 && phi[i][j][0] >= 0 ){
+					point = j-1 + Math.abs(phi[i][j-1][0])/(phi[i][j][0] + Math.abs(phi[i][j-1][0]));
+					System.out.print("\n" + i + " " + (n[1] - 1 - point) );
+					break;
+				}
+			}
+			
+			
+			
+		}
+	}
 	
+	public double findArea(){
+		double area = 0;
+		for (int i=0; i<n[0]; i++)
+			for (int j=0; j<n[1]; j++)
+				for (int k=0; k<n[2]; k++)
+					if (phi[i][j][k] > 0) area = area + 1;
+		return area;
+	}
 
 }
 

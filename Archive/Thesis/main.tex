@@ -44,6 +44,9 @@
 \newpage
 \pagenumbering{arabic}
 
+\section{Abstract}
+Evaporation and condensation is modeled in this study using two methods - Lattice Boltzmann method and Method of lines. These two methods were evaluated based on space and time complexity, average time for one iteration and time for convergence. Evaporation of planar droplet was simulated and reproduced results mentioned in the literature. The boundary condition for evaporation was reversed for initiating condensation and was able to bring opposite effect. Evaporation and condensation of a sessile droplet was studied on ideal and hysteritic surfaces. The results showed same pattern that is recorded experimentally. Pinning of contact line during evaporation was achieved on a hysteretic surface by defining a smaller receding angle. 
+
 \section{Governing equations}
 Continuity equation,
 \begin{equation}
@@ -88,6 +91,82 @@ Also,
 \end{equation}
 Expressions for equilibrium distribution functions are reported in \cite{paper:intertial_effects}.
 
+\section{LB Method and Method of Lines}
+Equation (\ref{eq:CH}) can be solved using method of lines. In this section, we compare various aspects of algorithms of LB method(LBM) and method of lines(MOL)
+\subsection*{Time complexity}
+Average time required for one iteration in both the algorithms was noted and plotted in Figure \ref*{fig:lbm_vs_mol_time}. It was noted that time for one iteration of MOL is almost equal to LB method with D2Q9 lattice. Time varies linearly with number of points for both the algorithms. Hence both shows time complexity of $\mathcal{O}(n)$
+\begin{figure}[h!]
+	%\begin{center}
+	\begin{subfigure}{7cm}
+		\begin{tikzpicture}
+		\begin{axis}[
+		width=7cm, % Scale the plot to \linewidth
+		grid=major, % Display a grid
+		grid style={dashed,gray!30}, % Set the style
+		xlabel=Number of points, % Set the labels
+		ylabel=Average time for one iteration,
+		%x unit=\si{\volt}, % Set the respective units
+		%y unit=\si{\ampere},
+		%legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
+		x tick label style={rotate=90,anchor=east} % Display labels sideways
+		]
+		\addplot 
+		[only marks]
+		table[x=points,y=lbm,col sep=comma] {data/lbm_vs_mol_time.csv}; 
+		%\addlegendentry{LB Method}
+		\addplot
+		[color=red] 
+		[only marks]
+		table[x=points,y=mol,col sep=comma] {data/lbm_vs_mol_time.csv}; 
+		%\addlegendentry{Method of Lines}
+		
+		\end{axis}
+		
+		\end{tikzpicture}
+		\caption{Average time for one iteration vary linearly for both the methods}
+		\label{fig:lbm_vs_mol_time}
+	\end{subfigure}
+	\begin{subfigure}{7cm}
+		\begin{tikzpicture}
+		\begin{axis}[
+		width=7cm, % Scale the plot to \linewidth
+		grid=major, % Display a grid
+		grid style={dashed,gray!30}, % Set the style
+		xlabel=Time, % Set the labels
+		ylabel=RMS Error,
+		%x unit=\si{\volt}, % Set the respective units
+		%y unit=\si{\ampere},
+		legend style={at={( 1.05,0.6)}, anchor=north west}, % Put the legend below the plot
+		x tick label style={rotate=90,anchor=east} % Display labels sideways
+		]
+		\addplot 
+		[color=black]
+		table[x=time,y=lbm,col sep=comma] {data/time_convergence.csv}; 
+		\addlegendentry{LB Method}
+		\addplot
+		[color=red] 
+		table[x=time,y=mol,col sep=comma] {data/time_convergence.csv}; 
+		\addlegendentry{Method of Lines}
+		
+		\end{axis}
+		
+		\end{tikzpicture}
+		\caption{Both the algorithms show same time for convergence}
+		\label{fig:lbm_vs_mol_convergence}
+	\end{subfigure}
+	\caption{Time complexity and convergence analysis for LB method and method of lines}
+	\label{fig:lbm_vs_mol}
+	%\end{center}
+	
+\end{figure}
+\subsection*{Space complexity}
+Both the algorithms have same space complexity  $\mathcal{O}(n)$
+\subsection*{Time for convergence}
+It was noted that both the methods gives almost same result and error at a particular time and takes almost same time to converge to a solution. 
+
+
+
+
 \section{Spinodal decomposition}
 
 Spinodal decomposition is a mechanism for the rapid unmixing of a mixture of liquids or solids from one thermodynamic phase, to form two coexisting phases. Refer Figure \ref*{fig:spinod} for the spinodal decomposition simulation where we started with each point having a random $\phi$ value where $ -1 \leq \phi \leq 1.  $
@@ -115,7 +194,7 @@ Spinodal decomposition is a mechanism for the rapid unmixing of a mixture of liq
 		\caption{t = 100000}
 		\label{Fig:Data4}
 	\end{subfigure}
-	\caption{Spinodal decomposition simulation in a domain of 500 * 500 using Lattice Boltmann method. It can be seen that phases unmix to form sepearte clusters.}\label{fig:spinod}
+	\caption{Spinodal decomposition simulation in a domain of 500 * 500 using Lattice Boltzmann method. It can be seen that phases unmix to form separate clusters.}\label{fig:spinod}
 \end{figure}
 \begin{flushright}
 	\href{https://www.youtube.com/watch?v=B9JiYVE437Y}{[Click here to see the video of the simulation.]}
@@ -126,22 +205,22 @@ Surface tension is the elastic tendency of a fluid surface which makes it acquir
 
 \begin{figure}[h!]
 	\centering
-	\begin{subfigure}[h!]{4cm}            
-		\frame{\includegraphics[width=4cm]{images/surface_tension/0.png}}
+	\begin{subfigure}[h!]{5cm}            
+		\frame{\includegraphics[width=5cm]{images/surface_tension/0.png}}
 		\caption{At t = 0}
 		\label{Fig:surface_initial}
 	\end{subfigure}
-	\begin{subfigure}[h!]{4cm}
+	\begin{subfigure}[h!]{5cm}
 		\centering
-		\frame{\includegraphics[width=4cm]{images/surface_tension/880000.png}}
+		\frame{\includegraphics[width=5cm]{images/surface_tension/880000.png}}
 		\caption{At equilibrium }
 		\label{Fig:surface_final}
 	\end{subfigure}
 	\caption{Evolution of a square surface to a circular surface.}\label{fig:surface_tension}
 \end{figure}
 
-\section{Variation of phase phield close to interphase}
-Close to interface, the phase field varies as a hyperbolic tangent with the normal cordinates to the interface, r. Simulation data was perfectly matching with the numberical solution given by \cite{arXiv:1104.0078}. (Refer Fig \ref*{fig:tanh}) \newline
+\section{Variation of phase field close to interfase}
+Close to interface, the phase field varies as a hyperbolic tangent with the normal coordinates to the interface, r. Simulation data was perfectly matching with the numerical solution given by \cite{arXiv:1104.0078}. (Refer Fig \ref*{fig:tanh}) \newline
 \begin{equation}
 	\phi(r) = \phi_{eq}tan h(\frac{r}{\epsilon})
 \end{equation}
@@ -176,138 +255,59 @@ where $\phi_{eq} = \sqrt{-a/b}$ and $\epsilon \equiv \sqrt{-2k/a}$ is the interf
 		\end{axis}
 		
 		\end{tikzpicture}
-		\caption{Phase field profile along normal to interface of two already seperated phases }
+		\caption{Phase field profile along normal to interface of two already separated phases }
 		\label{fig:tanh}
 	\end{center}
 
 \end{figure}
 
-\section{LB Method and Method of Lines}
-Equation (\ref{eq:CH}) can be solved using method of lines, and the above simulations can be achieved. In this section, we compare various aspects of algorithms of LB method(LBM) and method of lines(MOL)
-\subsection*{Time complexity}
-Average time required for one iteration in both the algorithms was noted and plotted in Figure \ref*{fig:lbm_vs_mol_time}. It was noted that time for one iteration of MOL is almost equal to LB method with D2Q9 lattice. Time varies linearly with number of points for both the algorithms. Hence both shows time complexity of $\mathcal{O}(n)$
-\begin{figure}[h!]
-	%\begin{center}
-		\begin{subfigure}{7cm}
-			\begin{tikzpicture}
-			\begin{axis}[
-			width=7cm, % Scale the plot to \linewidth
-			grid=major, % Display a grid
-			grid style={dashed,gray!30}, % Set the style
-			xlabel=Number of points, % Set the labels
-			ylabel=Average time for one iteration,
-			%x unit=\si{\volt}, % Set the respective units
-			%y unit=\si{\ampere},
-			%legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
-			x tick label style={rotate=90,anchor=east} % Display labels sideways
-			]
-			\addplot 
-			[only marks]
-			table[x=points,y=lbm,col sep=comma] {data/lbm_vs_mol_time.csv}; 
-			%\addlegendentry{LB Method}
-			\addplot
-			[color=red] 
-			[only marks]
-			table[x=points,y=mol,col sep=comma] {data/lbm_vs_mol_time.csv}; 
-			%\addlegendentry{Method of Lines}
-			
-			\end{axis}
-			
-			\end{tikzpicture}
-			\caption{Average time for one iteration vary linearly for both the methods}
-			\label{fig:lbm_vs_mol_time}
-		\end{subfigure}
-		\begin{subfigure}{7cm}
-			\begin{tikzpicture}
-			\begin{axis}[
-			width=7cm, % Scale the plot to \linewidth
-			grid=major, % Display a grid
-			grid style={dashed,gray!30}, % Set the style
-			xlabel=Time, % Set the labels
-			ylabel=RMS Error,
-			%x unit=\si{\volt}, % Set the respective units
-			%y unit=\si{\ampere},
-			legend style={at={( 1.05,0.6)}, anchor=north west}, % Put the legend below the plot
-			x tick label style={rotate=90,anchor=east} % Display labels sideways
-			]
-			\addplot 
-			[color=black]
-			table[x=time,y=lbm,col sep=comma] {data/time_convergence.csv}; 
-			\addlegendentry{LB Method}
-			\addplot
-			[color=red] 
-			table[x=time,y=mol,col sep=comma] {data/time_convergence.csv}; 
-			\addlegendentry{Method of Lines}
-			
-			\end{axis}
-			
-			\end{tikzpicture}
-			\caption{Both the algorithms show same time for convergence}
-			\label{fig:lbm_vs_mol_convergence}
-		\end{subfigure}
-	\caption{Time complexity and convergence analysis for LB method and method of lines}
-	\label{fig:lbm_vs_mol}
-	%\end{center}
-	
-\end{figure}
-\subsection*{Space complexity}
-Both the algorithms have same space complexity  $\mathcal{O}(n)$
-\subsection*{Time for convergence}
-It was noted that both the methods gives almost same result and error at a particular time and takes almost same time to converge to a solution. 
 \section{Solid wall}
 Bounce-back rules \cite{paper:bounce_back} are imposed along the boundary for impenetrability and no-slip boundary conditions. Also,
 \begin{equation}
 	\vec{n}.\nabla\mu = 0
 \end{equation}
- For an equilibrium contact angle on an ideal solid wall, geometrical formulation is used for implemeting wetting condition \cite{paper:contact_angle}.
+ For an equilibrium contact angle on an ideal solid wall, geometrical formulation is used for implementing wetting condition \cite{paper:contact_angle,PhysRevE.75.046708}.
  \begin{equation}
  \phi_{i,j,1} = \phi_{i,j,3} + tanh(\frac{\pi}{2}-\theta) \xi
  \end{equation}
  where 
  \begin{equation}
  	\xi = \sqrt{(\phi_{i+1,j,2}-\phi_{i-1,j,2})^{2}+(\phi_{i,j+1,2}-\phi_{i,j-1,2})^{2}}
- \end{equation}
- Considering the shape of the droplet, contact angle is given by\cite{paper:geometrical_contact_anngle} 
- \begin{equation}
- 	tan(\theta) = \frac{b_{0}}{2(R-a_{0})}
- \end{equation}
- where $ a_{0} $ is the droplet height and $ b_{0} $ is the wet length between the droplet and the wall,
- \begin{equation}
- R = \frac{a_{0}}{2} + \frac{b_{0}^{2}}{8a_{0}}
+ \label{eqn_wetting_bc}
  \end{equation}
  \begin{figure}[h!]
  	\centering
- 	\begin{subfigure}[h!]{3cm}
- 		\frame{\includegraphics[height=2cm]{images/solid_wall/150.png}}
- 		\caption{Contact angle = xxx}
+ 	\begin{subfigure}{3.7cm}
+ 		\frame{\includegraphics[height=3cm,trim=1cm 0 1cm 0, clip]{images/solid_wall/30.png}}
+ 		\caption{30$ ^{0} $}
  	\end{subfigure}
- 	\begin{subfigure}[h!]{2cm}            
- 		\frame{\includegraphics[width=2cm]{images/spinodal/10000.png}}
- 		\caption{Contact angle xxx}
+ 	\begin{subfigure}{3cm}            
+ 		\frame{\includegraphics[width=3cm]{images/solid_wall/45.png}}
+ 		\caption{45$ ^{0} $}
  		\label{Fig:Datsa3}
  	\end{subfigure}
  	
- 	\begin{subfigure}[h!]{2cm}
- 		\frame{\includegraphics[width=2cm]{images/solid_wall/135.png}}
- 		\caption{Contact angle = xx$ ^{0} $}
+ 	\begin{subfigure}{3cm}
+ 		\frame{\includegraphics[width=3cm]{images/solid_wall/60.png}}
+ 		\caption{60$ ^{0} $}
  	\end{subfigure}
- 	\begin{subfigure}[h!]{2cm}            
- 		\frame{\includegraphics[width=2cm]{images/solid_wall/90.png}}
- 		\caption{Contact angle = 90$ ^{0} $}
+ 	\begin{subfigure}[h!]{3cm}            
+ 		\frame{\includegraphics[width=3cm]{images/solid_wall/90.png}}
+ 		\caption{90$ ^{0} $}
  		\label{Fig:Datsa1}
  	\end{subfigure}
- 	\begin{subfigure}[h!]{2cm}            
- 		\frame{\includegraphics[width=2cm]{images/solid_wall/120.png}}
- 		\caption{Contact angle = $ 120^{0} $}
+ 	\begin{subfigure}[h!]{3cm}            
+ 		\frame{\includegraphics[width=3cm]{images/solid_wall/120.png}}
+ 		\caption{$ 120^{0} $}
  		\label{Fig:Datsase3}
  	\end{subfigure}
- 	\begin{subfigure}[h!]{2cm}
- 		\frame{\includegraphics[width=2cm]{images/solid_wall/135.png}}
- 		\caption{Conatact angle = $ 135^{0} $}
+ 	\begin{subfigure}[h!]{3cm}
+ 		\frame{\includegraphics[width=3cm]{images/solid_wall/135.png}}
+ 		\caption{$ 135^{0} $}
  	\end{subfigure}
- 	\begin{subfigure}[h!]{2.5cm}
-	 	\frame{\includegraphics[height=2cm]{images/solid_wall/150.png}}
-	 	\caption{Contact angle = 150$ ^{0} $}
+ 	\begin{subfigure}[h!]{3cm}
+	 	\frame{\includegraphics[height=3cm,trim=2cm 0 2cm 0, clip]{images/solid_wall/150.png}}
+	 	\caption{150$ ^{0} $}
 	\end{subfigure}
  	\caption{Droplets on solid wall with different contact angles }
  	\label{fig:spinods}
@@ -315,7 +315,7 @@ Bounce-back rules \cite{paper:bounce_back} are imposed along the boundary for im
 
 \section{Evaporation of a planar droplet}
 
-To drive evaporation of the film we impose the boundary condition $\phi(z=z_{H},t)=\phi_{H}$, where $\phi_{H} < -\phi_{eq}$. This induces a gradient in the chemical potential field $\mu$. In response to this imabalance, the system reduces $\phi$, which curresponds to the evaporation of the film\cite{paper:evaporation}.
+To drive evaporation of the film we impose the boundary condition $\phi(z=z_{H},t)=\phi_{H}$, where $\phi_{H} < -\phi_{eq}$. This induces a gradient in the chemical potential field $\mu$. In response to this imbalance, the system reduces $\phi$, which corresponds to the evaporation of the film\cite{paper:evaporation}.
 Phase field imbalance, $\Delta\phi_{H} \equiv -\phi_{eq} - \phi_{H}$
 \newline
 We performed simulations in a box consisting of  1 x 1 x 150 lattice sites. Periodic boundary conditions were set in the x and
@@ -399,219 +399,337 @@ was fixed to a value $ \phi_{H}$ at $z_{H} = N_{z} $ to drive the system out of 
 	
 \end{figure}
 
-
-\section{Evaporation of a droplet on solid wall}
-Refer Figure \ref*{fig:evaporation_90}
+\section{Condensation of planar droplet}
+Similar to evaporation, condensation can be simulated by imposing boundary condition $\phi(z=z_{H},t)=\phi_{H}$, where $\phi_{H} > -\phi_{eq}$.
 \begin{figure}[h!]
 	\begin{center}
 		\begin{tikzpicture}
 		\begin{axis}[
-		width=5.5cm, % Scale the plot to \linewidth
+		width=7cm, % Scale the plot to \linewidth
 		grid=major, % Display a grid
-		grid style={dashed,white!30}, % Set the style
-		xlabel=$t$, % Set the labels
-		%ylabel=Drop diameter/angle/height,
+		grid style={dashed,gray!30}, % Set the style
+		xlabel=$x$, % Set the labels
+		ylabel=$\phi(x)/\phi_{eq}$,
+		%x unit=\si{\volt}, % Set the respective units
+		%y unit=\si{\ampere},
+		legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
+		x tick label style={rotate=90,anchor=east} % Display labels sideways
+		]
+		\addplot 
+		table[x=t,y=before_evaporation,col sep=comma] {data/evaporation_condensation_1D.csv}; 
+		\addlegendentry{Before evaporation}
+		\addplot 
+		table[x=t,y=after_evaporation,col sep=comma] {data/evaporation_condensation_1D.csv}; 
+		\addlegendentry{After evaporation}
+		\addplot 
+		table[x=t,y=before_cond,col sep=comma] {data/evaporation_condensation_1D.csv}; 
+		\addlegendentry{Before condensation}
+		\addplot 
+		table[x=t,y=after_cond,col sep=comma] {data/evaporation_condensation_1D.csv}; 
+		\addlegendentry{After condensation}
+		\end{axis}
+		
+		\end{tikzpicture}
+		\caption{Phase field profile along normal to interface of evaporating and condensing planar droplet.  }
+		\label{fig:evap_cond_1D}
+	\end{center}
+	
+\end{figure}
+In Figure \ref*{fig:evap_cond_1D}, a planar droplet of height 100 is evaporated with $\phi_{H} = -1.1$. After $5 x 10^{6}$ timesteps, boundary condition at z = 150 is changed to $\phi_{H} = -0.245$ ( at which $\mu$ is equal and opposite to that of $\mu(\phi=-1.1)$ ) to initiate evaporation. It is observed that after condensing for same duration as that of evaporation, at $t = 10 x 10^{6}$ the system returns to the initial condition. 
+
+\section{Evaporation and condensation of a sessile droplet on a solid surface}
+
+\subsection{Ideal surface}
+\begin{figure}[h!]
+	\begin{center}
+		\begin{tikzpicture}
+		\begin{axis}[
+		ticks=none,
+		width=6cm, % Scale the plot to \linewidth
+		%grid=major, % Display a grid
+		%grid style={dashed,gray!30}, % Set the style
+		%xlabel=$x$, % Set the labels
+		%ylabel=$\phi(x)/\phi_{eq}$,
 		%x unit=\si{\volt}, % Set the respective units
 		%y unit=\si{\ampere},
 		legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
 		no markers,
 		every axis plot/.append style={ultra thick},
+		x tick label style={rotate=90,anchor=east}, % Display labels sideways
+		xticklabels={,,},
+		yticklabels={,,}		
+		]
+		\addplot 
+		[color=black]
+		table[x=0x,y=0y,col sep=comma] {data/evaporation_ideal_outline.csv}; 
+		
+	
+		
+		\addplot 
+		[color=black]
+		table[x=2x,y=2y,col sep=comma] {data/evaporation_ideal_outline.csv}; 
+		
+		\addplot 
+		[color=black]
+		table[x=3x,y=3y,col sep=comma] {data/evaporation_ideal_outline.csv}; 
+		\end{axis}		
+		\end{tikzpicture}
+		\caption{Shape profile of an evaporating droplet on an ideal surface. }
+		\label{fig:evpn_outline}
+	\end{center}
+	
+\end{figure}
+
+An ideal solid surface is flat, rigid, perfectly smooth, and chemically homogeneous, and has zero contact angle hysteresis. On such a surface, only one thermodynamically stable contact angle exists. Hence we expect a constant contact angle and varying contact diameter during evaporation and condensation. 
+\begin{figure}[h!]
+	\begin{center}
+		
+		\begin{subfigure}{6cm}
+			\begin{tikzpicture}
+			\begin{axis}[
+			width=6cm, % Scale the plot to \linewidth
+			grid=major, % Display a grid
+			grid style={dashed,white!30}, % Set the style
+			xlabel=$t$, % Set the labels
+			%ylabel=$t$,
+			%x unit=\si{\volt}, % Set the respective units
+			%y unit=\si{\ampere},
+			%legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
+			no markers,
+			every axis plot/.append style={ultra thick},
+			x tick label style={rotate=90,anchor=east} % Display labels sideways
+			]
+			\addplot 
+			table[x=t,y=diameter, col sep=comma] {data/condensation_90.csv}; 
+			\addlegendentry{Contact diameter}
+			\addplot 
+			table[x=t,y=slope,col sep=comma] {data/condensation_90.csv}; 
+			\addlegendentry{Contact angle}
+			\addplot 
+			table[x=t,y=height,col sep=comma] {data/condensation_90.csv}; 
+			\addlegendentry{Drop height}
+			\legend{}; % empty the legend so as not to print it
+			\end{axis}
+			\end{tikzpicture}
+			\caption{Condensation}
+			\label{fig:cond_90}
+			
+		\end{subfigure}
+		
+		\quad 
+		\begin{subfigure}{6cm}
+			\begin{tikzpicture}
+			\begin{axis}[
+			width=6cm, % Scale the plot to \linewidth
+			grid=major, % Display a grid
+			grid style={dashed,white!30}, % Set the style
+			xlabel=$t$, % Set the labels
+			%ylabel=$t$,
+			%x unit=\si{\volt}, % Set the respective units
+			%y unit=\si{\ampere},
+			legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
+			no markers,
+			every axis plot/.append style={ultra thick},
+			x tick label style={rotate=90,anchor=east} % Display labels sideways
+			]
+			\addplot 
+			table[x=t,y=diameter, col sep=comma] {data/evaporation_90.csv}; 
+			\addlegendentry{Contact diameter}
+			\addplot 
+			table[x=t,y=slope,col sep=comma] {data/evaporation_90.csv}; 
+			\addlegendentry{Contact angle}
+			\addplot 
+			table[x=t,y=height,col sep=comma] {data/evaporation_90.csv}; 
+			\addlegendentry{Drop height}
+			\end{axis}
+			\end{tikzpicture}
+			\caption{Evaporation}
+			\label{fig:evpn_90}
+			
+		\end{subfigure}
+		
+		\caption{Contact diameter, angle and drop height of a droplet on an ideal surface with equilibrium contact angle $90^{0}$ during evaporation/condensation. }
+		\label{fig:evpn_ideal}
+	\end{center}
+	
+\end{figure}
+
+
+
+\subsection{Hysteretic surface}
+\begin{figure}[h!]
+	\begin{center}
+		\begin{tikzpicture}
+		\begin{axis}[
+		ticks=none,
+		width=6cm, % Scale the plot to \linewidth
+		%grid=major, % Display a grid
+		%grid style={dashed,gray!30}, % Set the style
+		%xlabel=$x$, % Set the labels
+		%ylabel=$\phi(x)/\phi_{eq}$,
+		%x unit=\si{\volt}, % Set the respective units
+		%y unit=\si{\ampere},
+		legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
+		no markers,
+		every axis plot/.append style={ultra thick},
+		x tick label style={rotate=90,anchor=east}, % Display labels sideways
+		xticklabels={,,},
+		yticklabels={,,}		
+		]
+		\addplot 
+		[color=black]
+		table[x=0x,y=0y,col sep=comma] {data/evaporation_hysteritic_outline.csv}; 
+		
+		
+		
+		\addplot 
+		[color=black]
+		table[x=2x,y=2y,col sep=comma] {data/evaporation_hysteritic_outline.csv}; 
+		
+		\addplot 
+		[color=black]
+		table[x=1x,y=1y,col sep=comma] {data/evaporation_hysteritic_outline.csv}; 
+		\end{axis}		
+		\end{tikzpicture}
+		\caption{Shape profile of an evaporating droplet on a hysteretic surface. }
+		\label{fig:evpn_hysteritic_outline}
+	\end{center}
+\end{figure}
+
+In many natural systems, the solid walls are usually rough and chemically inhomogeneous. In these surfaces, contact angle hysteresis has to be taken into consideration. Due to hysteresis, the contact line remains pinned when the local contact angle $\theta$ is within a hysteresis window.
+\begin{equation}
+\theta_{R} \leq \theta \leq \theta_{A} 
+\end{equation}
+where $\theta_{R}$ and $\theta_{A}$ denote the receding angle and advancing angle respectively. 
+\newline
+When $\theta$ is greater than $\theta_{A}$, the contact line moves forward. When $\theta$ is less than $\theta_{R}$, the contact line moves backward. To realize this effect, at each time step of computation, we should first obtain the local apparent contact angle at the contact points. Then, comparisons of $\theta$ with $\theta_{R}$ and $\theta_{A}$ are required. If $\theta \leq \theta_{R}$, $\theta$ in Eq.\ref{eqn_wetting_bc} should be replaced by $\theta_{R}$; if $\theta \geq \theta_{A}$, $\theta$ should be replaced by $\theta_{A}$; else $\theta$ in Eq.\ref{eqn_wetting_bc} remains unchanged.
+\par
+A small difference in contact angle imposed using Eq.\ref{eqn_wetting_bc} and measured contact angle was observed in the simulation. This difference was causing error while implementing contact angle hysteresis, i.e, the contact angle $\theta$ was reaching $\theta_{R}$ at a very short time causing contact angle pinning to be visible for very small duration. Hence, difference between measured angle and imposed angle was plotted in Figure \ref{fig:angle_correction} and this data was used to correct the measured angle. 
+\begin{figure}[h!]
+	\begin{center}
+		\begin{tikzpicture}
+		\begin{axis}[
+		width=7cm, % Scale the plot to \linewidth
+		grid=major, % Display a grid
+		grid style={dashed,gray!30}, % Set the style
+		xlabel=Imposed angle, % Set the labels
+		ylabel=Difference,
+		x unit=\si{\deg}, % Set the respective units
+		y unit=\si{\deg},
+		legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
+		no markers,
+		every axis plot/.append style={ultra thick},
+		x tick label style={rotate=90,anchor=east}, % Display labels sideways
+		]
+		\addplot 
+		table[x=angle,y=difference,col sep=comma] {data/error_data.csv}; 
+		
+		\end{axis}		
+		\end{tikzpicture}
+		\caption{Difference between imposed contact angle and measured contact angle}
+		\label{fig:angle_correction}
+	\end{center}
+\end{figure}
+
+\par
+Picknett and Bexon\cite{PICKNETT1977336} followed the mass and profile evolution of organic liquid drops. They observed three
+distinct evaporation modes: mode 1, during which the
+solid and iquid interface area remains constant (when hysteresis
+exists); mode 2, for which the contact angle remains
+constant (ideal system with no hysteresis at equilibrium);
+mode 3, which is a mixed mode. They also observed that evaporation follows the first mode until $\theta = \theta_{R}$, and then, the second mode is initiated.\cite{doi:10.1021/la00007a076}
+
+
+\par
+In Figure \ref*{fig:evpn_cah} a droplet with initial contact angle $90^{0}$ is evaporating on a surface with $\theta_{R} = 42^{0}$ and $\theta_{A} = 140^{0}$. It followes mode 1 in the initial stage where contact diameter stays constant whereas contact angle decreases. After contact angle reaches $\theta = \theta_{R}$, mode 2 is observed in which contact angle stays at $\theta_{R}$ and the contact diameter reduces. 
+\begin{figure}[h!]
+	\begin{center}
+		\begin{tikzpicture}
+		\begin{axis}[
+		width=7cm, % Scale the plot to \linewidth
+		grid=major, % Display a grid
+		grid style={dashed,gray!30}, % Set the style
+		xlabel=$t$, % Set the labels
+		%ylabel=$\phi(x)/\phi_{eq}$,
+		%x unit=\si{\volt}, % Set the respective units
+		%y unit=\si{\ampere},
+		legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
+		%no markers,
+		%every axis plot/.append style={ultra thick},
 		x tick label style={rotate=90,anchor=east} % Display labels sideways
 		]
 		\addplot 
-		table[x=0.1t,y=0.1contact_diameter,col sep=comma] {data/evaporation_90.csv}; 
-		\addlegendentry{Contact diameter}
-		\addplot 
-		table[x=0.1t,y=0.1contact_angle,col sep=comma] {data/evaporation_90.csv}; 
+		table[x=t,y=angle,col sep=comma] {data/cah_evaporation.csv}; 
 		\addlegendentry{Contact angle}
-		\addplot 
-		table[x=0.1t,y=0.1drop_height,col sep=comma] {data/evaporation_90.csv}; 
+		\addplot
+		table[x=t,y=height,col sep=comma] {data/cah_evaporation.csv}; 
 		\addlegendentry{Drop height}
-		
+		\addplot
+		table[x=t,y=diameter,col sep=comma] {data/cah_evaporation.csv}; 
+		\addlegendentry{Contact diameter}
 		
 		\end{axis}
 		\end{tikzpicture}
-		\caption{Evaporation of a droplet with contact angle $90^{0}$  for $ \nabla\phi_{H} = 0.1 $.}
-		\label{fig:evaporation_90}
+		\caption{Profile of a evaporating droplet on a hysteretic surface. }
+		\label{fig:evpn_cah}
 	\end{center}
-\end{figure}
-\begin{figure}[!h]
-	\centering
-	\begin{subfigure}{6cm}
-			\begin{center}
-			\begin{tikzpicture}
-			\begin{axis}[
-			width=6cm, % Scale the plot to \linewidth
-			grid=major, % Display a grid
-			grid style={dashed,white!30}, % Set the style
-			xlabel=$t$, % Set the labels
-			ylabel=Contact angle,
-			%x unit=\si{\volt}, % Set the respective units
-			%y unit=\si{\ampere},
-			%legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
-			no markers,
-			every axis plot/.append style={ultra thick},
-			x tick label style={rotate=90,anchor=east} % Display labels sideways
-			]
-			\addplot 
-			table[x=0.1t,y=0.1contact_angle,col sep=comma] {data/evaporation_90.csv}; 
-			%\addlegendentry{0.1}
-			\addplot 
-			table[x=0.2t,y=0.2contact_angle,col sep=comma] {data/evaporation_90.csv}; 
-			%\addlegendentry{0.2}
-			\addplot 
-			table[x=0.3t,y=0.3contact_angle,col sep=comma] {data/evaporation_90.csv}; 
-			%\addlegendentry{0.3}
-			
-			
-			\end{axis}
-			\end{tikzpicture}
-			\caption{Contact angle}
-			\label{fig:evaporation_90_angle}
-		\end{center}
-		
-	\end{subfigure}
-	\begin{subfigure}[!h]{6cm}
-			\begin{center}
-			\begin{tikzpicture}
-			\begin{axis}[
-			width=6cm, % Scale the plot to \linewidth
-			grid=major, % Display a grid
-			grid style={dashed,white!30}, % Set the style
-			xlabel=$t$, % Set the labels
-			ylabel=Drop height,
-			%x unit=\si{\volt}, % Set the respective units
-			%y unit=\si{\ampere},
-			%legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
-			no markers,
-			every axis plot/.append style={ultra thick},
-			x tick label style={rotate=90,anchor=east} % Display labels sideways
-			]
-			\addplot 
-			table[x=0.1t,y=0.1drop_height,col sep=comma] {data/evaporation_90.csv}; 
-			%\addlegendentry{0.1}
-			\addplot 
-			table[x=0.2t,y=0.2drop_height,col sep=comma] {data/evaporation_90.csv}; 
-			%\addlegendentry{0.2}
-			\addplot 
-			table[x=0.3t,y=0.3drop_height,col sep=comma] {data/evaporation_90.csv}; 
-			%\addlegendentry{0.3}		
-			
-			\end{axis}
-			\end{tikzpicture}
-			\caption{Drop height}
-			\label{fig:evaporation_90_height}
-		\end{center}
-		
-	\end{subfigure}
-	\begin{subfigure}[!h]{6cm}
-			\begin{center}
-			\begin{tikzpicture}
-			\begin{axis}[
-			width=6cm, % Scale the plot to \linewidth
-			grid=major, % Display a grid
-			grid style={dashed,white!30}, % Set the style
-			xlabel=$t$, % Set the labels
-			ylabel=Contact diameter,
-			%x unit=\si{\volt}, % Set the respective units
-			%y unit=\si{\ampere},
-			legend style={at={( 1.3,1)}, anchor=north west}, % Put the legend below the plot
-			no markers,
-			every axis plot/.append style={ultra thick},
-			x tick label style={rotate=90,anchor=east} % Display labels sideways
-			]
-			\addplot 
-			table[x=0.1t,y=0.1contact_diameter,col sep=comma] {data/evaporation_90.csv}; 
-			\addlegendentry{0.1}
-			\addplot 
-			table[x=0.1t,y=0.2contact_diameter,col sep=comma] {data/evaporation_90.csv}; 
-			\addlegendentry{0.2}
-			\addplot 
-			table[x=0.1t,y=0.3contact_diameter,col sep=comma] {data/evaporation_90.csv}; 
-			\addlegendentry{0.3}
-			
-			\end{axis}
-			\end{tikzpicture}
-			\caption{Contact diameter}
-			\label{fig:evaporation_90_diameter}
-		\end{center}
-	\end{subfigure}
-	\caption{Evaporation of a droplet on a surface with contact angle $90^{0}$  for different $ \nabla\phi$.}
-	\label{fig:evaporation_90_complete}
+	
 \end{figure}
 
+\par
+In Figure \ref*{fig:condn_cah} a droplet with initial contact angle $70^{0}$ is condensing on a surface with $\theta_{R} = 42^{0}$ and $\theta_{A} = 90^{0}$. In the early stage, contact line is pinned (constant contact diameter) as the contact angle increases to $\theta_{A}$. Once the $\theta$ reaches $\theta_{R}$ contact angle stays at $\theta_{A}$ and contact diameter also increases with drop height. 
 \begin{figure}[h!]
 	\begin{center}
 		\begin{tikzpicture}
 		\begin{axis}[
-		width=5.5cm, % Scale the plot to \linewidth
+		width=7cm, % Scale the plot to \linewidth
 		grid=major, % Display a grid
-		grid style={dashed,white!30}, % Set the style
+		grid style={dashed,gray!30}, % Set the style
 		xlabel=$t$, % Set the labels
-		%ylabel=Drop diameter/angle/height,
+		%ylabel=$\phi(x)/\phi_{eq}$,
 		%x unit=\si{\volt}, % Set the respective units
 		%y unit=\si{\ampere},
 		legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
-		no markers,
-		every axis plot/.append style={ultra thick},
+		%no markers,
+		%every axis plot/.append style={ultra thick},
 		x tick label style={rotate=90,anchor=east} % Display labels sideways
 		]
 		\addplot 
-		table[x=0.1t,y=0.1contact_angle,col sep=comma] {data/evaporation_90.csv}; 
-		\addlegendentry{90$ ^{0} $}
-		\addplot 
-		table[x=0.1t,y=0.1contact_angle,col sep=comma] {data/evaporation_120.csv}; 
-		\addlegendentry{120$ ^{0} $}
-		\addplot 
-		table[x=0.1t,y=0.1contact_angle,col sep=comma] {data/evaporation_135.csv}; 
-		\addlegendentry{135$ ^{0} $}
-		\addplot 
-		table[x=0.1t,y=0.1contact_angle,col sep=comma] {data/evaporation_150.csv}; 
-		\addlegendentry{150$ ^{0} $}
-		\end{axis}
-		\end{tikzpicture}
-		\caption{Evaporation of a droplet with different contact angles  for $ \nabla\phi_{H} = 0.1 $.}
-		\label{fig:evaporation_phi_0.1_contact_angle}
-	\end{center}
-\end{figure}
-
-\begin{figure}[h!]
-	\begin{center}
-		\begin{tikzpicture}
-		\begin{axis}[
-		width=5.5cm, % Scale the plot to \linewidth
-		grid=major, % Display a grid
-		grid style={dashed,white!30}, % Set the style
-		xlabel=$t$, % Set the labels
-		ylabel=Drop diameter,
-		%x unit=\si{\volt}, % Set the respective units
-		%y unit=\si{\ampere},
-		legend style={at={( 1.01,1)}, anchor=north west}, % Put the legend below the plot
-		no markers,
-		every axis plot/.append style={ultra thick},
-		x tick label style={rotate=90,anchor=east} % Display labels sideways
-		]
-		\addplot 
-		table[x=0.1t,y=0.1contact_diameter,col sep=comma] {data/evaporation_90.csv}; 
-		\addlegendentry{$ 90^{0} $}
-		\addplot 
-		table[x=0.1t,y=0.1contact_diameter,col sep=comma] {data/evaporation_120.csv}; 
-		\addlegendentry{$ 120^{0} $}
-		\addplot 
-		table[x=0.1t,y=0.1contact_diameter,col sep=comma] {data/evaporation_135.csv}; 
-		\addlegendentry{$ 135^{0} $}
-		\addplot 
-		table[x=0.1t,y=0.1contact_diameter,col sep=comma] {data/evaporation_150.csv}; 
-		\addlegendentry{$ 150^{0} $}
-		\end{axis}
+		table[x=t,y=angle,col sep=comma] {data/condensation_cah.csv}; 
+		\addlegendentry{Contact angle}
+		\addplot
+		table[x=t,y=height,col sep=comma] {data/condensation_cah.csv}; 
+		\addlegendentry{Drop height}
+		\addplot
+		table[x=t,y=diameter,col sep=comma] {data/condensation_cah.csv}; 
+		\addlegendentry{Contact diameter}
 		
+		\end{axis}
 		\end{tikzpicture}
-		\caption{Evaporation of a droplet with different contact angles for $ \nabla\phi_{H} = 0.1 $.}
-		\label{fig:evaporation_phi_0.1}
+		\caption{Profile of a condensing droplet on a hysteretic surface. }
+		\label{fig:condn_cah}
 	\end{center}
+	
 \end{figure}
 
+\section{Discussion and Conclusions}
 
+\par
+We discussed two methods for study of evaporation and condensation - Lattice Boltzmann algorithm and Method of lines. Both of the methods show $\mathcal{O}(n)$ time complexity and $\mathcal{O}(n)$ space complexity. Time for one iteration of 4th order Runge Kutta method and LB method on D2Q9 lattice was found to be almost same. Both the methods showed identical error from previous time steps and time for convergence. Lattice boltzmann method was used for rest of the work and is validated by simulating spidodal decomposition, evolution of a square surface into a circular one and studying variation of phase field close to interface. 
+
+\par
+Evaporation was implemented by imposing a boundary condition $\phi(z=z_{H},t)=\phi_{H}$, where $\phi_{H} < -\phi_{eq}$. This induces a gradient in the chemical potential field $\mu$. In response to this imbalance, the system reduces $\phi$, which corresponds to the evaporation of the film\cite{paper:evaporation}. A reverse effect was observed when boundary condition $\phi(z=z_{H},t)=\phi_{H}$, where $0 > \phi_{H} > -\phi_{eq}$. Hence we were able to simulate condensation in the system. With equal chemical potential gradient, amount of liquid evaporated was found to be equal to that of condensated (Refer 
+Figure \ref{fig:evap_cond_1D}).
+
+\par
+Wetting condition proposed by H. Ding and P. D. M. Spelt\cite{PhysRevE.75.046708} was found to have a difference between imposed and measured angle. It can reduce time in hysteresis window drastically. For correct study of contact angle hysterisis, this should be corrected by mapping measured contact angle to difference between imposed and measured angle. This difference should be added to measured angle as a correction.
+
+
+\par
+Evaporation and condensation was studied on a ideal and non-ideal surface. On an ideal surface during the both process, contact angle stays constant whereas contact diameter and drop height changes. On a hysteretic surface, contact dimater was staying constant until contact angle reaches $\theta_{R}$ or $\theta_{A}$ after which contact angle was staying constant. This result was in accordance with experimental results recorded by Picknett and Bexon\cite{PICKNETT1977336}. Contact line was pinned when $\theta$ is in the hysteresis window. A complete pinning of the contact line can be achieved by imposing $\theta_{R}=0^{0}$ or $\theta_{A}=180^{0}$
+
+\section{Future work}
+In this study, we were able to implement contact line pinning along with evaporation. Flow of fluid and particles can be incorporated in this model to study coffee ring effect. While simulating evaporation, a constant driving force was applied on the system. However, in real world this may not be the case. A varrying driving force could more accurately model the process.  
 
 \bibliography{data/cite} 
 \bibliographystyle{ieeetr}

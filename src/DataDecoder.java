@@ -14,7 +14,7 @@ public class DataDecoder {
 		int stepSize = 10000;
 		for (int i =0; i<=max; i=i+stepSize){
 			domain.phi = read("contactangle" + i );
-			Plot.define(domain, "Domain_at_t=" + i);
+			Plot.define(domain);
 //			System.out.println(domain.sigmaG());
 			System.out.print("t = "  + i + " ");
 			try {

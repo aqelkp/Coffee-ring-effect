@@ -19,14 +19,23 @@ H.-b.~H. Lei~Wang and X.-Y. Lu, ``Scheme for contact angle and its hysteresis
   in a multiphase lattice boltzmann method,'' {\em Phys. Rev. E 87, 013301},
   2013.
 
-\bibitem{paper:geometrical_contact_anngle}
-Q.~Kang, D.~Zhang, and S.~Chen, ``Displacement of a two-dimensional immiscible
-  droplet in a channel,'' {\em Physics of Fluids}, vol.~14, no.~9,
-  pp.~3203--3214, 2002.
+\bibitem{PhysRevE.75.046708}
+H.~Ding and P.~D.~M. Spelt, ``Wetting condition in diffuse interface
+  simulations of contact line motion,'' {\em Phys. Rev. E}, vol.~75, p.~046708,
+  Apr 2007.
 
 \bibitem{paper:evaporation}
 R.~Ledesma-Aguilar, D.~Vella, and J.~M. Yeomans, ``Lattice-boltzmann
   simulations of droplet evaporation.,'' {\em Soft Matter}, vol.~10, no.~41,
   pp.~8267--8275, 2014.
+
+\bibitem{PICKNETT1977336}
+R.~Picknett and R.~Bexon, ``The evaporation of sessile or pendant drops in
+  still air,'' {\em Journal of Colloid and Interface Science}, vol.~61, no.~2,
+  pp.~336 -- 350, 1977.
+
+\bibitem{doi:10.1021/la00007a076}
+C.~Bourges-Monnier and M.~E.~R. Shanahan, ``Influence of evaporation on contact
+  angle,'' {\em Langmuir}, vol.~11, no.~7, pp.~2820--2829, 1995.
 
 \end{thebibliography}

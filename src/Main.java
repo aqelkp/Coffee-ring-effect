@@ -15,11 +15,12 @@ import util.BlankSlate;
 public class Main {
 	
 	static int numPoints;
-	static String file = "data96.tmp";
+	static String file = "angles/data90.tmp";
 	
 			
 	public static void main(String[] args) {
 		numPoints = DataDecoder.readFile(file).length;
+		
 		// Define a domain
 		Domain domain = new Domain(2,numPoints);
 		domain.addSolidWall();
@@ -27,35 +28,27 @@ public class Main {
 		initializeDroplet(domain);
 		
 		domain.phi = DataDecoder.readFile(file);
+		domain.contactAngle = domain.findContactAngle(false);
+//		domain.contactAngle = (90.01/180.0) * Math.PI;
+		
+//		domain.getShape();
 		
 		System.out.print("t Contact_Diameter\t Drop_Height\t\t Slope\t\t Desired_Angle");
-		runSimulation(domain);
+		runSimulation(domain);	
 		
-		domain.phi = DataDecoder.readFile(file);
-		domain.a = domain.a/2; domain.K = domain.K * 2; domain.b = -domain.a;
-		runSimulation(domain);
-		
-		domain.phi = DataDecoder.readFile(file);
-		domain.a = domain.a/2; domain.K = domain.K * 2; domain.b = -domain.a;
-		runSimulation(domain);
-		
-		domain.phi = DataDecoder.readFile(file);
-		domain.a = domain.a/2; domain.K = domain.K * 2; domain.b = -domain.a;
-		runSimulation(domain);
-		
-		domain.phi = DataDecoder.readFile(file);
-		domain.a = domain.a*8; domain.K = domain.K /8; domain.b = -domain.a;
-		domain.a = domain.a*2; domain.K = domain.K / 2; domain.b = -domain.a;
-		runSimulation(domain);
-		
-		domain.phi = DataDecoder.readFile(file);
-		domain.a = domain.a*2; domain.K = domain.K / 2; domain.b = -domain.a;
-		runSimulation(domain);
+//		for (int i = 51; i<90; i++){
+////			System.out.println("\n============ " + i + "0" + " ============");
+////			System.out.print("t Contact_Diameter\t Drop_Height\t\t Slope\t\t Desired_Angle");
+//			domain.phi = DataDecoder.readFile("angles/data"+ i + ".tmp");
+//			System.out.print("Area: "+ domain.findArea());
+////			System.out.print("sigma phi " + domain.sigmaG());
+//			domain.contactAngle = domain.findContactAngle(true);
+//			runSimulation(domain);
+//		}
 		
 		
-		
-//		for (int i=0; i<7; i++){
-//			NewThread thread = new NewThread(numPoints, 80 + i * 3);
+//		for (int i=0; i<20; i++){
+//			NewThread thread = new NewThread(numPoints, 40 + i * 5);
 //			thread.start();
 //		}
 				
@@ -67,29 +60,28 @@ public class Main {
 	public static void runSimulation(Domain domain) {
 		
 		double angle = 0.123445678;
-		for (int i=0; i<=5000000; i++){
-			if (i % 5000000 == 0) displayResults(domain, i);	
-			if (i % 10000 == 0) {
-				double tempAngle = Math.floor(domain.findContactAngle(false) * 10000000) / 10000000;
-				if (angle == tempAngle ) {
-					displayResults(domain, i);
-					break;
-				}
-				else angle = tempAngle;
-			}
+		for (int i=0; i<=2000000; i++){
+			if (i % 1000 == 0) displayResults(domain, i);	
+//			if (i % 20000 == 0) {
+//				double tempAngle = Math.floor(domain.findContactAngle(false) * 10000000) / 10000000;
+//				if (angle == tempAngle ) {
+//					displayResults(domain, i);
+//					break;
+//				}
+//				else angle = tempAngle;
+//			}
 			
 			
 			
 			LBSimulation(domain, i);
 //			methodOfLines(domain, i);
-		
-//			if ( domain.findContactAngle(false) <= 0 ){
-//				System.out.println("\n" + i + " 0 0 0 0 " );
-//				break;
-//			}
+			
+			if ( domain.findContactAngle(false) <= 0 ){
+				System.out.print( i + "  \n");
+//				displayResults(domain, i);
+				break;
+			}
 		}
-		System.out.print("a " + domain.a +" b " + domain.b + " k " + domain.K + " ");
-		
 	}
 
 	public static void LBSimulation(Domain domain, int i) {
@@ -100,8 +92,8 @@ public class Main {
 		domain.stream();
 		domain.findPhiLBM(i);
 		if (domain.isSolidWall) domain.solidWallBC(i);
-//		domain.contactAngleHysterisis();
-//		domain.evaporate();
+		domain.contactAngleHysterisis();
+		domain.evaporate();
 //		domain.condensate();
 	}
 
@@ -111,11 +103,13 @@ public class Main {
 //		printPoints(domain);
 //		DataVisuals.plotBoundaryPhi(domain, i);
 //		System.out.print("sigma phi = " +  domain.sigmaG() + " ");
-//		domain.savePhi(((int) (angle * 180 / Math.PI)) + "contactangle" + i);
-//		Plot.define(domain, "Domain_at_t=" + i);
+//		domain.savePhi( (int) Math.round((angle*(180/Math.PI))) +  "contactangle" + i);
+//		Plot.define(domain);
 //		findHeight(domain);
 //		Image.createImage(domain,i);
 //		domain.findContactAngleBC(true);
+//		domain.getShape();	
+//		System.out.print(" Area[ " + domain.findArea() + " ]");
 		
 	}
 
@@ -123,11 +117,11 @@ public class Main {
 		
 //		domain.findCenter();
 		domain.findNu();
-//		domain.findBoundaryNu();
+		domain.findBoundaryNu();
 		domain.findPhiMethodOfLines(i);
 		if (domain.isSolidWall) domain.solidWallBC(i);
-		domain.contactAngleHysterisis();
-		domain.evaporate();
+//		domain.contactAngleHysterisis();
+//		domain.evaporate();
 //		domain.condensate();
 		
 	}
@@ -161,8 +155,8 @@ public class Main {
 	
 	public static void initializeDroplet(Domain domain){
 		 // Initial Condition for the domain
-			domain.definePlanarDroplet();
-//			domain.defineCube(numPoints/2);	
+//			domain.definePlanarDroplet();
+			domain.defineCube(numPoints/2);	
 //			domain.defineOneDimentionalDrop(numPoints/2);
 //			domain.defineCube(numPoints/2);
 //			domain.defineSeperatedSystem();

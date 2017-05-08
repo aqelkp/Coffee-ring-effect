@@ -1,9 +1,15 @@
-\BOOKMARK [1][-]{section.1}{Governing equations}{}% 1
-\BOOKMARK [1][-]{section.2}{Lattice-Boltzmann method}{}% 2
-\BOOKMARK [1][-]{section.3}{Spinodal decomposition}{}% 3
-\BOOKMARK [1][-]{section.4}{Surface tension}{}% 4
-\BOOKMARK [1][-]{section.5}{Variation of phase phield close to interphase}{}% 5
-\BOOKMARK [1][-]{section.6}{LB Method and Method of Lines}{}% 6
-\BOOKMARK [1][-]{section.7}{Solid wall}{}% 7
-\BOOKMARK [1][-]{section.8}{Evaporation of a planar droplet}{}% 8
-\BOOKMARK [1][-]{section.9}{Evaporation of a droplet on solid wall}{}% 9
+\BOOKMARK [1][-]{section.1}{Abstract}{}% 1
+\BOOKMARK [1][-]{section.2}{Governing equations}{}% 2
+\BOOKMARK [1][-]{section.3}{Lattice-Boltzmann method}{}% 3
+\BOOKMARK [1][-]{section.4}{LB Method and Method of Lines}{}% 4
+\BOOKMARK [1][-]{section.5}{Spinodal decomposition}{}% 5
+\BOOKMARK [1][-]{section.6}{Surface tension}{}% 6
+\BOOKMARK [1][-]{section.7}{Variation of phase field close to interfase}{}% 7
+\BOOKMARK [1][-]{section.8}{Solid wall}{}% 8
+\BOOKMARK [1][-]{section.9}{Evaporation of a planar droplet}{}% 9
+\BOOKMARK [1][-]{section.10}{Condensation of planar droplet}{}% 10
+\BOOKMARK [1][-]{section.11}{Evaporation and condensation of a sessile droplet on a solid surface}{}% 11
+\BOOKMARK [2][-]{subsection.11.1}{Ideal surface}{section.11}% 12
+\BOOKMARK [2][-]{subsection.11.2}{Hysteretic surface}{section.11}% 13
+\BOOKMARK [1][-]{section.12}{Discussion and Conclusions}{}% 14
+\BOOKMARK [1][-]{section.13}{Future work}{}% 15
