@@ -1,15 +1,17 @@
 \contentsline {section}{\numberline {1}Abstract}{1}{section.1}
-\contentsline {section}{\numberline {2}Governing equations}{1}{section.2}
-\contentsline {section}{\numberline {3}Lattice-Boltzmann method}{1}{section.3}
-\contentsline {section}{\numberline {4}LB Method and Method of Lines}{1}{section.4}
-\contentsline {section}{\numberline {5}Spinodal decomposition}{2}{section.5}
-\contentsline {section}{\numberline {6}Surface tension}{3}{section.6}
-\contentsline {section}{\numberline {7}Variation of phase field close to interfase}{3}{section.7}
-\contentsline {section}{\numberline {8}Solid wall}{4}{section.8}
-\contentsline {section}{\numberline {9}Evaporation of a planar droplet}{4}{section.9}
-\contentsline {section}{\numberline {10}Condensation of planar droplet}{4}{section.10}
-\contentsline {section}{\numberline {11}Evaporation and condensation of a sessile droplet on a solid surface}{5}{section.11}
-\contentsline {subsection}{\numberline {11.1}Ideal surface}{5}{subsection.11.1}
-\contentsline {subsection}{\numberline {11.2}Hysteretic surface}{6}{subsection.11.2}
-\contentsline {section}{\numberline {12}Discussion and Conclusions}{7}{section.12}
-\contentsline {section}{\numberline {13}Future work}{9}{section.13}
+\contentsline {section}{\numberline {2}Introduction}{1}{section.2}
+\contentsline {section}{\numberline {3}Governing equations}{2}{section.3}
+\contentsline {section}{\numberline {4}Lattice-Boltzmann method}{2}{section.4}
+\contentsline {section}{\numberline {5}LB Method and Method of Lines}{2}{section.5}
+\contentsline {section}{\numberline {6}Spinodal decomposition}{3}{section.6}
+\contentsline {section}{\numberline {7}Surface tension}{4}{section.7}
+\contentsline {section}{\numberline {8}Variation of phase field close to interface}{4}{section.8}
+\contentsline {section}{\numberline {9}Solid wall}{5}{section.9}
+\contentsline {section}{\numberline {10}Evaporation of a planar droplet}{5}{section.10}
+\contentsline {section}{\numberline {11}Condensation of planar droplet}{6}{section.11}
+\contentsline {section}{\numberline {12}Evaporation and condensation of a sessile droplet on a solid surface}{7}{section.12}
+\contentsline {subsection}{\numberline {12.1}Ideal surface}{7}{subsection.12.1}
+\contentsline {subsection}{\numberline {12.2}Hysteretic surface}{8}{subsection.12.2}
+\contentsline {section}{\numberline {13}Discussion and Conclusions}{10}{section.13}
+\contentsline {section}{\numberline {14}Future work}{10}{section.14}
+\contentsline {section}{\numberline {15}Source code}{10}{section.15}

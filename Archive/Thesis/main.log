@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.2.22)  8 MAY 2017 23:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2017.2.22)  9 MAY 2017 17:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -8,8 +8,8 @@ LaTeX2e <2016/03/31>
 Babel <3.9r> and hyphenation patterns for 83 language(s) loaded.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/size10.clo
-File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+(/usr/local/texlive/2016/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
 \c@section=\count80
@@ -939,20 +939,20 @@ LaTeX Warning: Label `eq:fg' multiply defined.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 21.
-LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
  (/usr/local/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count176
@@ -1000,12 +1000,12 @@ e
 * \topmargin=-37.0pt
 * \headheight=12.0pt
 * \headsep=25.0pt
-* \topskip=10.0pt
+* \topskip=11.0pt
 * \footskip=30.0pt
-* \marginparwidth=65.0pt
-* \marginparsep=11.0pt
+* \marginparwidth=59.0pt
+* \marginparsep=10.0pt
 * \columnsep=10.0pt
-* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \skip\footins=10.0pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -1019,7 +1019,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box62
-Package hyperref Info: Link coloring OFF on input line 21.
+Package hyperref Info: Link coloring OFF on input line 28.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
@@ -1028,9 +1028,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count182
 )
-LaTeX Info: Redefining \ref on input line 21.
-LaTeX Info: Redefining \pageref on input line 21.
-LaTeX Info: Redefining \nameref on input line 21.
+LaTeX Info: Redefining \ref on input line 28.
+LaTeX Info: Redefining \pageref on input line 28.
+LaTeX Info: Redefining \nameref on input line 28.
 
 (./main.out) (./main.out)
 \@outlinefile=\write4
@@ -1049,15 +1049,17 @@ s been generated with the most recent feature set (\pgfplotsset{compat=1.13}).
 
 \c__siunitx_mathsf_int=\count183
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 21.
+(Font)              <10.95> on input line 28.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 21.
+(Font)              <8> on input line 28.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 28.
 \c__siunitx_mathtt_int=\count184
-<images/others/iitm_logo.jpg, id=67, 108.8868pt x 108.8868pt>
+<images/others/iitm_logo.jpg, id=75, 108.8868pt x 108.8868pt>
 File: images/others/iitm_logo.jpg Graphic file (type jpg)
 
 <use images/others/iitm_logo.jpg>
-Package pdftex.def Info: images/others/iitm_logo.jpg used on input line 24.
+Package pdftex.def Info: images/others/iitm_logo.jpg used on input line 31.
 (pdftex.def)             Requested size: 70.46037pt x 70.46153pt.
  [1
 
@@ -1067,7 +1069,12 @@ s/others/iitm_logo.jpg>] (./main.toc)
 \openout5 = `main.toc'.
 
 
-[1]
+[1]pdfTeX warning (ext4): destination with the same identifier (name{page.1}) h
+as been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.74 \end{equation}
+                    [1]
 PGFPlots: reading {data/lbm_vs_mol_time.csv}
 
 NOTE: coordinate (1607824,) has been dropped because of a coordinate filter. (s
@@ -1083,6 +1090,11 @@ ee also unbounded coords=jump).
 NOTE: coordinate (1817104,) has been dropped because of a coordinate filter. (s
 ee also unbounded coords=jump). 
 PGFPlots: reading {data/lbm_vs_mol_time.csv}
+
+Overfull \hbox (3.25351pt too wide) in paragraph at lines 144--145
+[][] 
+ []
+
 PGFPlots: reading {data/time_convergence.csv}
 NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
  unbounded coords=jump). 
@@ -2750,120 +2762,114 @@ NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
 NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
  unbounded coords=jump). 
 
-Overfull \hbox (95.49464pt too wide) in paragraph at lines 153--154
+Overfull \hbox (105.4246pt too wide) in paragraph at lines 172--173
 [][] 
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.164 \subsection
-                 *{Time for convergence} [1]
-<images/spinodal/0.png, id=121, 501.875pt x 501.875pt>
+<images/spinodal/0.png, id=120, 501.875pt x 501.875pt>
 File: images/spinodal/0.png Graphic file (type png)
 
 <use images/spinodal/0.png>
-Package pdftex.def Info: images/spinodal/0.png used on input line 176.
+Package pdftex.def Info: images/spinodal/0.png used on input line 195.
 (pdftex.def)             Requested size: 113.81102pt x 113.80533pt.
 
-<images/spinodal/1000.png, id=123, 501.875pt x 501.875pt>
+<images/spinodal/1000.png, id=122, 501.875pt x 501.875pt>
 File: images/spinodal/1000.png Graphic file (type png)
 
 <use images/spinodal/1000.png>
-Package pdftex.def Info: images/spinodal/1000.png used on input line 182.
+Package pdftex.def Info: images/spinodal/1000.png used on input line 201.
 (pdftex.def)             Requested size: 113.81102pt x 113.80533pt.
 
-<images/spinodal/10000.png, id=124, 501.875pt x 501.875pt>
+<images/spinodal/10000.png, id=123, 501.875pt x 501.875pt>
 File: images/spinodal/10000.png Graphic file (type png)
 
 <use images/spinodal/10000.png>
-Package pdftex.def Info: images/spinodal/10000.png used on input line 187.
+Package pdftex.def Info: images/spinodal/10000.png used on input line 206.
 (pdftex.def)             Requested size: 113.81102pt x 113.80533pt.
 
-<images/spinodal/100000.png, id=125, 501.875pt x 501.875pt>
+<images/spinodal/100000.png, id=124, 501.875pt x 501.875pt>
 File: images/spinodal/100000.png Graphic file (type png)
 
 <use images/spinodal/100000.png>
-Package pdftex.def Info: images/spinodal/100000.png used on input line 193.
+Package pdftex.def Info: images/spinodal/100000.png used on input line 212.
 (pdftex.def)             Requested size: 113.81102pt x 113.80533pt.
- [2 <./images/spinodal/0.png> <./images/spinodal/1000.png> <./images/spinodal/1
-0000.png> <./images/spinodal/100000.png>]
-<images/surface_tension/0.png, id=142, 200.75pt x 200.75pt>
+ [2] [3 <./images/spinodal/0.png> <./images/spinodal/1000.png> <./images/spinod
+al/10000.png> <./images/spinodal/100000.png>]
+<images/surface_tension/0.png, id=159, 200.75pt x 200.75pt>
 File: images/surface_tension/0.png Graphic file (type png)
 
 <use images/surface_tension/0.png>
-Package pdftex.def Info: images/surface_tension/0.png used on input line 209.
+Package pdftex.def Info: images/surface_tension/0.png used on input line 228.
 (pdftex.def)             Requested size: 142.26378pt x 142.27312pt.
 
-<images/surface_tension/880000.png, id=143, 200.75pt x 200.75pt>
+<images/surface_tension/880000.png, id=160, 200.75pt x 200.75pt>
 File: images/surface_tension/880000.png Graphic file (type png)
 
 <use images/surface_tension/880000.png>
 Package pdftex.def Info: images/surface_tension/880000.png used on input line 2
-15.
+34.
 (pdftex.def)             Requested size: 142.26378pt x 142.27312pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 223--224
+Underfull \hbox (badness 10000) in paragraph at lines 242--243
 
  []
 
 PGFPlots: reading {data/tanh.csv}
-[3 <./images/surface_tension/0.png> <./images/surface_tension/880000.png>]
-<images/solid_wall/30.png, id=158, 301.125pt x 200.75pt>
+[4 <./images/surface_tension/0.png> <./images/surface_tension/880000.png>]
+<images/solid_wall/30.png, id=176, 301.125pt x 200.75pt>
 File: images/solid_wall/30.png Graphic file (type png)
 
 <use images/solid_wall/30.png>
-Package pdftex.def Info: images/solid_wall/30.png used on input line 281.
+Package pdftex.def Info: images/solid_wall/30.png used on input line 300.
 (pdftex.def)             Requested size: 103.84222pt x 85.35826pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 282.
+(Font)              <7> on input line 301.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 282.
+(Font)              <5> on input line 301.
 
-<images/solid_wall/45.png, id=160, 200.75pt x 200.75pt>
+<images/solid_wall/45.png, id=178, 200.75pt x 200.75pt>
 File: images/solid_wall/45.png Graphic file (type png)
 
 <use images/solid_wall/45.png>
-Package pdftex.def Info: images/solid_wall/45.png used on input line 285.
+Package pdftex.def Info: images/solid_wall/45.png used on input line 304.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
 
-<images/solid_wall/60.png, id=161, 200.75pt x 200.75pt>
+<images/solid_wall/60.png, id=179, 200.75pt x 200.75pt>
 File: images/solid_wall/60.png Graphic file (type png)
 
 <use images/solid_wall/60.png>
-Package pdftex.def Info: images/solid_wall/60.png used on input line 291.
+Package pdftex.def Info: images/solid_wall/60.png used on input line 310.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
 
-<images/solid_wall/90.png, id=162, 200.75pt x 200.75pt>
+<images/solid_wall/90.png, id=180, 200.75pt x 200.75pt>
 File: images/solid_wall/90.png Graphic file (type png)
 
 <use images/solid_wall/90.png>
-Package pdftex.def Info: images/solid_wall/90.png used on input line 295.
+Package pdftex.def Info: images/solid_wall/90.png used on input line 314.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
 
-<images/solid_wall/120.png, id=163, 200.75pt x 200.75pt>
+<images/solid_wall/120.png, id=181, 200.75pt x 200.75pt>
 File: images/solid_wall/120.png Graphic file (type png)
 
 <use images/solid_wall/120.png>
-Package pdftex.def Info: images/solid_wall/120.png used on input line 300.
+Package pdftex.def Info: images/solid_wall/120.png used on input line 319.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
 
-<images/solid_wall/135.png, id=164, 200.75pt x 200.75pt>
+<images/solid_wall/135.png, id=182, 200.75pt x 200.75pt>
 File: images/solid_wall/135.png Graphic file (type png)
 
 <use images/solid_wall/135.png>
-Package pdftex.def Info: images/solid_wall/135.png used on input line 305.
+Package pdftex.def Info: images/solid_wall/135.png used on input line 324.
 (pdftex.def)             Requested size: 85.35826pt x 85.35896pt.
 
-<images/solid_wall/150.png, id=165, 301.125pt x 200.75pt>
+<images/solid_wall/150.png, id=183, 301.125pt x 200.75pt>
 File: images/solid_wall/150.png Graphic file (type png)
 
 <use images/solid_wall/150.png>
-Package pdftex.def Info: images/solid_wall/150.png used on input line 309.
+Package pdftex.def Info: images/solid_wall/150.png used on input line 328.
 (pdftex.def)             Requested size: 79.64598pt x 85.35826pt.
 PGFPlots: reading {data/evaporation_different_phih.csv}
 PGFPlots: reading {data/evaporation_different_phih.csv}
@@ -2883,7 +2889,7 @@ PGFPlots: reading {data/evaporation_time.csv}
 NOTE: coordinate (,-1.099411) has been dropped because of a coordinate filter. 
 (see also unbounded coords=jump). 
 
-Overfull \hbox (53.62773pt too wide) in paragraph at lines 391--392
+Overfull \hbox (59.98122pt too wide) in paragraph at lines 411--412
 [][] 
  []
 
@@ -2894,99 +2900,97 @@ PGFPlots: reading {data/evaporation_condensation_1D.csv}
 PGFPlots: reading {data/evaporation_condensation_1D.csv}
 PGFPlots: reading {data/evaporation_condensation_1D.csv}
 PGFPlots: reading {data/evaporation_condensation_1D.csv}
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-PGFPlots: reading {data/evaporation_ideal_outline.csv}
-PGFPlots: reading {data/evaporation_ideal_outline.csv}
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-PGFPlots: reading {data/evaporation_ideal_outline.csv}
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
- unbounded coords=jump). 
-[4 <./images/solid_wall/30.png> <./images/solid_wall/150.png> <./images/solid_w
+[5 <./images/solid_wall/30.png> <./images/solid_wall/150.png> <./images/solid_w
 all/45.png> <./images/solid_wall/60.png> <./images/solid_wall/90.png> <./images
-/solid_wall/120.png> <./images/solid_wall/135.png>]
+/solid_wall/120.png> <./images/solid_wall/135.png>] [6]
+PGFPlots: reading {data/evaporation_ideal_outline.csv}
+PGFPlots: reading {data/evaporation_ideal_outline.csv}
+
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+PGFPlots: reading {data/evaporation_ideal_outline.csv}
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
+NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
+ unbounded coords=jump). 
 PGFPlots: reading {data/condensation_90.csv}
 PGFPlots: reading {data/condensation_90.csv}
 PGFPlots: reading {data/condensation_90.csv}
@@ -2995,14 +2999,12 @@ PGFPlots: reading {data/evaporation_90.csv}
 PGFPlots: reading {data/evaporation_90.csv}
 PGFPlots: reading {data/evaporation_90.csv}
 
-Overfull \hbox (85.47325pt too wide) in paragraph at lines 545--546
+Overfull \hbox (94.9493pt too wide) in paragraph at lines 568--569
 [][] 
  []
 
-[5]
 PGFPlots: reading {data/evaporation_hysteritic_outline.csv}
 PGFPlots: reading {data/evaporation_hysteritic_outline.csv}
-
 NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
  unbounded coords=jump). 
 NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
@@ -3032,94 +3034,93 @@ NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
  unbounded coords=jump). 
 NOTE: coordinate (,) has been dropped because of a coordinate filter. (see also
  unbounded coords=jump). 
-[6]
+[7]
 PGFPlots: reading {data/error_data.csv}
 
 
 Package pgfplots Warning: Table 'data/error_data.csv' has an empty column name;
- replacing it by '2'' on input line 625.
+ replacing it by '2'' on input line 648.
 
  [warning /pgfplots/warning/empty column name]
 
 Package pgfplots Warning: Table 'data/error_data.csv' has an empty column name;
- replacing it by '3'' on input line 625.
+ replacing it by '3'' on input line 648.
 
  [warning /pgfplots/warning/empty column name]
 
 Package pgfplots Warning: Table 'data/error_data.csv' has an empty column name;
- replacing it by '4'' on input line 625.
+ replacing it by '4'' on input line 648.
 
  [warning /pgfplots/warning/empty column name]
 
 Package pgfplots Warning: Table 'data/error_data.csv' has an empty column name;
- replacing it by '5'' on input line 625.
+ replacing it by '5'' on input line 648.
 
  [warning /pgfplots/warning/empty column name]
 
 Package pgfplots Warning: Table 'data/error_data.csv' has an empty column name;
- replacing it by '6'' on input line 625.
+ replacing it by '6'' on input line 648.
 
  [warning /pgfplots/warning/empty column name]
 
 Package pgfplots Warning: Table 'data/error_data.csv' has an empty column name;
- replacing it by '7'' on input line 625.
+ replacing it by '7'' on input line 648.
 
  [warning /pgfplots/warning/empty column name]
+[8]
 PGFPlots: reading {data/cah_evaporation.csv}
 PGFPlots: reading {data/cah_evaporation.csv}
 PGFPlots: reading {data/cah_evaporation.csv}
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
 PGFPlots: reading {data/condensation_cah.csv}
 PGFPlots: reading {data/condensation_cah.csv}
 PGFPlots: reading {data/condensation_cah.csv}
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[7] [8] (./main.bbl) [9]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 737.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 737.
+ [9] (./main.bbl [10]) [11]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 763.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 763.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 737.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 737.
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 5EB3BED8E9ADF3998F84F142BB1ECC01;934.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 763.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 763.
 
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: E13CA006F16A821351B3F3A0E5015C13;1031
+(rerunfilecheck)             After:  7386BB23A8A3BFD35E93E350500902A4;1031.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 737.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 763.
  ) 
 Here is how much of TeX's memory you used:
- 36308 strings out of 493014
- 872381 string characters out of 6133351
- 2917979 words of memory out of 5000000
- 39295 multiletter control sequences out of 15000+600000
- 12152 words of font info for 44 fonts, out of 8000000 for 9000
+ 36325 strings out of 493014
+ 872686 string characters out of 6133351
+ 2898512 words of memory out of 5000000
+ 39308 multiletter control sequences out of 15000+600000
+ 13538 words of font info for 49 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 59i,22n,103p,10404b,2326s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 59i,22n,103p,10404b,2324s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb>
 </usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
 /usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
-usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></us
-r/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/
-local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/lo
-cal/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/loca
-l/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/
-texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/tex
-live/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texliv
-e/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2
-016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/20
-16/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2016
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2016/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on main.pdf (11 pages, 1017373 bytes).
+usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></us
+r/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/
+local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
+cal/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/loca
+l/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/t
+exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texl
+ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texli
+ve/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive
+/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/
+2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on main.pdf (13 pages, 997235 bytes).
 PDF statistics:
- 307 PDF objects out of 1000 (max. 8388607)
- 245 compressed objects within 3 object streams
- 64 named destinations out of 1000 (max. 500000)
- 215 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 326 PDF objects out of 1000 (max. 8388607)
+ 264 compressed objects within 3 object streams
+ 70 named destinations out of 1000 (max. 500000)
+ 231 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -34,17 +34,17 @@ public class Main {
 //		domain.getShape();
 		
 		System.out.print("t Contact_Diameter\t Drop_Height\t\t Slope\t\t Desired_Angle");
-		runSimulation(domain);	
+//		runSimulation(domain);	
 		
-//		for (int i = 51; i<90; i++){
-////			System.out.println("\n============ " + i + "0" + " ============");
-////			System.out.print("t Contact_Diameter\t Drop_Height\t\t Slope\t\t Desired_Angle");
-//			domain.phi = DataDecoder.readFile("angles/data"+ i + ".tmp");
-//			System.out.print("Area: "+ domain.findArea());
-////			System.out.print("sigma phi " + domain.sigmaG());
+		for (int i = 6; i<13; i++){
+			System.out.println("\n============ " + i + "0" + " ============");
+//			System.out.print("t Contact_Diameter\t Drop_Height\t\t Slope\t\t Desired_Angle");
+			domain.phi = DataDecoder.readFile("angles/data"+ i + "0.tmp");
+			System.out.print("Area: "+ domain.findArea());
+//			System.out.print("sigma phi " + domain.sigmaG());
 //			domain.contactAngle = domain.findContactAngle(true);
 //			runSimulation(domain);
-//		}
+		}
 		
 		
 //		for (int i=0; i<20; i++){

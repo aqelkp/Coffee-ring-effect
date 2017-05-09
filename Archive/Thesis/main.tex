@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[11pt]{article}
 
 \usepackage{graphicx}
 \usepackage[margin=1in]{geometry}
@@ -9,10 +9,17 @@
 \usepackage{tikz} % To generate the plot from csv
 \usepackage{pgfplots}
 
+\makeatletter
+\def\@seccntformat#1{%
+	\expandafter\ifx\csname c@#1\endcsname\c@section\else
+	\csname the#1\endcsname\quad
+	\fi}
+\makeatother
+
 \pgfplotsset{compat=newest} % Allows to place the legend below plot
 \usepgfplotslibrary{units} % Allows to enter the units nicely
 
-\title{Lattice Boltzmann simulation of evaporating droplet}
+\title{Diffuse interface method for condensation and evaporation on ideal and non-ideal surfaces}
 \date{CH13B006}
 \author{Aqel Ahammad K P}
 \newpage
@@ -24,9 +31,9 @@
 			\includegraphics[width=0.15\textwidth]{images/others/iitm_logo}\par\vspace{1cm}
 			{\scshape\LARGE IIT Madras \par}
 			\vspace{1cm}
-			{\scshape\Large Final year BTech Project\par}
+			{\scshape\Large BTech Project\par}
 			\vspace{1.5cm}
-			{\huge\bfseries Lattice Boltzmann simulation of evaporating droplet\par}
+			{\huge\bfseries Diffuse interface method for condensation and evaporation on ideal and non-ideal surfaces\par}
 			\vspace{2cm}
 			{\Large\itshape Aqel Ahammad K P\par}
 			{\Large\itshape CH13B006\par}
@@ -45,7 +52,19 @@
 \pagenumbering{arabic}
 
 \section{Abstract}
-Evaporation and condensation is modeled in this study using two methods - Lattice Boltzmann method and Method of lines. These two methods were evaluated based on space and time complexity, average time for one iteration and time for convergence. Evaporation of planar droplet was simulated and reproduced results mentioned in the literature. The boundary condition for evaporation was reversed for initiating condensation and was able to bring opposite effect. Evaporation and condensation of a sessile droplet was studied on ideal and hysteritic surfaces. The results showed same pattern that is recorded experimentally. Pinning of contact line during evaporation was achieved on a hysteretic surface by defining a smaller receding angle. 
+We model evaporation and condensation in this study using two methods - Lattice Boltzmann method and Method of lines. The two methods are evaluated based on space and time complexity, average time for one iteration and time for convergence. Evaporation of planar droplet is simulated and reproduced results recorded in the literature. Reversing the boundary condition for evaporation, we observe condensation. We study evaporation and condensation of a sessile droplet on ideal and hysteretic surfaces. The results show same pattern that is recorded experimentally. Pinning of contact line during evaporation is achieved on a hysteretic surface by defining a smaller receding angle. 
+
+\section{Introduction}
+Recent developments in computational fluid dynamics have inspired researchers to simulate evaporation and condensation on surfaces. When a liquid droplet on a rough rigid surface evaporates, suspended particles are deposited along the perimeter. Edge of such an evaporating drop is pinned on the solid surface. After evaporation a ring of highly concentrated particles is formed. This well known phenomenon coffee ring effect is a potentially useful technology impacting printing, washing and coating processes. Using a colloidal suspension of gold particles it might be possible to assemble a fine wire with dimensions comparable to those achieved with modern lithographic methods. It might also be possible to stretch DNA using the strong shear flow that develops in ring forming drops when the evaporation rate is enhanced at the edge.\cite{CoffeeRing} Ring deposits also provide a potential means to write or deposit a fine pattern onto a surface\cite{9dda1ed06b4c4ef7bba2cf98f09e8b8f}. Modelling such a process involves accounting for mass, momentum and energy transport in liquid and gas phases. Adding to the complexity of the problem, physical systems involve changes in the surface energy and topography of the solid. The resulting problem is thus challenging from a computational perspective.
+
+\par
+The method of lines (MOL) is a technique for solving partial differential equations (PDEs) in which all but one dimension is discretized. The method of lines most often refers to the construction or analysis of numerical methods for partial differential equations that proceeds by first discretizing the spatial derivatives only and leaving the time variable continuous. This leads to a system of ordinary differential equations to which a numerical method for initial value ordinary equations can be applied. The method of lines in this context dates back to at least the early 1960s.
+
+\par 
+Lattice-Boltzmann (LB) simulations have become a standard tool in computational fluid dynamics. Instead of solving the Navier Stokes equations, the discrete Boltzmann equation is solved to simulate the flow of a Newtonian fluid with collision models such as Bhatnagar Gross Krook (BGK). By simulating streaming and collision processes across a limited number of particles, the intrinsic particle interactions evince a microcosm of viscous flow behavior applicable across the greater mass. LB method is scalable for parallel computing. Recently, LB simulations have proved useful to gain insight in complex geometries. A particular advantage that an LB treatment of evaporation would bring is the possibility of studying evaporation in the presence of flow and on complex microstructured surfaces.
+
+\par 
+In this study, we validate modeling evaporation and condensation using LB method and method of lines. We simulated evaporation and condensation of planar droplets, evaporation of a sessile droplet on an ideal and non-ideal solid surface. 
 
 \section{Governing equations}
 Continuity equation,
@@ -86,7 +105,7 @@ Hydrodynamic variables are related to above velocity distribution functions by,
 
 Also, 
 \begin{equation}
- \sum_{i} f_{i}^{eq} \equiv \rho, \quad \  \sum_{i} c_{i\alpha} f_{i}^{eq} \equiv rho v_{\alpha}, \sum_{i} g_{i}^{eq} \equiv \quad \phi 
+ \sum_{i} f_{i}^{eq} \equiv \rho, \quad \  \sum_{i} c_{i\alpha} f_{i}^{eq} \equiv \rho v_{\alpha}, \quad \sum_{i} g_{i}^{eq} \equiv  \phi 
 \label{eq:fg}
 \end{equation}
 Expressions for equilibrium distribution functions are reported in \cite{paper:intertial_effects}.
@@ -94,7 +113,7 @@ Expressions for equilibrium distribution functions are reported in \cite{paper:i
 \section{LB Method and Method of Lines}
 Equation (\ref{eq:CH}) can be solved using method of lines. In this section, we compare various aspects of algorithms of LB method(LBM) and method of lines(MOL)
 \subsection*{Time complexity}
-Average time required for one iteration in both the algorithms was noted and plotted in Figure \ref*{fig:lbm_vs_mol_time}. It was noted that time for one iteration of MOL is almost equal to LB method with D2Q9 lattice. Time varies linearly with number of points for both the algorithms. Hence both shows time complexity of $\mathcal{O}(n)$
+Average time required for one iteration in both the algorithms was noted and plotted in Figure \ref*{fig:lbm_vs_mol_time}. It was noted that time for one iteration of MOL is almost equal to LB method with D2Q9 lattice. Time varies linearly with number of points for both the algorithms. Hence both show time complexity of $\mathcal{O}(n)$
 \begin{figure}[h!]
 	%\begin{center}
 	\begin{subfigure}{7cm}
@@ -162,7 +181,7 @@ Average time required for one iteration in both the algorithms was noted and plo
 \subsection*{Space complexity}
 Both the algorithms have same space complexity  $\mathcal{O}(n)$
 \subsection*{Time for convergence}
-It was noted that both the methods gives almost same result and error at a particular time and takes almost same time to converge to a solution. 
+It was noted that both the methods give almost same result and error at a particular time and take almost same time to converge to a solution. 
 
 
 
@@ -201,7 +220,7 @@ Spinodal decomposition is a mechanism for the rapid unmixing of a mixture of liq
 \end{flushright}
    
 \section{Surface tension}
-Surface tension is the elastic tendency of a fluid surface which makes it acquire the least surface area possible. For any volume, sphere gives the least surface area. In the following simulation, a cubic volume of liquid is taken at t = 0. As expected, the droplets changes itself to a spherical droplet. (Refer Figure \ref{fig:surface_tension})
+Surface tension is the elastic tendency of a fluid surface which makes it acquire the least surface area possible. For any volume, sphere gives the least surface area. In the following simulation, a cubic volume of liquid is taken at t = 0. As expected, the droplet changes itself to a spherical droplet. (Refer Figure \ref{fig:surface_tension})
 
 \begin{figure}[h!]
 	\centering
@@ -219,7 +238,7 @@ Surface tension is the elastic tendency of a fluid surface which makes it acquir
 	\caption{Evolution of a square surface to a circular surface.}\label{fig:surface_tension}
 \end{figure}
 
-\section{Variation of phase field close to interfase}
+\section{Variation of phase field close to interface}
 Close to interface, the phase field varies as a hyperbolic tangent with the normal coordinates to the interface, r. Simulation data was perfectly matching with the numerical solution given by \cite{arXiv:1104.0078}. (Refer Fig \ref*{fig:tanh}) \newline
 \begin{equation}
 	\phi(r) = \phi_{eq}tan h(\frac{r}{\epsilon})
@@ -317,10 +336,11 @@ Bounce-back rules \cite{paper:bounce_back} are imposed along the boundary for im
 
 To drive evaporation of the film we impose the boundary condition $\phi(z=z_{H},t)=\phi_{H}$, where $\phi_{H} < -\phi_{eq}$. This induces a gradient in the chemical potential field $\mu$. In response to this imbalance, the system reduces $\phi$, which corresponds to the evaporation of the film\cite{paper:evaporation}.
 Phase field imbalance, $\Delta\phi_{H} \equiv -\phi_{eq} - \phi_{H}$
-\newline
+\par 
 We performed simulations in a box consisting of  1 x 1 x 150 lattice sites. Periodic boundary conditions were set in the x and
 y directions. A wall was located at $ z_{w} = 1 $, while the concentration
-was fixed to a value $ \phi_{H}$ at $z_{H} = N_{z} $ to drive the system out of equilibrium. The initial height of the film was set to $z_{0} = 100$. 
+was fixed to a value $ \phi_{H}$ at $z_{H} = N_{z} $ to drive the system out of equilibrium. The initial height of the film was set to $z_{0} = 100$. Figure \ref{fig:evaporation_tanh} shows that height of droplet decreases faster as driving force $\Delta\phi_{H}$ increases. 
+ Figure \ref{fig:evaporation_time} shows height of the drop decreasing with time. 
 
 \begin{figure}[h!]
 	\begin{center}
@@ -399,7 +419,7 @@ was fixed to a value $ \phi_{H}$ at $z_{H} = N_{z} $ to drive the system out of 
 	
 \end{figure}
 
-\section{Condensation of planar droplet}
+\section{Condensation of a planar droplet}
 Similar to evaporation, condensation can be simulated by imposing boundary condition $\phi(z=z_{H},t)=\phi_{H}$, where $\phi_{H} > -\phi_{eq}$.
 \begin{figure}[h!]
 	\begin{center}
@@ -430,16 +450,18 @@ Similar to evaporation, condensation can be simulated by imposing boundary condi
 		\end{axis}
 		
 		\end{tikzpicture}
-		\caption{Phase field profile along normal to interface of evaporating and condensing planar droplet.  }
+		\caption{Phase field profile along normal to interface of evaporating and condensing planar droplet}
 		\label{fig:evap_cond_1D}
 	\end{center}
 	
 \end{figure}
-In Figure \ref*{fig:evap_cond_1D}, a planar droplet of height 100 is evaporated with $\phi_{H} = -1.1$. After $5 x 10^{6}$ timesteps, boundary condition at z = 150 is changed to $\phi_{H} = -0.245$ ( at which $\mu$ is equal and opposite to that of $\mu(\phi=-1.1)$ ) to initiate evaporation. It is observed that after condensing for same duration as that of evaporation, at $t = 10 x 10^{6}$ the system returns to the initial condition. 
+In Figure \ref*{fig:evap_cond_1D}, a planar droplet of height 100 is evaporated with $\phi_{H} = -1.1$. After 5 x $10^{6}$ time steps, boundary condition at z = 150 is changed to $\phi_{H} = -0.85$ ( at which $\mu$ is equal and opposite to that of $\mu(\phi=-1.1)$ ) to initiate condensation. It is observed that after condensing for same duration as that of evaporation, at t = 10 x $10^{6}$ the system returns to the initial condition. 
 
 \section{Evaporation and condensation of a sessile droplet on a solid surface}
 
 \subsection{Ideal surface}
+An ideal solid surface is flat, rigid, perfectly smooth, and chemically homogeneous, and has zero contact angle hysteresis. On such a surface, only one thermodynamically stable contact angle exists. Hence we expect a constant contact angle and varying contact diameter during evaporation and condensation. 
+
 \begin{figure}[h!]
 	\begin{center}
 		\begin{tikzpicture}
@@ -463,7 +485,7 @@ In Figure \ref*{fig:evap_cond_1D}, a planar droplet of height 100 is evaporated 
 		[color=black]
 		table[x=0x,y=0y,col sep=comma] {data/evaporation_ideal_outline.csv}; 
 		
-	
+		
 		
 		\addplot 
 		[color=black]
@@ -474,13 +496,14 @@ In Figure \ref*{fig:evap_cond_1D}, a planar droplet of height 100 is evaporated 
 		table[x=3x,y=3y,col sep=comma] {data/evaporation_ideal_outline.csv}; 
 		\end{axis}		
 		\end{tikzpicture}
-		\caption{Shape profile of an evaporating droplet on an ideal surface. }
+		\caption{Shape profile of an evaporating droplet on an ideal surface}
 		\label{fig:evpn_outline}
 	\end{center}
 	
 \end{figure}
 
-An ideal solid surface is flat, rigid, perfectly smooth, and chemically homogeneous, and has zero contact angle hysteresis. On such a surface, only one thermodynamically stable contact angle exists. Hence we expect a constant contact angle and varying contact diameter during evaporation and condensation. 
+
+
 \begin{figure}[h!]
 	\begin{center}
 		
@@ -548,7 +571,7 @@ An ideal solid surface is flat, rigid, perfectly smooth, and chemically homogene
 			
 		\end{subfigure}
 		
-		\caption{Contact diameter, angle and drop height of a droplet on an ideal surface with equilibrium contact angle $90^{0}$ during evaporation/condensation. }
+		\caption{Contact diameter, angle and drop height of a droplet on an ideal surface with equilibrium contact angle $90^{0}$ during evaporation/condensation }
 		\label{fig:evpn_ideal}
 	\end{center}
 	
@@ -601,7 +624,7 @@ In many natural systems, the solid walls are usually rough and chemically inhomo
 \theta_{R} \leq \theta \leq \theta_{A} 
 \end{equation}
 where $\theta_{R}$ and $\theta_{A}$ denote the receding angle and advancing angle respectively. 
-\newline
+\par 
 When $\theta$ is greater than $\theta_{A}$, the contact line moves forward. When $\theta$ is less than $\theta_{R}$, the contact line moves backward. To realize this effect, at each time step of computation, we should first obtain the local apparent contact angle at the contact points. Then, comparisons of $\theta$ with $\theta_{R}$ and $\theta_{A}$ are required. If $\theta \leq \theta_{R}$, $\theta$ in Eq.\ref{eqn_wetting_bc} should be replaced by $\theta_{R}$; if $\theta \geq \theta_{A}$, $\theta$ should be replaced by $\theta_{A}$; else $\theta$ in Eq.\ref{eqn_wetting_bc} remains unchanged.
 \par
 A small difference in contact angle imposed using Eq.\ref{eqn_wetting_bc} and measured contact angle was observed in the simulation. This difference was causing error while implementing contact angle hysteresis, i.e, the contact angle $\theta$ was reaching $\theta_{R}$ at a very short time causing contact angle pinning to be visible for very small duration. Hence, difference between measured angle and imposed angle was plotted in Figure \ref{fig:angle_correction} and this data was used to correct the measured angle. 
@@ -634,14 +657,14 @@ A small difference in contact angle imposed using Eq.\ref{eqn_wetting_bc} and me
 \par
 Picknett and Bexon\cite{PICKNETT1977336} followed the mass and profile evolution of organic liquid drops. They observed three
 distinct evaporation modes: mode 1, during which the
-solid and iquid interface area remains constant (when hysteresis
+solid and liquid interface area remains constant (when hysteresis
 exists); mode 2, for which the contact angle remains
 constant (ideal system with no hysteresis at equilibrium);
 mode 3, which is a mixed mode. They also observed that evaporation follows the first mode until $\theta = \theta_{R}$, and then, the second mode is initiated.\cite{doi:10.1021/la00007a076}
 
 
 \par
-In Figure \ref*{fig:evpn_cah} a droplet with initial contact angle $90^{0}$ is evaporating on a surface with $\theta_{R} = 42^{0}$ and $\theta_{A} = 140^{0}$. It followes mode 1 in the initial stage where contact diameter stays constant whereas contact angle decreases. After contact angle reaches $\theta = \theta_{R}$, mode 2 is observed in which contact angle stays at $\theta_{R}$ and the contact diameter reduces. 
+In Figure \ref*{fig:evpn_cah} a droplet with initial contact angle $90^{0}$ is evaporating on a surface with $\theta_{R} = 42^{0}$ and $\theta_{A} = 140^{0}$. It follows mode 1 in the initial stage where contact diameter stays constant whereas contact angle decreases. After contact angle reaches $\theta = \theta_{R}$, mode 2 is observed in which contact angle stays at $\theta_{R}$ and the contact diameter reduces. 
 \begin{figure}[h!]
 	\begin{center}
 		\begin{tikzpicture}
@@ -670,7 +693,7 @@ In Figure \ref*{fig:evpn_cah} a droplet with initial contact angle $90^{0}$ is e
 		
 		\end{axis}
 		\end{tikzpicture}
-		\caption{Profile of a evaporating droplet on a hysteretic surface. }
+		\caption{Profile of an evaporating droplet on a hysteretic surface }
 		\label{fig:evpn_cah}
 	\end{center}
 	
@@ -706,7 +729,7 @@ In Figure \ref*{fig:condn_cah} a droplet with initial contact angle $70^{0}$ is 
 		
 		\end{axis}
 		\end{tikzpicture}
-		\caption{Profile of a condensing droplet on a hysteretic surface. }
+		\caption{Profile of a condensing droplet on a hysteretic surface }
 		\label{fig:condn_cah}
 	\end{center}
 	
@@ -715,21 +738,24 @@ In Figure \ref*{fig:condn_cah} a droplet with initial contact angle $70^{0}$ is 
 \section{Discussion and Conclusions}
 
 \par
-We discussed two methods for study of evaporation and condensation - Lattice Boltzmann algorithm and Method of lines. Both of the methods show $\mathcal{O}(n)$ time complexity and $\mathcal{O}(n)$ space complexity. Time for one iteration of 4th order Runge Kutta method and LB method on D2Q9 lattice was found to be almost same. Both the methods showed identical error from previous time steps and time for convergence. Lattice boltzmann method was used for rest of the work and is validated by simulating spidodal decomposition, evolution of a square surface into a circular one and studying variation of phase field close to interface. 
+We discussed two methods for study of evaporation and condensation - Lattice Boltzmann algorithm and Method of lines. Both of the methods show $\mathcal{O}(n)$ time complexity and $\mathcal{O}(n)$ space complexity. Time for one iteration of 4th order Runge Kutta method and LB method on D2Q9 lattice was found to be almost the same. Both the methods showed identical error from previous time steps and took equal time for convergence. Both methods were validated by simulating spinodal decomposition, evolution of a square surface into a circular one and studying variation of phase field close to interface. 
 
 \par
 Evaporation was implemented by imposing a boundary condition $\phi(z=z_{H},t)=\phi_{H}$, where $\phi_{H} < -\phi_{eq}$. This induces a gradient in the chemical potential field $\mu$. In response to this imbalance, the system reduces $\phi$, which corresponds to the evaporation of the film\cite{paper:evaporation}. A reverse effect was observed when boundary condition $\phi(z=z_{H},t)=\phi_{H}$, where $0 > \phi_{H} > -\phi_{eq}$. Hence we were able to simulate condensation in the system. With equal chemical potential gradient, amount of liquid evaporated was found to be equal to that of condensated (Refer 
 Figure \ref{fig:evap_cond_1D}).
 
 \par
-Wetting condition proposed by H. Ding and P. D. M. Spelt\cite{PhysRevE.75.046708} was found to have a difference between imposed and measured angle. It can reduce time in hysteresis window drastically. For correct study of contact angle hysterisis, this should be corrected by mapping measured contact angle to difference between imposed and measured angle. This difference should be added to measured angle as a correction.
+Wetting condition proposed by H. Ding and P. D. M. Spelt\cite{PhysRevE.75.046708} was found to have a difference between imposed and measured angle. It can reduce time in hysteresis window drastically. For correct study of contact angle hysteresis, this should be corrected by mapping measured contact angle to difference between imposed and measured angle. This difference should be added to measured angle as a correction.
 
 
 \par
-Evaporation and condensation was studied on a ideal and non-ideal surface. On an ideal surface during the both process, contact angle stays constant whereas contact diameter and drop height changes. On a hysteretic surface, contact dimater was staying constant until contact angle reaches $\theta_{R}$ or $\theta_{A}$ after which contact angle was staying constant. This result was in accordance with experimental results recorded by Picknett and Bexon\cite{PICKNETT1977336}. Contact line was pinned when $\theta$ is in the hysteresis window. A complete pinning of the contact line can be achieved by imposing $\theta_{R}=0^{0}$ or $\theta_{A}=180^{0}$
+Evaporation and condensation was studied on an ideal and non-ideal surface. On an ideal surface during the both processes, contact angle stays constant whereas contact diameter and drop height changes. On a hysteretic surface, contact diameter was staying constant until contact angle reaches $\theta_{R}$ or $\theta_{A}$ after which contact angle was staying constant. This result was in accordance with experimental results recorded by Picknett and Bexon\cite{PICKNETT1977336}. Contact line was pinned when $\theta$ is in the hysteresis window. A complete pinning of the contact line can be achieved by imposing $\theta_{R}=0^{0}$ or $\theta_{A}=180^{0}$
 
 \section{Future work}
-In this study, we were able to implement contact line pinning along with evaporation. Flow of fluid and particles can be incorporated in this model to study coffee ring effect. While simulating evaporation, a constant driving force was applied on the system. However, in real world this may not be the case. A varrying driving force could more accurately model the process.  
+In this study, we were able to implement contact line pinning along with evaporation. Flow of fluid and particles can be incorporated in this model to study coffee ring effect. While simulating evaporation, a constant driving force was applied on the system. However, in real world this may not be the case. A varying driving force could more accurately model the process.  
+
+\section{Source code}
+The entire simulation was done using Java8. Source code is shared on a public repository in GitHub. \href{https://github.com/aqelkp/Coffee-ring-effect}{Link - https://github.com/aqelkp/Coffee-ring-effect}
 
 \bibliography{data/cite} 
 \bibliographystyle{ieeetr}

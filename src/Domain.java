@@ -829,7 +829,10 @@ public class Domain {
 		for (int i=0; i<n[0]; i++)
 			for (int j=0; j<n[1]; j++)
 				for (int k=0; k<n[2]; k++)
-					if (phi[i][j][k] > 0) area = area + 1;
+					if (phi[i][j][k] > 0){
+//						area = area + 1;
+						area = area + phi[i][j][k];
+					}
 		return area;
 	}
 

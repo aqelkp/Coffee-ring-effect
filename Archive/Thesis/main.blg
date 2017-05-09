@@ -3,6 +3,8 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: main.aux
 The style file: ieeetr.bst
 Database file #1: data/cite.bib
+Warning--entry type for "CoffeeRing" isn't style-file defined
+--line 143 of file data/cite.bib
 Too many commas in name 1 of "V. M. Kendon, M. E. Cates, J-C. Desplat, I. Pagonabarraga, P. Bladon" for entry paper:intertial_effects
 while executing---line 969 of file ieeetr.bst
 Too many commas in name 1 of "V. M. Kendon, M. E. Cates, J-C. Desplat, I. Pagonabarraga, P. Bladon" for entry paper:intertial_effects
@@ -11,45 +13,45 @@ Name 1 in "P.T. Sumesh, Ignacio Pagonabarraga, and R. Adhikari" has a comma at t
 while executing---line 969 of file ieeetr.bst
 Name 1 in "Lei Wang, Hai-bo Huang, and Xi-Yun Lu" has a comma at the end for entry paper:contact_angle
 while executing---line 969 of file ieeetr.bst
-You've used 8 entries,
+You've used 10 entries,
             1876 wiz_defined-function locations,
-            534 strings with 4857 characters,
-and the built_in function-call counts, 2181 in all, are:
-= -- 229
-> -- 59
+            547 strings with 5217 characters,
+and the built_in function-call counts, 2681 in all, are:
+= -- 275
+> -- 83
 < -- 0
-+ -- 23
-- -- 15
-* -- 140
-:= -- 299
-add.period$ -- 8
-call.type$ -- 8
-change.case$ -- 8
++ -- 32
+- -- 22
+* -- 175
+:= -- 371
+add.period$ -- 9
+call.type$ -- 10
+change.case$ -- 10
 chr.to.int$ -- 0
-cite$ -- 8
-duplicate$ -- 123
-empty$ -- 206
-format.name$ -- 15
-if$ -- 547
+cite$ -- 10
+duplicate$ -- 144
+empty$ -- 254
+format.name$ -- 22
+if$ -- 667
 int.to.chr$ -- 0
-int.to.str$ -- 8
-missing$ -- 8
-newline$ -- 27
-num.names$ -- 8
-pop$ -- 18
+int.to.str$ -- 10
+missing$ -- 9
+newline$ -- 33
+num.names$ -- 10
+pop$ -- 24
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 96
+skip$ -- 117
 stack$ -- 0
-substring$ -- 160
-swap$ -- 60
+substring$ -- 192
+swap$ -- 69
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 18
-width$ -- 9
-write$ -- 80
+while$ -- 23
+width$ -- 12
+write$ -- 97
 (There were 4 error messages)
